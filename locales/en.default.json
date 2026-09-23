@@ -1,0 +1,106 @@
+{
+  "general": {
+    "meta": {
+      "tagline": "Fine jewelry, made to be kept forever"
+    },
+    "search": {
+      "placeholder": "Search for rings, necklaces...",
+      "submit": "Search"
+    },
+    "cart": {
+      "title": "Your Bag",
+      "empty": "Your bag is empty.",
+      "continue_shopping": "Continue shopping",
+      "subtotal": "Subtotal",
+      "checkout": "Check out",
+      "remove": "Remove",
+      "quantity": "Quantity",
+      "view_cart": "View bag"
+    },
+    "newsletter": {
+      "heading": "Join the inner circle",
+      "text": "Be first to know about new collections, private sales, and jewelry care tips.",
+      "placeholder": "Enter your email",
+      "submit": "Subscribe",
+      "success": "Thank you for subscribing."
+    },
+    "password_page": {
+      "opening_soon": "Opening soon",
+      "login_form_heading": "Enter using password",
+      "login_password_button": "Enter",
+      "login_form_password_label": "Password",
+      "login_form_error": "Wrong password, please try again.",
+      "admin_link_html": "Are you the store owner? <a href=\"/admin\">Log in here</a>"
+    }
+  },
+  "sections": {
+    "header": {
+      "menu": "Menu",
+      "announcement": "Complimentary shipping on all orders over $150"
+    },
+    "hero": {
+      "default_heading": "Timeless pieces, for every story",
+      "default_subheading": "Ethically sourced diamonds and 18k gold, handcrafted by master jewelers.",
+      "default_button": "Shop the collection"
+    },
+    "featured_collection": {
+      "view_all": "View all"
+    },
+    "footer": {
+      "newsletter_heading": "Stay in touch",
+      "copyright": "All rights reserved."
+    },
+    "testimonials": {
+      "heading": "Loved by our clients"
+    },
+    "usps": {
+      "heading": "The Lumière promise"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to bag",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "on_sale": "Sale",
+      "quantity": "Quantity",
+      "description": "Description",
+      "details": "Details",
+      "shipping_returns": "Shipping & Returns",
+      "vendor": "Vendor",
+      "sku": "SKU"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No products found in this collection.",
+      "items_with_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      }
+    },
+    "sorting": {
+      "title": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best selling",
+      "price_ascending": "Price: low to high",
+      "price_descending": "Price: high to low",
+      "created_descending": "Newest"
+    }
+  },
+  "404": {
+    "title": "Page not found",
+    "subtext": "The page you're looking for doesn't exist.",
+    "link": "Return home"
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone number",
+      "message": "Message",
+      "send": "Send message",
+      "success": "Thanks for reaching out — we'll be in touch soon."
+    }
+  }
+}

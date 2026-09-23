@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "colors": "Colors",
+    "background": "Background",
+    "text": "Text",
+    "accent": "Accent (gold)",
+    "accent_dark": "Accent (dark)",
+    "surface": "Surface / cards",
+    "border": "Borders",
+    "typography": "Typography",
+    "heading_font": "Heading font",
+    "body_font": "Body font",
+    "layout": "Layout",
+    "page_width": "Page width",
+    "social": "Social media"
+  }
+}

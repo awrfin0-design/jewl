@@ -1,0 +1,35 @@
+{% if section.settings.enable %}
+<section class="section newsletter">
+  <div class="page-width">
+    <h2>{{ section.settings.heading | default: ('general.newsletter.heading' | t) }}</h2>
+    <p>{{ section.settings.text | default: ('general.newsletter.text' | t) }}</p>
+
+    {% form 'customer', data-newsletter-form: true, class: 'newsletter-form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <input
+        type="email"
+        name="contact[email]"
+        placeholder="{{ 'general.newsletter.placeholder' | t }}"
+        required
+        aria-label="{{ 'general.newsletter.placeholder' | t }}"
+      >
+      <button type="submit">{{ 'general.newsletter.submit' | t }}</button>
+
+      {% if form.posted_successfully? %}
+        <p class="form-success">{{ 'general.newsletter.success' | t }}</p>
+      {% endif %}
+    {% endform %}
+  </div>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "checkbox", "id": "enable", "label": "Enable section", "default": true },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "text", "label": "Text" }
+  ]
+}
+{% endschema %}

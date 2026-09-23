@@ -1,0 +1,42 @@
+<section class="section">
+  <div class="page-width">
+    <div class="contact-form">
+      <div class="page-banner" style="padding-top:0;">
+        <h1>Login</h1>
+      </div>
+
+      {% form 'customer_login' %}
+        {%- if form.errors -%}
+          <p class="form-error">{{ form.errors | default_errors }}</p>
+        {%- endif -%}
+
+        <div class="field">
+          <label for="CustomerEmail">{{ 'contact.form.email' | t }}</label>
+          <input type="email" id="CustomerEmail" name="customer[email]" required>
+        </div>
+        <div class="field">
+          <label for="CustomerPassword">Password</label>
+          <input type="password" id="CustomerPassword" name="customer[password]" required>
+        </div>
+        <button type="submit" class="btn" style="width:100%;">Sign in</button>
+        <p style="text-align:center;margin-top:16px;font-size:13px;">
+          <a href="#" onclick="document.getElementById('RecoverPassword').style.display='block';return false;">Forgot your password?</a>
+        </p>
+      {% endform %}
+
+      <div id="RecoverPassword" style="display:none;margin-top:32px;">
+        {% form 'recover_customer_password' %}
+          <div class="field">
+            <label for="RecoverEmail">{{ 'contact.form.email' | t }}</label>
+            <input type="email" id="RecoverEmail" name="email" required>
+          </div>
+          <button type="submit" class="btn btn--outline" style="width:100%;">Reset password</button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Login page", "settings": [] }
+{% endschema %}

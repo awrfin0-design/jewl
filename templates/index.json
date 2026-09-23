@@ -1,0 +1,69 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "New Collection",
+        "heading": "Timeless pieces, for every story",
+        "subheading": "Ethically sourced diamonds and 18k gold, handcrafted by master jewelers.",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/all"
+      }
+    },
+    "usps": {
+      "type": "usps",
+      "settings": { "heading": "The Lumière promise" },
+      "blocks": {
+        "usp-1": { "type": "usp", "settings": { "title": "Lifetime warranty", "text": "Every piece is covered, forever." } },
+        "usp-2": { "type": "usp", "settings": { "title": "Ethically sourced", "text": "Conflict-free diamonds and recycled gold." } },
+        "usp-3": { "type": "usp", "settings": { "title": "Free shipping & returns", "text": "On all orders over $150." } },
+        "usp-4": { "type": "usp", "settings": { "title": "Handcrafted in-house", "text": "Made by master jewelers." } }
+      },
+      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Curated",
+        "heading": "Bestsellers",
+        "text": "Our most-loved pieces, chosen for their timeless design.",
+        "products_to_show": 8
+      }
+    },
+    "collection-list": {
+      "type": "collection-list",
+      "settings": {
+        "eyebrow": "Shop by category",
+        "heading": "Find your piece"
+      },
+      "blocks": {
+        "col-1": { "type": "collection", "settings": { "title": "Rings" } },
+        "col-2": { "type": "collection", "settings": { "title": "Necklaces" } },
+        "col-3": { "type": "collection", "settings": { "title": "Earrings" } }
+      },
+      "block_order": ["col-1", "col-2", "col-3"]
+    },
+    "story": {
+      "type": "story-split",
+      "settings": {
+        "image_position": "left",
+        "eyebrow": "Our Craft",
+        "heading": "Crafted with intention",
+        "text": "Every Lumière piece begins as a sketch and ends as an heirloom. Our master jewelers combine time-honored techniques with modern precision to create pieces that are made to be worn for generations.",
+        "button_label": "Our story",
+        "button_link": "/pages/about"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": { "heading": "Loved by our clients" },
+      "blocks": {
+        "t-1": { "type": "testimonial", "settings": { "quote": "The engagement ring exceeded every expectation. Stunning craftsmanship.", "name": "Amelia R." } },
+        "t-2": { "type": "testimonial", "settings": { "quote": "Fast shipping, beautiful packaging, and the necklace is even better in person.", "name": "Sophie L." } },
+        "t-3": { "type": "testimonial", "settings": { "quote": "Customer service helped me resize my ring with zero hassle. Highly recommend.", "name": "Daniel K." } }
+      },
+      "block_order": ["t-1", "t-2", "t-3"]
+    }
+  },
+  "order": ["hero", "usps", "featured-collection", "collection-list", "story", "testimonials"]
+}

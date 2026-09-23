@@ -1,0 +1,60 @@
+<footer class="site-footer">
+  <div class="page-width">
+    <div class="footer-grid">
+      <div>
+        <a href="{{ routes.root_url }}" class="site-header__logo">{{ shop.name }}</a>
+        <p style="margin-top:16px;color:#6b6259;max-width:320px;">{{ section.settings.about | default: ('general.meta.tagline' | t) }}</p>
+        <div class="footer-social">
+          {% if settings.social_instagram %}<a href="{{ settings.social_instagram }}" aria-label="Instagram">IG</a>{% endif %}
+          {% if settings.social_facebook %}<a href="{{ settings.social_facebook }}" aria-label="Facebook">FB</a>{% endif %}
+          {% if settings.social_pinterest %}<a href="{{ settings.social_pinterest }}" aria-label="Pinterest">PIN</a>{% endif %}
+          {% if settings.social_tiktok %}<a href="{{ settings.social_tiktok }}" aria-label="TikTok">TT</a>{% endif %}
+        </div>
+      </div>
+
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          {%- for link in section.settings.shop_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>About</h4>
+        <ul>
+          {%- for link in section.settings.about_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Help</h4>
+        <ul>
+          {%- for link in section.settings.help_menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'sections.footer.copyright' | t }}</span>
+      <span>{{ shop.address.country }} &middot; {{ cart.currency.iso_code }}</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "about", "label": "About text" },
+    { "type": "link_list", "id": "shop_menu", "label": "Shop menu", "default": "footer" },
+    { "type": "link_list", "id": "about_menu", "label": "About menu", "default": "footer" },
+    { "type": "link_list", "id": "help_menu", "label": "Help menu", "default": "footer" }
+  ]
+}
+{% endschema %}

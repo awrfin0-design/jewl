@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Contact us",
+        "text": "Have a question about an order, custom design, or repair? Our team typically responds within one business day."
+      }
+    }
+  },
+  "order": ["main"]
+}

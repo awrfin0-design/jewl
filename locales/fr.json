@@ -1,0 +1,86 @@
+{
+  "general": {
+    "meta": { "tagline": "Joaillerie fine, faite pour durer toujours" },
+    "search": { "placeholder": "Rechercher des bagues, colliers...", "submit": "Rechercher" },
+    "cart": {
+      "title": "Votre panier",
+      "empty": "Votre panier est vide.",
+      "continue_shopping": "Continuer les achats",
+      "subtotal": "Sous-total",
+      "checkout": "Passer à la caisse",
+      "remove": "Retirer",
+      "quantity": "Quantité",
+      "view_cart": "Voir le panier"
+    },
+    "newsletter": {
+      "heading": "Rejoignez le cercle privé",
+      "text": "Soyez les premiers informés des nouvelles collections et ventes privées.",
+      "placeholder": "Entrez votre email",
+      "submit": "S'abonner",
+      "success": "Merci de votre inscription."
+    },
+    "password_page": {
+      "opening_soon": "Ouverture prochaine",
+      "login_form_heading": "Entrer avec le mot de passe",
+      "login_password_button": "Entrer",
+      "login_form_password_label": "Mot de passe",
+      "login_form_error": "Mot de passe incorrect, veuillez réessayer.",
+      "admin_link_html": "Êtes-vous le propriétaire de la boutique ? <a href=\"/admin\">Connectez-vous ici</a>"
+    }
+  },
+  "sections": {
+    "header": { "menu": "Menu", "announcement": "Livraison gratuite pour toute commande de plus de 150 $" },
+    "hero": {
+      "default_heading": "Des pièces intemporelles, pour chaque histoire",
+      "default_subheading": "Diamants d'origine éthique et or 18 carats, façonnés par des maîtres joailliers.",
+      "default_button": "Découvrir la collection"
+    },
+    "featured_collection": { "view_all": "Voir tout" },
+    "footer": { "newsletter_heading": "Restons en contact", "copyright": "Tous droits réservés." },
+    "testimonials": { "heading": "Aimé par nos clients" },
+    "usps": { "heading": "La promesse Lumière" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "sold_out": "Épuisé",
+      "unavailable": "Indisponible",
+      "on_sale": "Promotion",
+      "quantity": "Quantité",
+      "description": "Description",
+      "details": "Détails",
+      "shipping_returns": "Livraison et retours",
+      "vendor": "Marque",
+      "sku": "Référence"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "Aucun produit trouvé dans cette collection.",
+      "items_with_count": { "one": "{{ count }} produit", "other": "{{ count }} produits" }
+    },
+    "sorting": {
+      "title": "Trier par",
+      "featured": "En vedette",
+      "best_selling": "Meilleures ventes",
+      "price_ascending": "Prix : croissant",
+      "price_descending": "Prix : décroissant",
+      "created_descending": "Nouveautés"
+    }
+  },
+  "404": {
+    "title": "Page introuvable",
+    "subtext": "La page que vous recherchez n'existe pas.",
+    "link": "Retour à l'accueil"
+  },
+  "contact": {
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "message": "Message",
+      "send": "Envoyer le message",
+      "success": "Merci de nous avoir contactés — nous vous répondrons bientôt."
+    }
+  }
+}

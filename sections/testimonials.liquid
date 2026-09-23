@@ -1,0 +1,45 @@
+<section class="section section--tight">
+  <div class="page-width">
+    <div class="section__header">
+      <h2>{{ section.settings.heading | default: ('sections.testimonials.heading' | t) }}</h2>
+    </div>
+    <div class="testimonial-grid">
+      {%- for block in section.blocks -%}
+        <div class="testimonial-card" {{ block.shopify_attributes }}>
+          <div class="testimonial-card__stars">★★★★★</div>
+          <p>&ldquo;{{ block.settings.quote }}&rdquo;</p>
+          <div class="testimonial-card__name">{{ block.settings.name }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "name", "label": "Customer name" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "quote": "The engagement ring exceeded every expectation. Stunning craftsmanship.", "name": "Amelia R." } },
+        { "type": "testimonial", "settings": { "quote": "Fast shipping, beautiful packaging, and the necklace is even better in person.", "name": "Sophie L." } },
+        { "type": "testimonial", "settings": { "quote": "Customer service helped me resize my ring with zero hassle. Highly recommend.", "name": "Daniel K." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

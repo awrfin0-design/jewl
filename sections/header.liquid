@@ -1,0 +1,42 @@
+<header class="site-header">
+  <div class="page-width site-header__inner">
+    <button class="mobile-nav-toggle" data-nav-toggle aria-label="{{ 'sections.header.menu' | t }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+
+    <a href="{{ routes.root_url }}" class="site-header__logo">{{ shop.name }}</a>
+
+    <nav aria-label="{{ 'sections.header.menu' | t }}">
+      <ul class="site-nav" data-mobile-nav>
+        {%- for link in section.settings.menu.links -%}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__icons">
+      <a href="{{ routes.search_url }}" aria-label="{{ 'general.search.submit' | t }}">{% render 'icon-search' %}</a>
+      <a href="{{ routes.account_url }}" aria-label="Account">{% render 'icon-account' %}</a>
+      <a href="{{ routes.cart_url }}" aria-label="{{ 'general.cart.title' | t }}">
+        {% render 'icon-bag' %}
+        {%- if cart.item_count > 0 -%}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

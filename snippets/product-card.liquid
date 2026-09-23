@@ -1,0 +1,35 @@
+{%- comment -%}
+  Accepts: product
+{%- endcomment -%}
+<a href="{{ product.url }}" class="product-card">
+  <div class="product-card__media">
+    {%- if product.featured_media -%}
+      <img
+        src="{{ product.featured_media | image_url: width: 800 }}"
+        alt="{{ product.featured_media.alt | default: product.title | escape }}"
+        loading="lazy"
+        width="800"
+        height="1000"
+      >
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {%- endif -%}
+
+    {%- if product.media[1] -%}
+      <img
+        class="product-card__hover-image"
+        src="{{ product.media[1] | image_url: width: 800 }}"
+        alt=""
+        loading="lazy"
+      >
+    {%- endif -%}
+
+    {%- if product.compare_at_price > product.price -%}
+      <span class="product-card__badge">{{ 'products.product.on_sale' | t }}</span>
+    {%- elsif product.available == false -%}
+      <span class="product-card__badge">{{ 'products.product.sold_out' | t }}</span>
+    {%- endif -%}
+  </div>
+  <h3 class="product-card__title">{{ product.title }}</h3>
+  {% render 'product-price', product: product %}
+</a>

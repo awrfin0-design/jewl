@@ -1,0 +1,35 @@
+<section class="section">
+  <div class="page-width">
+    <div class="page-banner" style="padding-top:0;">
+      <span class="eyebrow">Journal</span>
+      <h1>{{ blog.title }}</h1>
+    </div>
+
+    {%- paginate blog.articles by 9 -%}
+      <div class="product-grid">
+        {%- for article in blog.articles -%}
+          <a href="{{ article.url }}" class="product-card">
+            <div class="product-card__media">
+              {%- if article.image -%}
+                <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" loading="lazy">
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+            <span class="eyebrow">{{ article.published_at | date: '%B %d, %Y' }}</span>
+            <h3 class="product-card__title">{{ article.title }}</h3>
+            <p style="color:#6b6259;font-size:14px;">{{ article.excerpt_or_content | strip_html | truncate: 110 }}</p>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="section__footer">{{ paginate | default_pagination }}</div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Blog page", "settings": [] }
+{% endschema %}

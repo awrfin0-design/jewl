@@ -1,0 +1,86 @@
+{
+  "general": {
+    "meta": { "tagline": "Joyería fina, hecha para durar para siempre" },
+    "search": { "placeholder": "Buscar anillos, collares...", "submit": "Buscar" },
+    "cart": {
+      "title": "Tu bolsa",
+      "empty": "Tu bolsa está vacía.",
+      "continue_shopping": "Seguir comprando",
+      "subtotal": "Subtotal",
+      "checkout": "Pagar",
+      "remove": "Eliminar",
+      "quantity": "Cantidad",
+      "view_cart": "Ver bolsa"
+    },
+    "newsletter": {
+      "heading": "Únete al círculo interno",
+      "text": "Sé el primero en conocer nuevas colecciones y ventas privadas.",
+      "placeholder": "Ingresa tu correo",
+      "submit": "Suscribirse",
+      "success": "Gracias por suscribirte."
+    },
+    "password_page": {
+      "opening_soon": "Próxima apertura",
+      "login_form_heading": "Ingresar con contraseña",
+      "login_password_button": "Entrar",
+      "login_form_password_label": "Contraseña",
+      "login_form_error": "Contraseña incorrecta, inténtalo de nuevo.",
+      "admin_link_html": "¿Eres el propietario de la tienda? <a href=\"/admin\">Inicia sesión aquí</a>"
+    }
+  },
+  "sections": {
+    "header": { "menu": "Menú", "announcement": "Envío gratis en pedidos superiores a $150" },
+    "hero": {
+      "default_heading": "Piezas atemporales, para cada historia",
+      "default_subheading": "Diamantes de origen ético y oro de 18k, hechos a mano por maestros joyeros.",
+      "default_button": "Ver la colección"
+    },
+    "featured_collection": { "view_all": "Ver todo" },
+    "footer": { "newsletter_heading": "Mantente en contacto", "copyright": "Todos los derechos reservados." },
+    "testimonials": { "heading": "Amado por nuestros clientes" },
+    "usps": { "heading": "La promesa Lumière" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Añadir a la bolsa",
+      "sold_out": "Agotado",
+      "unavailable": "No disponible",
+      "on_sale": "Oferta",
+      "quantity": "Cantidad",
+      "description": "Descripción",
+      "details": "Detalles",
+      "shipping_returns": "Envíos y devoluciones",
+      "vendor": "Marca",
+      "sku": "SKU"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No se encontraron productos en esta colección.",
+      "items_with_count": { "one": "{{ count }} producto", "other": "{{ count }} productos" }
+    },
+    "sorting": {
+      "title": "Ordenar por",
+      "featured": "Destacados",
+      "best_selling": "Más vendidos",
+      "price_ascending": "Precio: menor a mayor",
+      "price_descending": "Precio: mayor a menor",
+      "created_descending": "Novedades"
+    }
+  },
+  "404": {
+    "title": "Página no encontrada",
+    "subtext": "La página que buscas no existe.",
+    "link": "Volver al inicio"
+  },
+  "contact": {
+    "form": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "message": "Mensaje",
+      "send": "Enviar mensaje",
+      "success": "Gracias por contactarnos — te responderemos pronto."
+    }
+  }
+}

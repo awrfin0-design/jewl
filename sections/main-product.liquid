@@ -1,0 +1,113 @@
+<section class="section">
+  <div class="page-width">
+    <div class="product-main">
+      <div class="product-gallery">
+        <div class="product-gallery__main">
+          {%- if product.featured_media -%}
+            <img
+              src="{{ product.featured_media | image_url: width: 1200 }}"
+              alt="{{ product.featured_media.alt | default: product.title | escape }}"
+              data-gallery-main-image
+            >
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="product-gallery__thumbs">
+            {%- for media in product.media limit: 5 -%}
+              <img
+                src="{{ media | image_url: width: 200 }}"
+                data-full-src="{{ media | image_url: width: 1200 }}"
+                data-gallery-thumb
+                alt="{{ media.alt | escape }}"
+                loading="lazy"
+              >
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        {%- if product.vendor != blank -%}<span class="eyebrow">{{ product.vendor }}</span>{%- endif -%}
+        <h1>{{ product.title }}</h1>
+
+        <div class="product-info__price">
+          {%- if product.compare_at_price > product.price -%}
+            <s>{{ product.compare_at_price | money }}</s>
+          {%- endif -%}
+          {{ product.price | money }}
+        </div>
+
+        <div class="product-info__description">
+          {{ product.description }}
+        </div>
+
+        {% form 'product', product %}
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="field">
+                <label>{{ option.name }}</label>
+                <select name="options[{{ option.name | escape }}]">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <select name="id" class="visually-hidden">
+            {%- for variant in product.variants -%}
+              <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {%- endfor -%}
+          </select>
+
+          <div class="product-form__buttons">
+            <div class="qty-selector" data-qty-selector>
+              <button type="button" data-step="-1" aria-label="Decrease quantity">&minus;</button>
+              <input type="number" name="quantity" value="1" min="1">
+              <button type="button" data-step="1" aria-label="Increase quantity">&plus;</button>
+            </div>
+
+            <button type="submit" class="btn" {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}
+                {{ 'products.product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </button>
+          </div>
+        {% endform %}
+
+        <div class="accordion">
+          <div class="accordion__item is-open" data-accordion-item>
+            <div class="accordion__title" data-accordion-title>{{ 'products.product.details' | t }}</div>
+            <div class="accordion__content">{{ product.description }}</div>
+          </div>
+          <div class="accordion__item" data-accordion-item>
+            <div class="accordion__title" data-accordion-title>{{ 'products.product.shipping_returns' | t }}</div>
+            <div class="accordion__content">{{ section.settings.shipping_text }}</div>
+          </div>
+          {%- if product.metafields.custom.materials != blank -%}
+          <div class="accordion__item" data-accordion-item>
+            <div class="accordion__title" data-accordion-title>Materials & Care</div>
+            <div class="accordion__content">{{ product.metafields.custom.materials }}</div>
+          </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    { "type": "textarea", "id": "shipping_text", "label": "Shipping & returns text", "default": "Complimentary shipping and free 30-day returns on every order." }
+  ]
+}
+{% endschema %}

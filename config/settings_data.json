@@ -1,0 +1,16 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_background": "#FBF9F6",
+      "color_text": "#231F1B",
+      "color_accent": "#8A6D3B",
+      "color_accent_dark": "#231F1B",
+      "color_surface": "#FFFFFF",
+      "color_border": "#E4DED2",
+      "font_heading": "playfair_display_n4",
+      "font_body": "jost_n4",
+      "page_width": 1400
+    }
+  }
+}

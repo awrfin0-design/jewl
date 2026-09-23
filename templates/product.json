@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": { "type": "main-product" },
+    "related": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "You may also like",
+        "heading": "Complete the look",
+        "products_to_show": 4
+      }
+    }
+  },
+  "order": ["main", "related"]
+}

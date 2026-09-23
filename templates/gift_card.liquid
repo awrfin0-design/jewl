@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ 'general.gift_card.issued.title' | t: value: gift_card.initial_value | money, shop: shop.name | default: shop.name }}</title>
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+  <div class="page-width empty-state">
+    <span class="eyebrow">{{ shop.name }}</span>
+    <h1>{{ gift_card.initial_value | money }} Gift Card</h1>
+    {%- if gift_card.enabled and gift_card.money_balance != blank -%}
+      <p>Balance: {{ gift_card.balance | money }}</p>
+    {%- endif -%}
+    <p style="font-size:24px;letter-spacing:0.1em;">{{ gift_card.code | format_code }}</p>
+    {%- unless gift_card.enabled -%}<p>This gift card is no longer active.</p>{%- endunless -%}
+  </div>
+</body>
+</html>

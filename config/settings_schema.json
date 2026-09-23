@@ -1,0 +1,53 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Lumière",
+    "theme_version": "1.0.0",
+    "theme_author": "Lumière Studio",
+    "theme_documentation_url": "https://example.com",
+    "theme_support_url": "https://example.com"
+  },
+  {
+    "name": "t:settings.colors",
+    "settings": [
+      { "type": "color", "id": "color_background", "label": "t:settings.background", "default": "#FBF9F6" },
+      { "type": "color", "id": "color_text", "label": "t:settings.text", "default": "#231F1B" },
+      { "type": "color", "id": "color_accent", "label": "t:settings.accent", "default": "#8A6D3B" },
+      { "type": "color", "id": "color_accent_dark", "label": "t:settings.accent_dark", "default": "#231F1B" },
+      { "type": "color", "id": "color_surface", "label": "t:settings.surface", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_border", "label": "t:settings.border", "default": "#E4DED2" }
+    ]
+  },
+  {
+    "name": "t:settings.typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "t:settings.heading_font",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "t:settings.body_font",
+        "default": "jost_n4"
+      }
+    ]
+  },
+  {
+    "name": "t:settings.layout",
+    "settings": [
+      { "type": "range", "id": "page_width", "min": 1200, "max": 1800, "step": 50, "unit": "px", "label": "t:settings.page_width", "default": 1400 }
+    ]
+  },
+  {
+    "name": "t:settings.social",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook URL" },
+      { "type": "text", "id": "social_pinterest", "label": "Pinterest URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" }
+    ]
+  }
+]

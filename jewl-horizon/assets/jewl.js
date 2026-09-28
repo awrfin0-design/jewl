@@ -78,6 +78,9 @@
     p.stone = stoneOf(raw.stone || (raw.tags || []).find((x) => /^stone:/i.test(x))?.slice(6), i);
     const badge = (raw.tags || []).find((x) => /^badge:/i.test(x));
     p.badge = raw.badge || (badge ? badge.slice(6).trim() : '');
+    const ct = (raw.tags || []).find((x) => /^ct:/i.test(x));
+    p.ct = ct ? ct.slice(3).trim() : '';
+    p.stoneTagged = !!(raw.stone || (raw.tags || []).some((x) => /^stone:/i.test(x)));
     p.cat = catOf(raw);
     p.metalIdx = p.options.findIndex((o) => METAL_NAME.test(o.name) || o.values.some((v) => METAL_VAL.test(v)));
     const first = p.variants.find((v) => v.available) || p.variants[0];
@@ -95,15 +98,27 @@
   const priceFor = (p, sel) => (p.demo ? p.price : (variantFor(p, sel) || {}).price ?? p.price);
   const imgFor = (p, sel) => (p.demo ? null : (variantFor(p, sel) || {}).img || p.img);
   const availableFor = (p, sel) => (p.demo ? true : !!(variantFor(p, sel) || {}).available);
-  const optLabel = (p, oi, v) => (p.options[oi].demoMetal ? t(v) : v);
+  const optLabel = (p, oi, v) => {
+    if (p.options[oi].demoMetal) return t(v);
+    if (oi === p.metalIdx && METAL_VAL.test(v)) return t(metalKind(v));
+    return v;
+  };
+  const optName = (o, oi, p) => {
+    if (o.demoMetal || oi === p.metalIdx) return t('metal');
+    if (o.demoLabel) return t(o.name);
+    if (SIZE_NAME.test(o.name)) return t('size');
+    if (/length|länge|longueur|lunghezza|largo|长度|長さ|длина|الطول/i.test(o.name)) return t('length');
+    return o.name;
+  };
   const metalOfSel = (p, sel) => (p.metalIdx >= 0 ? (p.demo ? sel[p.metalIdx] : metalKind(sel[p.metalIdx])) : 'yellow');
   const specFor = (p, sel) => {
     if (p.demo) return `${t(p.stone)} · ${p.ct} · ${t(sel[0])}`;
-    const parts = [p.spec || (p.type ? p.type : t(p.stone))];
-    if (p.metalIdx >= 0) parts.push(sel[p.metalIdx]);
+    const parts = p.spec ? [p.spec] : [p.stoneTagged ? t(p.stone) : p.type, p.ct];
+    if (p.metalIdx >= 0) parts.push(optLabel(p, p.metalIdx, sel[p.metalIdx]));
     return parts.filter(Boolean).join(' · ');
   };
-  const badgeFor = (p) => (p.badgeKey ? t(p.badgeKey) : p.badge || '');
+  const BADGES = { new: 't_new', bestseller: 't_best', engravable: 't_engr' };
+  const badgeFor = (p) => (p.badgeKey ? t(p.badgeKey) : BADGES[String(p.badge).toLowerCase()] ? t(BADGES[String(p.badge).toLowerCase()]) : p.badge || '');
   const phHTML = (p, sel, extra = '') => {
     const img = imgFor(p, sel);
     return `<div class="j-ph${img ? ' j-has-img' : ''}" data-stone="${p.stone}" data-metal="${metalOfSel(p, sel)}" ${extra}>${
@@ -297,7 +312,7 @@
     const optionsHTML = p.options.map((o, oi) => {
       if (o.values.length < 2 && !o.demoMetal) return '';
       const isMetal = oi === p.metalIdx;
-      const label = o.demoMetal ? t('metal') : o.demoLabel ? t(o.name) : esc(o.name);
+      const label = esc(optName(o, oi, p));
       const grid = !isMetal && o.values.length > 5 ? 'j-sizes' : 'j-opts';
       return `<div class="j-field"><span class="j-eyebrow" style="color:var(--j-muted)">${label}</span>
         <div class="${grid}">${o.values.map((v) => {

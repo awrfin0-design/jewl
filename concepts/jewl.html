@@ -7,440 +7,558 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
+<script>
+try{
+  var d=document.documentElement,t=localStorage.getItem('jewl-theme'),l=localStorage.getItem('jewl-lang');
+  if(t)d.setAttribute('data-theme',t);
+  if(l){d.lang=l;d.dir=l==='ar'?'rtl':'ltr'}
+}catch(e){}
+</script>
 <style>
-/* ---------- Tokens ---------- */
+/* ================= Tokens ================= */
 :root{
-  --bg:#F2F4F9;
+  --bg:#F4FBFC;
   --surface:#FFFFFF;
-  --ink:#0E1B3D;
-  --muted:#58627C;
-  --line:rgba(14,27,61,.12);
-  --gold:#94701F;          /* text-safe gold on light */
-  --gold-soft:#D8B460;
-  --lapis:#1A357F;
-  --chip:#E6EAF4;
-  /* fixed "night" palette for the lapis bands, same in both themes */
-  --night:#0A1540;
-  --night-2:#122462;
-  --on-night:#EEF0F8;
-  --on-night-muted:#A9B3D2;
-  --gilt:#E2C272;
+  --ink:#0B3440;
+  --muted:#4D6D76;
+  --line:rgba(11,52,64,.13);
+  --accent:#0A7C88;
+  --gold:#8C6A1C;
+  --chip:#E3F4F7;
+  --ph-a:#F1FBFC;
+  --ph-b:#CBEDF3;
+  --caustic:rgba(255,255,255,.75);
+  --band-a:#D8F3F7;
+  --band-b:#A9E2EB;
+  --band-muted:#3B6470;
+  --blob1:#8FE3EE;
+  --blob2:#46CDD3;
+  --blob3:#F3DA95;
+  --scrim:rgba(4,30,38,.45);
+  --shadow:0 30px 60px -32px rgba(11,52,64,.45);
+  --g-yellow:linear-gradient(100deg,#A47A25 0%,#F4DE98 32%,#C79E45 52%,#F0D788 72%,#9A7322 100%);
+  --g-white:linear-gradient(100deg,#7F8A97 0%,#FFFFFF 32%,#AEB8C3 52%,#F4F7FA 72%,#76818E 100%);
+  --g-rose:linear-gradient(100deg,#955544 0%,#F7D2BF 32%,#C98870 52%,#F5CDB9 72%,#8A4C3C 100%);
+  --brand:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
   --script:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;
   --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
   --sans:"Jost","Futura","Avenir Next","Segoe UI",system-ui,sans-serif;
   --gutter:clamp(16px,4vw,48px);
-  --max:1240px;
+  --max:1260px;
+  --ease:cubic-bezier(.2,.7,.2,1);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#070E2A; --surface:#0E1A44; --ink:#ECEFF8; --muted:#A3ADCA;
-    --line:rgba(226,194,114,.16); --gold:#DDBE6C; --gold-soft:#E8CF8A;
-    --lapis:#3558C0; --chip:#16245A; color-scheme:dark;
+    --bg:#041A20; --surface:#0A2A33; --ink:#E4F6F8; --muted:#95BEC6; --line:rgba(127,220,230,.17);
+    --accent:#5FE0EA; --gold:#E4C57C; --chip:#0D3540; --ph-a:#0B3A45; --ph-b:#03181E;
+    --caustic:rgba(127,220,230,.2); --band-a:#062A33; --band-b:#0A4553; --band-muted:#9CC6CD;
+    --blob1:#0F7F8C; --blob2:#11A9B5; --blob3:#5E4C1C; --scrim:rgba(0,8,12,.65);
+    --shadow:0 30px 60px -30px rgba(0,0,0,.8); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#070E2A; --surface:#0E1A44; --ink:#ECEFF8; --muted:#A3ADCA;
-  --line:rgba(226,194,114,.16); --gold:#DDBE6C; --gold-soft:#E8CF8A;
-  --lapis:#3558C0; --chip:#16245A; color-scheme:dark;
+  --bg:#041A20; --surface:#0A2A33; --ink:#E4F6F8; --muted:#95BEC6; --line:rgba(127,220,230,.17);
+  --accent:#5FE0EA; --gold:#E4C57C; --chip:#0D3540; --ph-a:#0B3A45; --ph-b:#03181E;
+  --caustic:rgba(127,220,230,.2); --band-a:#062A33; --band-b:#0A4553; --band-muted:#9CC6CD;
+  --blob1:#0F7F8C; --blob2:#11A9B5; --blob3:#5E4C1C; --scrim:rgba(0,8,12,.65);
+  --shadow:0 30px 60px -30px rgba(0,0,0,.8); color-scheme:dark;
 }
+/* Per-language type: every script gets a calligraphic accent face and a matching serif */
+html:lang(ru){--script:"Marck Script",cursive;--display:"Cormorant","Bodoni Moda",Georgia,serif}
+html:lang(zh){--script:"Ma Shan Zheng",cursive;--display:"Noto Serif SC","Songti SC",serif;--sans:"Noto Sans SC","PingFang SC",sans-serif}
+html:lang(ja){--script:"Yuji Syuku",serif;--display:"Shippori Mincho","Hiragino Mincho ProN",serif;--sans:"Noto Sans JP","Hiragino Sans",sans-serif}
+html:lang(ar){--script:"Aref Ruqaa",serif;--display:"Amiri",serif;--sans:"IBM Plex Sans Arabic",Tahoma,sans-serif}
+html:lang(zh) em,html:lang(ja) em{font-style:normal}
+html:lang(ar) *{letter-spacing:0!important}
+html:lang(zh) .eyebrow,html:lang(ja) .eyebrow{letter-spacing:.12em}
 
-/* ---------- Base ---------- */
+/* ================= Base ================= */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
-img,svg{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;transition:background-color .5s,color .5s}
+body.locked{overflow:hidden}
 a{color:inherit}
 button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px;border-radius:2px}
-.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
-.eyebrow{font:500 12px/1.2 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
-h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.08}
-h2{font-size:clamp(32px,4.4vw,52px)}
-h2 em,h1 em{font-style:italic}
-.script{font-family:var(--script);font-weight:400;line-height:1}
-.num{font-variant-numeric:tabular-nums lining-nums}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 [hidden]{display:none!important}
+.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.eyebrow{font:500 12px/1.3 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:clamp(32px,4.4vw,54px)}
+.s{font-family:var(--script);font-weight:400;font-style:normal;color:var(--gold);font-size:1.18em;line-height:.9}
+.brand{font-family:var(--brand);font-weight:400;line-height:1}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.gild{background:var(--g-yellow);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* ---------- Buttons ---------- */
-.btn{display:inline-flex;align-items:center;gap:.6em;border:1px solid currentColor;background:none;padding:.95em 1.8em;font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:background .25s,color .25s,border-color .25s}
-.btn-gold{background:var(--gilt);border-color:var(--gilt);color:var(--night)}
-.btn-gold:hover{background:transparent;color:var(--gilt)}
-.btn-ghost-night{color:var(--on-night)}
-.btn-ghost-night:hover{background:var(--on-night);color:var(--night)}
+/* ================= Buttons ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;border:1px solid currentColor;background:none;padding:1em 1.9em;font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:background-color .3s,color .3s,background-position .8s var(--ease),transform .3s var(--ease)}
+.btn-gold{background:var(--g-yellow);background-size:220% 100%;border:0;color:#2A1E05;padding:calc(1em + 1px) calc(1.9em + 1px)}
+.btn-gold:hover{background-position:100% 0;transform:translateY(-2px)}
+.btn-line{color:var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--bg)}
 .btn-ink{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .btn-ink:hover{background:transparent;color:var(--ink)}
+.btn-block{width:100%}
 
-/* ---------- Announcement + header ---------- */
-.announce{background:var(--night);color:var(--on-night-muted);text-align:center;font:400 12px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:10px var(--gutter)}
-.announce b{color:var(--gilt);font-weight:500}
-header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;min-height:76px;gap:16px}
-.nav-links{display:flex;gap:28px;list-style:none;margin:0;padding:0;font:400 13px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
-.nav-links a{text-decoration:none;padding-block:6px;background:linear-gradient(var(--gold),var(--gold)) left bottom/0 1px no-repeat;transition:background-size .3s}
-.nav-links a:hover{background-size:100% 1px}
-.logo{font-family:var(--script);font-size:54px;line-height:1;color:var(--gold);text-decoration:none;padding-top:6px}
-.nav-tools{display:flex;justify-content:flex-end;gap:6px}
-.icon-btn{position:relative;display:grid;place-items:center;width:42px;height:42px;border:0;background:none;border-radius:50%}
-.icon-btn:hover{background:var(--chip)}
-.icon-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.4}
-.badge{position:absolute;top:4px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--gold);color:var(--bg);font:500 10px/18px var(--sans);text-align:center}
-.menu-btn{display:none}
-
-/* ---------- Hero ---------- */
-.hero{background:radial-gradient(120% 90% at 78% 40%,var(--night-2) 0%,var(--night) 58%);color:var(--on-night);overflow:hidden;position:relative}
-.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 22%,rgba(226,194,114,.7),transparent),radial-gradient(1px 1px at 32% 78%,rgba(226,194,114,.5),transparent),radial-gradient(1.5px 1.5px at 58% 14%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 88% 82%,rgba(226,194,114,.6),transparent),radial-gradient(1px 1px at 70% 60%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 6% 90%,rgba(255,255,255,.4),transparent);pointer-events:none}
-.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:clamp(24px,4vw,64px);padding-block:clamp(48px,7vw,96px)}
-.hero .eyebrow{color:var(--gilt)}
-.hero-mark{font-family:var(--script);font-size:clamp(110px,15vw,210px);line-height:.8;color:var(--gilt);margin:.12em 0 .02em -.04em;background:linear-gradient(100deg,#B98E34 0%,#F6E3A4 38%,#C9A24A 55%,#F1D98E 75%,#A77F2A 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gleam 9s ease-in-out infinite}
+/* ================= Loader ================= */
+.loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;align-content:center;gap:22px;background:var(--bg);overflow:hidden;transition:opacity .9s var(--ease),visibility .9s;animation:loaderOut .9s 6s forwards}
+.loader.done{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes loaderOut{to{opacity:0;visibility:hidden}}
+.loader .aurora{opacity:.8}
+.loader-mark{position:relative;font-family:var(--brand);font-size:clamp(110px,20vw,190px);line-height:1;padding:0 .12em;direction:ltr;clip-path:inset(0 100% 0 0);animation:write 1.7s .15s var(--ease) forwards,gleam 3s 1.2s ease-in-out infinite}
+@keyframes write{to{clip-path:inset(0 0 0 0)}}
+.loader-line{position:relative;width:min(220px,60vw);height:1px;background:var(--line);overflow:hidden}
+.loader-line i{position:absolute;inset:0;background:var(--g-yellow);transform-origin:left;transform:scaleX(0);animation:fill 1.9s var(--ease) forwards}
+@keyframes fill{to{transform:scaleX(1)}}
+.loader p{position:relative;margin:0;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);text-align:center;padding-inline:16px}
 @keyframes gleam{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.hero h1{font-size:clamp(34px,4.6vw,60px);max-width:14ch}
-.hero p.lede{color:var(--on-night-muted);max-width:44ch;font-size:17px;margin:20px 0 32px}
+
+/* ================= Aurora (water light) ================= */
+.aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(70px);opacity:.55;animation:drift 22s ease-in-out infinite alternate}
+.aurora i:nth-child(1){background:var(--blob1);top:-25vmax;inset-inline-start:-10vmax}
+.aurora i:nth-child(2){background:var(--blob2);bottom:-30vmax;inset-inline-end:-15vmax;animation-duration:28s;opacity:.4}
+.aurora i:nth-child(3){background:var(--blob3);top:10%;inset-inline-start:45%;width:30vmax;height:30vmax;opacity:.35;animation-duration:18s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(6vmax,4vmax) scale(1.15)}}
+
+/* ================= Announcement + header ================= */
+.announce{position:relative;background:var(--ink);color:var(--bg);text-align:center;font:400 12px/1.4 var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:10px var(--gutter)}
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid var(--line)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;min-height:78px;gap:16px}
+.nav-links{display:flex;gap:28px;list-style:none;margin:0;padding:0;font:400 12.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.nav-links a{text-decoration:none;padding-block:6px;background:var(--g-yellow) 0 100%/0 1px no-repeat;transition:background-size .4s var(--ease)}
+html[dir="rtl"] .nav-links a{background-position:100% 100%}
+.nav-links a:hover{background-size:100% 1px}
+.logo{font-family:var(--brand);font-size:56px;line-height:1;text-decoration:none;padding:6px .1em 0;direction:ltr}
+.tools{display:flex;justify-content:flex-end;align-items:center;gap:4px}
+.tool{position:relative;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border:0;background:none;border-radius:20px;font:400 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;transition:background-color .2s}
+.tool:hover,.tool[aria-expanded="true"]{background:var(--chip)}
+.tool .glyph{font-size:17px;letter-spacing:0;line-height:1}
+.count{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--g-yellow);color:#2A1E05;font:500 10px/18px var(--sans);letter-spacing:0;text-align:center}
+.menu-btn{display:none}
+.lang-wrap{position:relative}
+.lang-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;z-index:60;min-width:200px;margin:0;padding:8px;list-style:none;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);display:grid;gap:2px}
+.lang-menu button{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;border:0;background:none;padding:10px 12px;text-align:start;font:400 15px/1.2 var(--sans)}
+.lang-menu button:hover{background:var(--chip)}
+.lang-menu button small{font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.lang-menu button[aria-current="true"]{color:var(--accent)}
+.lang-menu button[aria-current="true"]::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--g-yellow);margin-inline-start:auto}
+.mobile-nav{display:flex;flex-wrap:wrap;gap:8px 20px;padding-block:0 16px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.mobile-nav a{text-decoration:none}
+
+/* ================= Product image slots (placeholders for photography) ================= */
+.ph{position:relative;display:grid;place-items:center;overflow:hidden;container-type:inline-size;
+  background:
+    radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.35),transparent 38%),
+    radial-gradient(52% 42% at 50% 64%,color-mix(in srgb,var(--stone) 75%,transparent),transparent 72%),
+    linear-gradient(172deg,var(--ph-a),var(--ph-b));
+  border-radius:50% 50% 0 0/40% 40% 0 0;
+  isolation:isolate}
+.ph::before{content:"";position:absolute;inset:-20%;z-index:-1;background:
+  radial-gradient(18% 10% at 30% 30%,var(--caustic),transparent 70%),
+  radial-gradient(14% 8% at 70% 44%,var(--caustic),transparent 70%),
+  radial-gradient(22% 9% at 45% 78%,var(--caustic),transparent 70%),
+  radial-gradient(10% 6% at 20% 62%,var(--caustic),transparent 70%);
+  animation:caustic 14s ease-in-out infinite alternate;opacity:.8}
+@keyframes caustic{from{transform:translate(-3%,-2%) rotate(-3deg)}to{transform:translate(3%,3%) rotate(4deg)}}
+.ph::after{content:"";position:absolute;inset:auto 18% 9% 18%;height:1px;background:var(--g-yellow);opacity:.55}
+.ph-initial{font-family:var(--brand);font-size:52cqi;line-height:1;padding:0 .12em;margin-top:.05em;background:var(--metal-g);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 6px 14px rgba(8,50,60,.22));transition:transform .8s var(--ease),background-position 1.2s var(--ease);direction:ltr}
+.ph[data-metal="yellow"]{--metal-g:var(--g-yellow)}
+.ph[data-metal="white"]{--metal-g:var(--g-white)}
+.ph[data-metal="rose"]{--metal-g:var(--g-rose)}
+.ph[data-stone="aqua"]{--stone:#8FDDEB}
+.ph[data-stone="paraiba"]{--stone:#19D3C5}
+.ph[data-stone="topaz"]{--stone:#55AEEA}
+.ph[data-stone="turq"]{--stone:#3EC1B4}
+
+/* ================= Hero ================= */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--band-b) 55%,var(--bg)))}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:clamp(28px,5vw,72px);padding-block:clamp(40px,6vw,88px)}
+.hero-mark{font-family:var(--brand);font-size:clamp(120px,16vw,230px);line-height:.82;margin:.1em 0 .02em;margin-inline-start:-.05em;padding-inline-end:.1em;direction:ltr;width:max-content;max-width:100%;animation:gleam 9s ease-in-out infinite}
+html[dir="rtl"] .hero-mark{margin-inline-start:0}
+.hero h1{font-size:clamp(34px,4.6vw,62px);max-width:15ch}
+.hero h1 em{color:var(--accent)}
+.lede{color:var(--muted);max-width:46ch;font-size:17px;margin:20px 0 32px}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
-.hero-art{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;justify-self:center}
-.hero-art svg{width:100%;height:100%;display:block;overflow:visible}
-.hero-caption{position:absolute;right:0;bottom:6%;text-align:right;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-night-muted)}
-.hero-caption .script{display:block;font-size:34px;letter-spacing:0;text-transform:none;color:var(--gilt);margin-bottom:4px}
-.float{animation:float 7s ease-in-out infinite;transform-origin:50% 50%}
-@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(1deg)}}
-.sparkle{animation:twinkle 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-.sparkle.d2{animation-delay:1.1s}.sparkle.d3{animation-delay:2.2s}
-@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+.hero-piece{justify-self:center;width:min(430px,100%);display:grid;gap:18px;perspective:1100px}
+.arch-btn{border:0;padding:0;background:none;display:block;width:100%;transform-style:preserve-3d;transition:transform .7s var(--ease)}
+.arch-btn .ph{aspect-ratio:4/5;width:100%;box-shadow:var(--shadow)}
+.arch-btn .ph-initial{font-size:56cqi}
+.arch-cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.arch-cap .brand{font-size:40px}
+.arch-cap span:last-child{font-size:13px;color:var(--muted);letter-spacing:.06em;text-align:end}
 
-/* ---------- Standards strip ---------- */
-.standards{border-bottom:1px solid var(--line)}
+/* ================= Marquee ================= */
+.marquee{direction:ltr;overflow:hidden;border-block:1px solid var(--line);background:var(--surface);padding-block:16px}
+.marquee-track{display:flex;width:max-content;animation:marquee 40s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee span{font:400 italic 22px/1 var(--display);padding-inline:26px;white-space:nowrap;display:inline-flex;align-items:center;gap:52px}
+.marquee span::after{content:"";width:7px;height:7px;transform:rotate(45deg);background:var(--g-yellow)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ================= Standards ================= */
 .standards ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
-.standards li{padding:26px 20px;display:grid;gap:4px;border-left:1px solid var(--line)}
-.standards li:first-child{border-left:0;padding-left:0}
+.standards li{padding:28px 22px;display:grid;gap:4px;border-inline-start:1px solid var(--line)}
+.standards li:first-child{border-inline-start:0;padding-inline-start:0}
 .standards strong{font:400 22px/1.2 var(--display);font-style:italic}
-.standards span{font-size:13px;color:var(--muted)}
+.standards span{font-size:13.5px;color:var(--muted)}
+html:lang(zh) .standards strong,html:lang(ja) .standards strong{font-style:normal}
 
-/* ---------- Section heads ---------- */
-section.block{padding-block:clamp(64px,8vw,112px)}
-.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
-.head .script-accent{font-family:var(--script);color:var(--gold);font-size:1.15em;font-weight:400}
+/* ================= Section heads ================= */
+section.block{padding-block:clamp(64px,8vw,116px)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
+.head h2{margin-top:10px}
 
-/* ---------- Filters + grid ---------- */
-.filters{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);background:none;border-radius:999px;padding:.6em 1.2em;font:400 13px/1 var(--sans);letter-spacing:.08em}
-.chip:hover{border-color:var(--gold)}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,28px)}
-.card{display:flex;flex-direction:column;gap:14px}
-.card-media{position:relative;aspect-ratio:4/5;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
-.card-media::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 55%,rgba(216,180,96,.14),transparent 70%);pointer-events:none}
-.card-media svg{width:78%;height:auto;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.card:hover .card-media svg{transform:scale(1.06) rotate(-2deg)}
-.tag{position:absolute;top:12px;left:12px;font:500 10px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:var(--bg);padding:6px 8px;border:1px solid var(--line);z-index:1}
-.quick{position:absolute;left:12px;right:12px;bottom:12px;z-index:1;opacity:0;transform:translateY(8px);transition:.3s;background:var(--ink);color:var(--bg);border:0;padding:12px;font:500 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
-.card:hover .quick,.quick:focus-visible{opacity:1;transform:none}
+/* ================= Catalog ================= */
+.toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:34px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.filters{display:flex;flex-wrap:wrap;gap:4px;position:relative}
+.chip{position:relative;border:0;background:none;padding:.7em 1.1em;font:400 13px/1 var(--sans);letter-spacing:.1em;color:var(--muted);transition:color .3s}
+.chip::after{content:"";position:absolute;inset-inline:1.1em;bottom:0;height:1px;background:var(--g-yellow);transform:scaleX(0);transition:transform .45s var(--ease)}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--ink)}
+.chip[aria-pressed="true"]::after{transform:scaleX(1)}
+.chip .count{display:inline-block;margin-inline-start:6px;vertical-align:1px}
+.sorter{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted)}
+.sorter select{appearance:none;-webkit-appearance:none;border:1px solid var(--line);background:var(--surface) linear-gradient(45deg,transparent 50%,var(--muted) 50%) no-repeat calc(100% - 16px) 52%/5px 5px;color:var(--ink);padding:.65em 2.4em .65em 1em;font:400 13px/1.2 var(--sans);border-radius:0}
+html[dir="rtl"] .sorter select{background-position:16px 52%;padding:.65em 1em .65em 2.4em}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.2vw,32px) clamp(14px,2vw,28px)}
+.card{display:flex;flex-direction:column;gap:14px;animation:rise .7s var(--ease) both;animation-delay:calc(var(--d,0) * 60ms)}
+@keyframes rise{from{opacity:.001;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card-media{perspective:900px}
+.card-media .tilt{position:relative;transition:transform .6s var(--ease);transform-style:preserve-3d}
+.card-media .ph{aspect-ratio:4/5;width:100%;cursor:pointer}
+.card:hover .ph-initial{transform:scale(1.06);background-position:100% 0}
+.actions{position:absolute;inset-inline:10px;bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:1px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--ease)}
+.card:hover .actions,.card:focus-within .actions{opacity:1;transform:none}
+.actions button{border:0;padding:12px 6px;font:500 10.5px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background-color .2s,color .2s}
+.actions button:hover{background:var(--ink);color:var(--bg)}
+.card-info{display:grid;gap:6px}
+.card-tag{font:500 10.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--accent);min-height:11px}
+.card-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .card h3{font-size:21px}
-.card-meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.card-spec{font-size:13px;color:var(--muted);margin-top:2px}
-.price{font:400 16px/1 var(--display);white-space:nowrap}
-@media (hover:none){.quick{opacity:1;transform:none;position:static;margin-top:0}.card-media{display:flex;flex-direction:column;justify-content:center;align-items:center}}
+.card h3 button{border:0;background:none;padding:0;font:inherit;text-align:start;background-image:var(--g-yellow);background-repeat:no-repeat;background-size:0 1px;background-position:0 100%;transition:background-size .4s var(--ease)}
+.card h3 button:hover{background-size:100% 1px}
+.card-spec{font-size:13px;color:var(--muted);min-height:2.6em}
+.price{font:400 17px/1 var(--display);white-space:nowrap}
+.heart{border:0;background:none;width:34px;height:34px;display:grid;place-items:center;font-size:18px;line-height:1;color:var(--muted);transition:transform .3s var(--ease),color .2s;flex:none}
+.heart:hover{color:var(--gold);transform:scale(1.15)}
+.heart[aria-pressed="true"]{color:var(--gold)}
+.heart[aria-pressed="true"] span{display:inline-block;animation:pop .45s var(--ease)}
+@keyframes pop{40%{transform:scale(1.4)}}
+.swatches{display:flex;gap:6px}
+.sw{width:18px;height:18px;border-radius:50%;border:0;padding:0;background:var(--sw);box-shadow:0 0 0 1px var(--line);transition:box-shadow .2s,transform .2s}
+.sw:hover{transform:scale(1.15)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--ink)}
+.empty-grid{grid-column:1/-1;text-align:center;padding:60px 16px;color:var(--muted)}
+.empty-grid .s{display:block;font-size:48px;margin-bottom:8px}
+@media (hover:none){
+  .actions{opacity:1;transform:none}
+}
 
-/* ---------- Collections (night band) ---------- */
-.night{background:var(--night);color:var(--on-night)}
-.night .eyebrow{color:var(--gilt)}
-.collections{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:clamp(16px,2vw,24px)}
-.coll{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:420px;padding:28px;text-decoration:none;border:1px solid rgba(226,194,114,.28);overflow:hidden;background:radial-gradient(80% 60% at 50% 30%,var(--night-2),var(--night) 75%)}
-.coll svg{position:absolute;top:8%;left:50%;width:62%;transform:translateX(-50%);transition:transform .6s}
-.coll:hover svg{transform:translateX(-50%) scale(1.05)}
-.coll .script{font-size:64px;color:var(--gilt);position:relative}
-.coll p{position:relative;margin:6px 0 0;color:var(--on-night-muted);font-size:14px;max-width:34ch}
-.coll .count{position:absolute;top:22px;right:24px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--on-night-muted)}
+/* ================= Collections band ================= */
+.band-sec{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--band-a),var(--band-b))}
+.band-sec .head p{color:var(--band-muted)}
+.colls{display:flex;gap:clamp(12px,1.6vw,20px);height:clamp(440px,48vw,560px)}
+.coll{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:clamp(20px,2.4vw,32px);border:0;background:none;text-align:start;text-decoration:none;color:var(--ink);transition:flex-grow .8s var(--ease);overflow:hidden}
+.coll .ph{position:absolute;inset:0;border-radius:50% 50% 0 0/28% 28% 0 0}
+.coll .ph-initial{font-size:clamp(90px,14vw,180px);opacity:.9;transform:translateY(-18%)}
+.coll > *:not(.ph){position:relative}
+.coll .brand{font-size:clamp(52px,5.4vw,72px)}
+.coll p{margin:0;font-size:14px;color:var(--muted);max-width:32ch}
+.coll small{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.coll:hover,.coll:focus-visible{flex-grow:1.7}
+.coll:hover .ph-initial{transform:translateY(-22%) scale(1.06)}
 
-/* ---------- Engraving studio ---------- */
-.studio{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:center}
-.studio-stage{position:relative;background:var(--surface);border:1px solid var(--line);aspect-ratio:1/1;display:grid;place-items:center}
-.studio-stage svg{width:88%;height:auto}
-.stage-note{position:absolute;left:18px;bottom:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.studio-form{display:grid;gap:26px}
-.studio-form p.intro{color:var(--muted);margin:14px 0 0;max-width:46ch}
+/* ================= Engraving studio ================= */
+.studio{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,80px);align-items:center}
+.stage{position:relative;display:grid;place-items:center;align-content:center;gap:24px;min-height:clamp(360px,42vw,520px);padding:clamp(24px,4vw,48px);border-radius:50% 50% 0 0/26% 26% 0 0;overflow:hidden;--stone:#8FDDEB}
+.stage.ph .band{z-index:1}
+.band{position:relative;width:100%;max-width:520px;height:clamp(96px,13vw,132px);border-radius:16px;display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(180deg,var(--m-dark) 0%,var(--m-light) 20%,var(--m-mid) 50%,var(--m-light) 80%,var(--m-dark) 100%);
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.28),inset 0 -2px 6px rgba(255,255,255,.35),0 28px 50px -24px rgba(5,40,50,.55);
+  transform:perspective(900px) rotateX(16deg);transition:background .6s}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:sheen 5.5s 2s ease-in-out infinite}
+@keyframes sheen{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.band[data-metal="yellow"]{--m-dark:#8C6A1E;--m-light:#F6E3A2;--m-mid:#C9A24A;--m-ink:#5A4210}
+.band[data-metal="white"]{--m-dark:#78828F;--m-light:#FFFFFF;--m-mid:#BCC5CF;--m-ink:#3A4350}
+.band[data-metal="rose"]{--m-dark:#8E5040;--m-light:#F8D5C3;--m-mid:#C98870;--m-ink:#5E2E22}
+.engr{position:relative;z-index:1;max-width:92%;padding-inline:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--m-ink);opacity:.82;text-shadow:0 1px 0 rgba(255,255,255,.6),0 -1px 0 rgba(0,0,0,.3);transition:font-size .3s}
+.engr[data-font="script"]{font:400 clamp(34px,5vw,50px)/1.3 "Pinyon Script",var(--script)}
+.engr[data-font="roman"]{font:400 italic clamp(24px,3.4vw,34px)/1.3 "Bodoni Moda",var(--display)}
+.engr[data-font="caps"]{font:400 clamp(16px,2.2vw,22px)/1.3 "Jost",var(--sans);letter-spacing:.3em;text-transform:uppercase}
+.engr.empty{opacity:.35}
+.hall{position:absolute;bottom:9px;font:500 9.5px/1 var(--sans);letter-spacing:.22em;color:var(--m-ink);opacity:.55;direction:ltr}
+.hall.l{left:18px}.hall.r{right:18px}
+.stage-note{position:relative;z-index:1;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center}
+.studio-form{display:grid;gap:24px}
+.studio-form .intro{color:var(--muted);margin:14px 0 0;max-width:48ch}
 .field{display:grid;gap:10px}
-.field > label,.field legend{font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0}
+.field > label,.field legend{font:500 11.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding:0}
 fieldset{border:0;margin:0;padding:0;min-width:0}
-.text-input{border:0;border-bottom:1px solid var(--ink);background:none;padding:10px 0;font:400 28px/1.2 var(--display);font-style:italic;color:var(--ink);width:100%}
-.text-input:focus{outline:none;border-bottom-color:var(--gold)}
+.text-input{border:0;border-bottom:1px solid var(--ink);background:none;padding:10px 0;font:400 italic 28px/1.2 var(--display);color:var(--ink);width:100%;border-radius:0}
+.text-input:focus{outline:none;border-bottom-color:var(--accent)}
 .counter{font-size:12px;color:var(--muted);justify-self:end;margin-top:-4px}
 .opts{display:flex;flex-wrap:wrap;gap:8px}
 .opt{position:relative}
-.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
-.opt span{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:.7em 1.1em;font-size:14px;transition:.2s}
+.opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;width:100%;height:100%}
+.opt span{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;border:1px solid var(--line);padding:.5em 1.1em;font-size:14px;transition:background-color .2s,color .2s,border-color .2s}
+.opt:hover span{border-color:var(--accent)}
 .opt input:checked + span{border-color:var(--ink);background:var(--ink);color:var(--bg)}
-.opt input:focus-visible + span{outline:2px solid var(--gold-soft);outline-offset:2px}
-.swatch{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
-.size-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
-.size-grid .opt span{justify-content:center;width:100%;padding:.65em 0;font-variant-numeric:tabular-nums}
-.size-readout{font-size:13px;color:var(--muted)}
-.studio-total{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px}
-.studio-total .price{font-size:30px}
-.studio-total small{display:block;font:300 12px/1.4 var(--sans);color:var(--muted);margin-top:6px}
+.opt input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px var(--line)}
+.sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:6px}
+.sizes .opt span{width:100%;padding:.5em 0;font-variant-numeric:tabular-nums}
+.readout{font-size:13px;color:var(--muted)}
+.total{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px}
+.total .price{font-size:32px}
+.total small{display:block;font:300 12.5px/1.4 var(--sans);color:var(--muted);margin-top:8px}
 
-/* ---------- Story ---------- */
-.story{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center}
-.story blockquote{margin:0;font:400 clamp(26px,3vw,38px)/1.3 var(--display);font-style:italic;text-wrap:balance}
-.story blockquote .script{font-size:1.5em;color:var(--gilt);font-style:normal}
-.story cite{display:block;margin-top:20px;font:400 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;font-style:normal;color:var(--on-night-muted)}
-.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(226,194,114,.25);border:1px solid rgba(226,194,114,.25)}
-.facts div{background:var(--night);padding:26px 22px}
-.facts b{display:block;font:400 42px/1 var(--display);color:var(--gilt);font-variant-numeric:lining-nums}
-.facts span{display:block;margin-top:10px;font-size:13px;color:var(--on-night-muted)}
+/* ================= Atelier ================= */
+.story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:center}
+.story blockquote{margin:16px 0 0;font:400 italic clamp(26px,3vw,40px)/1.3 var(--display);text-wrap:balance}
+html:lang(zh) .story blockquote,html:lang(ja) .story blockquote{font-style:normal}
+.story cite{display:block;margin-top:22px;font:400 12px/1.5 var(--sans);letter-spacing:.2em;text-transform:uppercase;font-style:normal;color:var(--band-muted)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.facts div{background:color-mix(in srgb,var(--band-a) 70%,var(--bg));padding:28px 22px}
+.facts b{display:block;font:400 44px/1 var(--display);font-variant-numeric:lining-nums}
+.facts span{display:block;margin-top:12px;font-size:13px;color:var(--band-muted)}
 
-/* ---------- Newsletter + footer ---------- */
+/* ================= Newsletter ================= */
 .letter{text-align:center;display:grid;justify-items:center;gap:14px}
-.letter .script{font-size:clamp(56px,7vw,88px);color:var(--gold)}
-.letter p{color:var(--muted);margin:0;max-width:48ch}
-.letter form{display:flex;gap:0;width:min(520px,100%);margin-top:14px;border:1px solid var(--ink)}
-.letter input{flex:1;min-width:0;border:0;background:none;padding:14px 16px;font:300 15px var(--sans);color:var(--ink)}
+.letter h2{font-family:var(--script);font-size:clamp(56px,7.5vw,96px);line-height:1.1}
+.letter p{color:var(--muted);margin:0;max-width:50ch}
+.letter form{display:flex;width:min(540px,100%);margin-top:16px;border:1px solid var(--ink)}
+.letter input{flex:1;min-width:0;border:0;background:none;padding:15px 16px;font:300 15px var(--sans);color:var(--ink)}
 .letter input:focus{outline:none}
-.letter .btn{border:0;border-left:1px solid var(--ink)}
-.form-msg{font-size:14px;color:var(--gold);min-height:1.4em}
-footer.site{background:var(--night);color:var(--on-night-muted);padding-block:64px 32px;font-size:14px}
-.foot{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:32px}
-.foot .logo{color:var(--gilt);font-size:64px}
-.foot h4{margin:0 0 14px;font:500 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--on-night)}
-.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.foot a{text-decoration:none}.foot a:hover{color:var(--gilt)}
-.legal{margin-top:48px;padding-top:22px;border-top:1px solid rgba(226,194,114,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;letter-spacing:.06em}
+.letter form .btn{border:0}
+.form-msg{font-size:14px;color:var(--accent);min-height:1.4em}
 
-/* ---------- Bag drawer ---------- */
-.scrim{position:fixed;inset:0;background:rgba(5,10,30,.5);z-index:60;opacity:0;transition:opacity .3s}
+/* ================= Footer ================= */
+footer.site{background:var(--ink);color:color-mix(in srgb,var(--bg) 72%,var(--ink));padding-block:64px 32px;font-size:14px}
+.foot{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:32px}
+.foot .logo{display:inline-block;font-size:66px;padding-inline:0 .1em}
+.foot h4{margin:0 0 14px;font:500 11.5px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--bg)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none}.foot a:hover{color:var(--bg)}
+.legal{margin-top:48px;padding-top:22px;border-top:1px solid color-mix(in srgb,var(--bg) 18%,transparent);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;letter-spacing:.06em}
+
+/* ================= Bag drawer ================= */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:80;opacity:0;transition:opacity .35s}
 .scrim.on{opacity:1}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:61;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);border-left:1px solid var(--line)}
-.drawer.on{transform:none}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(430px,100%);z-index:81;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .5s var(--ease);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);border-inline-start:1px solid var(--line);visibility:hidden}
+html[dir="rtl"] .drawer{transform:translateX(-100%)}
+.drawer.on,html[dir="rtl"] .drawer.on{transform:none;visibility:visible}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
-.drawer-head h2{font-size:26px}
-.drawer-body{flex:1;overflow:auto;padding:8px 24px}
-.line{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
-.line .thumb{aspect-ratio:1;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
-.line .thumb svg{width:80%}
+.drawer-head h2{font-size:28px}
+.x{border:0;background:none;width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1}
+.x:hover{background:var(--chip)}
+.drawer-body{flex:1;overflow:auto;padding:4px 24px}
+.line{display:grid;grid-template-columns:68px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.line .ph{aspect-ratio:4/5;width:100%}
+.line .ph::before{animation:none}
 .line h3{font-size:17px}
-.line small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.line small{display:block;color:var(--muted);font-size:12px;margin-top:4px;line-height:1.4}
 .qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin-top:8px}
-.qty button{border:0;background:none;width:28px;height:28px}
+.qty button{border:0;background:none;width:30px;height:30px}
 .qty span{min-width:22px;text-align:center;font-size:13px}
-.empty{padding:48px 0;text-align:center;color:var(--muted)}
-.empty .script{display:block;font-size:48px;color:var(--gold);margin-bottom:6px}
+.empty{padding:56px 0;text-align:center;color:var(--muted)}
+.empty .s{display:block;font-size:46px;margin-bottom:6px}
 .drawer-foot{padding:20px 24px 24px;border-top:1px solid var(--line);display:grid;gap:12px}
 .drawer-foot .row{display:flex;justify-content:space-between;align-items:baseline}
-.drawer-foot .note{font-size:12px;color:var(--muted);margin:0}
-.btn-block{justify-content:center;width:100%}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:70;background:var(--night);color:var(--on-night);border:1px solid rgba(226,194,114,.4);padding:12px 20px;font-size:14px;transition:.3s;pointer-events:none;max-width:calc(100% - 32px)}
+.note{font-size:12px;color:var(--muted);margin:0}
+
+/* ================= Quick view ================= */
+dialog.qv{width:min(980px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);box-shadow:var(--shadow);overflow:auto}
+dialog.qv::backdrop{background:var(--scrim);backdrop-filter:blur(4px)}
+dialog.qv[open]{animation:qvIn .5s var(--ease)}
+@keyframes qvIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.qv-grid{display:grid;grid-template-columns:1fr 1fr}
+.qv-media{padding:clamp(20px,3vw,36px);background:linear-gradient(160deg,var(--band-a),var(--band-b))}
+.qv-media .ph{aspect-ratio:4/5;width:100%}
+.qv-info{position:relative;padding:clamp(24px,3.4vw,44px);display:grid;align-content:start;gap:20px}
+.qv-info .x{position:absolute;top:14px;inset-inline-end:14px}
+.qv-info h2{font-size:clamp(32px,3.6vw,44px)}
+.qv-info .spec{color:var(--muted);margin:6px 0 0}
+.qv-info .desc{margin:0;color:var(--muted);font-size:15px}
+.qv-info .price{font-size:28px}
+.qv-actions{display:grid;grid-template-columns:1fr auto;gap:10px}
+.qv-actions .heart{width:52px;height:auto;border:1px solid var(--line)}
+.made{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:90;background:var(--ink);color:var(--bg);padding:13px 22px;font-size:14px;transition:opacity .3s,transform .4s var(--ease);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-/* ---------- Responsive ---------- */
-@media (max-width:1024px){
+/* ================= Responsive ================= */
+@media (max-width:1080px){
   .grid{grid-template-columns:repeat(3,1fr)}
-  .collections{grid-template-columns:1fr 1fr}
-  .collections .coll:first-child{grid-column:1/-1}
   .standards ul{grid-template-columns:1fr 1fr}
-  .standards li:nth-child(3){border-left:0;padding-left:0}
-  .standards li{border-top:1px solid var(--line)}
-  .standards li:nth-child(-n+2){border-top:0}
+  .standards li:nth-child(3){border-inline-start:0;padding-inline-start:0}
+  .standards li:nth-child(n+3){border-top:1px solid var(--line)}
 }
-@media (max-width:820px){
-  .nav-links{display:none}
-  .menu-btn{display:grid}
+@media (max-width:860px){
+  .nav-links,.tool.hide-sm{display:none}
+  .menu-btn{display:inline-flex}
   .nav{grid-template-columns:auto 1fr auto}
-  .logo{justify-self:center}
-  .hero-grid,.studio,.story{grid-template-columns:1fr}
-  .hero-art{max-width:380px;order:-1}
+  .logo{justify-self:center;font-size:46px}
+  .hero-grid,.studio,.story,.qv-grid{grid-template-columns:1fr}
+  .hero-piece{width:min(320px,80%);order:-1}
   .grid{grid-template-columns:1fr 1fr}
+  .colls{flex-direction:column;height:auto}
+  .coll{min-height:300px}
+  .coll:hover,.coll:focus-visible{flex-grow:1}
   .foot{grid-template-columns:1fr 1fr}
   .foot > div:first-child{grid-column:1/-1}
+  .qv-media .ph{max-width:320px;margin-inline:auto}
 }
-@media (max-width:520px){
-  .collections{grid-template-columns:1fr}
-  .coll{min-height:360px}
-  .standards ul{grid-template-columns:1fr}
-  .standards li{border-left:0!important;padding-left:0;border-top:1px solid var(--line)!important}
-  .standards li:first-child{border-top:0!important}
-  .facts{grid-template-columns:1fr}
-  .logo{font-size:44px}
-  .grid{gap:14px}
-  .card h3{font-size:18px}
+@media (max-width:540px){
+  .standards ul,.facts{grid-template-columns:1fr}
+  .standards li{border-inline-start:0!important;padding-inline-start:0;border-top:1px solid var(--line)}
+  .standards li:first-child{border-top:0}
+  .grid{gap:22px 12px}
+  .card h3{font-size:17px}
+  .actions{grid-template-columns:1fr}
+  .actions button:first-child{display:none}
+  .tool{padding:0 8px}
+  .toolbar{align-items:stretch}
 }
-.mobile-nav{display:flex;flex-wrap:wrap;gap:6px 18px;padding-block:0 14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
-.mobile-nav a{text-decoration:none}
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .loader-mark{clip-path:none}
   html{scroll-behavior:auto}
 }
 </style>
 </head>
 <body>
 
-<!-- Shared SVG paint: gold alloys and sapphire -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <linearGradient id="g-yellow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8C6A1E"/><stop offset=".28" stop-color="#F3DC94"/>
-      <stop offset=".5" stop-color="#B98F36"/><stop offset=".72" stop-color="#F6E4A6"/>
-      <stop offset="1" stop-color="#8F6C22"/>
-    </linearGradient>
-    <linearGradient id="g-white" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7C8394"/><stop offset=".28" stop-color="#F4F6FA"/>
-      <stop offset=".5" stop-color="#A9B0BF"/><stop offset=".72" stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#7A8192"/>
-    </linearGradient>
-    <linearGradient id="g-rose" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8E5040"/><stop offset=".28" stop-color="#F5C9B4"/>
-      <stop offset=".5" stop-color="#C07D66"/><stop offset=".72" stop-color="#F8D8C8"/>
-      <stop offset="1" stop-color="#8A4E3E"/>
-    </linearGradient>
-    <radialGradient id="sapph" cx=".38" cy=".32" r=".75">
-      <stop offset="0" stop-color="#A9C0FF"/><stop offset=".25" stop-color="#4A70E0"/>
-      <stop offset=".62" stop-color="#1A3790"/><stop offset="1" stop-color="#08164A"/>
-    </radialGradient>
-    <radialGradient id="glow" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#E2C272" stop-opacity=".35"/><stop offset="1" stop-color="#E2C272" stop-opacity="0"/>
-    </radialGradient>
-    <symbol id="gem" viewBox="-20 -20 40 40">
-      <circle r="18" fill="url(#sapph)"/>
-      <path d="M0-18 L9-9 L18 0 L9 9 L0 18 L-9 9 L-18 0 L-9-9Z M-9-9 L9-9 L9 9 L-9 9Z M0-18 L0 18 M-18 0 L18 0" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width=".8"/>
-      <ellipse cx="-6" cy="-8" rx="5" ry="2.6" fill="#fff" opacity=".55" transform="rotate(-30 -6 -8)"/>
-    </symbol>
-    <symbol id="spark" viewBox="-10 -10 20 20">
-      <path d="M0-10 Q1-1 10 0 Q1 1 0 10 Q-1 1-10 0 Q-1-1 0-10Z" fill="#FFF6D8"/>
-    </symbol>
-  </defs>
-</svg>
+<!-- Loading page -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <div class="loader-mark gild">Jewl</div>
+  <div class="loader-line"><i></i></div>
+  <p data-i="loader"></p>
+</div>
 
-<div class="announce">Complimentary insured shipping &amp; <b>free resizing for life</b> on every ring</div>
+<div class="announce" data-i="announce"></div>
 
 <header class="site">
   <div class="wrap">
     <nav class="nav" aria-label="Primary">
-      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Show menu" aria-expanded="false" aria-controls="mobileNav">
-        <svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-      </button>
+      <button class="tool menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav"><span class="glyph" aria-hidden="true">≡</span><span class="sr" data-i="menu"></span></button>
       <ul class="nav-links">
-        <li><a href="#shop">Shop</a></li>
-        <li><a href="#collections">Collections</a></li>
-        <li><a href="#engrave">Engraving</a></li>
-        <li><a href="#atelier">Atelier</a></li>
+        <li><a href="#shop" data-i="nav_shop"></a></li>
+        <li><a href="#collections" data-i="nav_coll"></a></li>
+        <li><a href="#engrave" data-i="nav_engr"></a></li>
+        <li><a href="#atelier" data-i="nav_atelier"></a></li>
       </ul>
-      <a class="logo" href="#top" aria-label="Jewl home">Jewl</a>
-      <div class="nav-tools">
-        <button class="icon-btn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
-        <button class="icon-btn" id="bagBtn" aria-label="Open bag, 0 items" aria-controls="drawer">
-          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
-          <span class="badge num" id="bagCount" hidden>0</span>
-        </button>
+      <a class="logo gild" href="#top" aria-label="Jewl">Jewl</a>
+      <div class="tools">
+        <div class="lang-wrap">
+          <button class="tool" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu"><span id="langCode">EN</span><span aria-hidden="true" style="font-size:9px">▼</span></button>
+          <ul class="lang-menu" id="langMenu" hidden></ul>
+        </div>
+        <button class="tool" id="themeBtn"><span class="glyph" id="themeGlyph" aria-hidden="true">☾</span></button>
+        <button class="tool hide-sm" id="wishBtn"><span class="glyph" aria-hidden="true">♡&#xFE0E;</span><span class="count num" id="wishCount" hidden>0</span></button>
+        <button class="tool" id="bagBtn" aria-controls="drawer"><span data-i="bag"></span><span class="count num" id="bagCount" hidden>0</span></button>
       </div>
     </nav>
     <div class="mobile-nav" id="mobileNav" hidden>
-      <a href="#shop">Shop</a><a href="#collections">Collections</a><a href="#engrave">Engraving</a><a href="#atelier">Atelier</a>
+      <a href="#shop" data-i="nav_shop"></a><a href="#collections" data-i="nav_coll"></a><a href="#engrave" data-i="nav_engr"></a><a href="#atelier" data-i="nav_atelier"></a>
     </div>
   </div>
 </header>
 
 <main id="top">
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" id="hero">
+    <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow">The Autumn Lapis Edit</div>
-        <div class="hero-mark" aria-hidden="true">Jewl</div>
-        <h1>Sapphires set in <em>recycled 18k gold</em></h1>
-        <p class="lede">Heat-free Ceylon sapphires, hand-set in our Lisbon atelier. Each piece is hallmarked, made to your ring size, and yours to engrave.</p>
+        <div class="eyebrow" data-i="hero_eyebrow"></div>
+        <div class="hero-mark gild" aria-hidden="true">Jewl</div>
+        <h1 data-i="hero_title"></h1>
+        <p class="lede" data-i="hero_lede"></p>
         <div class="hero-ctas">
-          <a class="btn btn-gold" href="#shop">Shop the edit</a>
-          <a class="btn btn-ghost-night" href="#engrave">Engrave a ring</a>
+          <a class="btn btn-gold" href="#shop" data-i="cta1"></a>
+          <a class="btn btn-line" href="#engrave" data-i="cta2"></a>
         </div>
       </div>
-      <div class="hero-art">
-        <svg viewBox="0 0 400 400" role="img" aria-label="The Ondine solitaire ring: a gold band set with a round blue sapphire">
-          <circle cx="200" cy="200" r="190" fill="url(#glow)"/>
-          <circle cx="200" cy="200" r="168" fill="none" stroke="#E2C272" stroke-opacity=".22" stroke-dasharray="1 7"/>
-          <g class="float">
-            <ellipse cx="200" cy="238" rx="108" ry="112" fill="none" stroke="#050B24" stroke-opacity=".5" stroke-width="22" transform="translate(6 10)"/>
-            <ellipse cx="200" cy="238" rx="108" ry="112" fill="none" stroke="url(#g-yellow)" stroke-width="20"/>
-            <ellipse cx="200" cy="238" rx="96" ry="100" fill="none" stroke="#F6E4A6" stroke-opacity=".35" stroke-width="1.2"/>
-            <!-- setting -->
-            <path d="M160 132 Q200 98 240 132 L230 148 Q200 132 170 148Z" fill="url(#g-yellow)"/>
-            <path d="M166 96 L176 136 M234 96 L224 136 M186 84 L190 134 M214 84 L210 134" stroke="url(#g-yellow)" stroke-width="5" stroke-linecap="round"/>
-            <use href="#gem" x="162" y="50" width="76" height="76"/>
-          </g>
-          <use class="sparkle" href="#spark" x="226" y="46" width="26" height="26"/>
-          <use class="sparkle d2" href="#spark" x="92" y="150" width="16" height="16"/>
-          <use class="sparkle d3" href="#spark" x="300" y="300" width="18" height="18"/>
-        </svg>
-        <div class="hero-caption"><span class="script">Ondine</span>1.2 ct Ceylon sapphire · 18k</div>
+      <div class="hero-piece">
+        <button class="arch-btn" id="heroArch" data-qv="ondine" type="button">
+          <div class="ph" data-stone="aqua" data-metal="yellow"><span class="ph-initial">O</span></div>
+        </button>
+        <div class="arch-cap"><span class="brand gild">Ondine</span><span id="heroCap" class="num"></span></div>
       </div>
     </div>
   </section>
 
+  <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+
   <!-- Standards -->
-  <section class="standards" aria-label="Our standards">
+  <section class="standards">
     <div class="wrap">
       <ul>
-        <li><strong>18k recycled gold</strong><span>750 hallmark, assayed in Lisbon</span></li>
-        <li><strong>Heat-free sapphires</strong><span>Ceylon origin, certificate with every stone over 0.5 ct</span></li>
-        <li><strong>Made to size</strong><span>US 4 – 9 in half sizes, cast to order in 3 weeks</span></li>
-        <li><strong>Resized for life</strong><span>Up to two sizes, always complimentary</span></li>
+        <li><strong data-i="s1t"></strong><span data-i="s1d"></span></li>
+        <li><strong data-i="s2t"></strong><span data-i="s2d"></span></li>
+        <li><strong data-i="s3t"></strong><span data-i="s3d"></span></li>
+        <li><strong data-i="s4t"></strong><span data-i="s4d"></span></li>
       </ul>
     </div>
   </section>
 
-  <!-- Shop -->
+  <!-- Catalog -->
   <section class="block" id="shop">
     <div class="wrap">
       <div class="head">
         <div>
-          <div class="eyebrow">Bestsellers</div>
-          <h2>Pieces worn <span class="script-accent">every day</span></h2>
+          <div class="eyebrow" data-i="shop_eyebrow"></div>
+          <h2 data-i="shop_title"></h2>
         </div>
-        <div class="filters" role="group" aria-label="Filter by category" id="filters"></div>
       </div>
-      <div class="grid" id="grid" aria-live="polite"></div>
+      <div class="toolbar">
+        <div class="filters" role="group" id="filters"></div>
+        <div class="sorter">
+          <span id="showing" class="num" aria-live="polite"></span>
+          <label class="sr" for="sort" data-i="sort"></label>
+          <select id="sort"></select>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
     </div>
   </section>
 
   <!-- Collections -->
-  <section class="block night" id="collections">
-    <div class="wrap">
+  <section class="block band-sec" id="collections">
+    <div class="aurora" aria-hidden="true" style="opacity:.5"><i></i><i></i><i></i></div>
+    <div class="wrap" style="position:relative">
       <div class="head">
         <div>
-          <div class="eyebrow">Collections</div>
-          <h2>Three stories in <em>gold and blue</em></h2>
+          <div class="eyebrow" data-i="coll_eyebrow"></div>
+          <h2 data-i="coll_title"></h2>
         </div>
-        <a class="btn btn-ghost-night" href="#shop">View all 48 pieces</a>
+        <a class="btn btn-line" href="#shop" data-i="coll_all"></a>
       </div>
-      <div class="collections">
-        <a class="coll" href="#shop">
-          <span class="count">18 pieces</span>
-          <svg viewBox="0 0 200 200" aria-hidden="true">
-            <path d="M28 18 Q100 150 172 18" fill="none" stroke="url(#g-yellow)" stroke-width="2.4" stroke-dasharray="4 2.2"/>
-            <circle cx="100" cy="108" r="7" fill="none" stroke="url(#g-yellow)" stroke-width="3"/>
-            <path d="M100 116 C122 136 124 164 100 182 C76 164 78 136 100 116Z" fill="url(#g-yellow)"/>
-            <path d="M100 124 C116 140 117 162 100 174 C83 162 84 140 100 124Z" fill="url(#sapph)"/>
-            <ellipse cx="94" cy="142" rx="4" ry="8" fill="#fff" opacity=".4" transform="rotate(20 94 142)"/>
-          </svg>
-          <span class="script">Lapis</span>
-          <p>Deep sapphire drops and pendants cut to catch low autumn light.</p>
-        </a>
-        <a class="coll" href="#shop">
-          <span class="count">14 pieces</span>
-          <svg viewBox="0 0 200 200" aria-hidden="true">
-            <path d="M40 100 A60 60 0 1 1 100 160" fill="none" stroke="url(#g-yellow)" stroke-width="12" stroke-linecap="round"/>
-            <use href="#gem" x="88" y="148" width="24" height="24"/>
-          </svg>
-          <span class="script">Tide</span>
-          <p>Open hoops and crescents, shaped like the waterline in Cascais.</p>
-        </a>
-        <a class="coll" href="#shop">
-          <span class="count">16 pieces</span>
-          <svg viewBox="0 0 200 200" aria-hidden="true">
-            <ellipse cx="100" cy="112" rx="58" ry="60" fill="none" stroke="url(#g-yellow)" stroke-width="16"/>
-            <rect x="72" y="36" width="56" height="34" rx="14" fill="url(#g-yellow)"/>
-            <text x="100" y="62" text-anchor="middle" font-family="Pinyon Script, cursive" font-size="24" fill="#6B4E14">J</text>
-          </svg>
-          <span class="script">Heirloom</span>
-          <p>Signets and bands made to be engraved and passed on.</p>
-        </a>
+      <div class="colls">
+        <button class="coll" type="button" data-go="necklaces">
+          <div class="ph" data-stone="aqua" data-metal="yellow" aria-hidden="true"><span class="ph-initial">L</span></div>
+          <small class="num" data-i="pieces" data-n="18"></small>
+          <span class="brand gild">Lagoon</span>
+          <p data-i="c1"></p>
+        </button>
+        <button class="coll" type="button" data-go="earrings">
+          <div class="ph" data-stone="paraiba" data-metal="rose" aria-hidden="true"><span class="ph-initial">T</span></div>
+          <small class="num" data-i="pieces" data-n="14"></small>
+          <span class="brand gild">Tide</span>
+          <p data-i="c2"></p>
+        </button>
+        <button class="coll" type="button" data-go="rings">
+          <div class="ph" data-stone="topaz" data-metal="white" aria-hidden="true"><span class="ph-initial">H</span></div>
+          <small class="num" data-i="pieces" data-n="16"></small>
+          <span class="brand gild">Heirloom</span>
+          <p data-i="c3"></p>
+        </button>
       </div>
     </div>
   </section>
@@ -448,97 +566,72 @@ footer.site{background:var(--night);color:var(--on-night-muted);padding-block:64
   <!-- Engraving studio -->
   <section class="block" id="engrave">
     <div class="wrap studio">
-      <div class="studio-stage">
-        <svg viewBox="0 0 400 400" role="img" aria-labelledby="stageLabel">
-          <title id="stageLabel">Live preview of your engraved Nocturne band</title>
-          <defs>
-            <path id="engravePath" d="M78 206 A122 84 0 0 1 322 206"/>
-          </defs>
-          <circle cx="200" cy="200" r="180" fill="url(#glow)"/>
-          <!-- back of band -->
-          <ellipse cx="200" cy="200" rx="130" ry="86" fill="none" id="bandBack" stroke="url(#g-yellow)" stroke-width="34" opacity=".75"/>
-          <!-- inner shadow band -->
-          <ellipse cx="200" cy="206" rx="114" ry="72" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="10"/>
-          <!-- front arc -->
-          <path d="M70 200 A130 86 0 0 0 330 200" fill="none" id="bandFront" stroke="url(#g-yellow)" stroke-width="36"/>
-          <!-- sapphires along the front -->
-          <g id="bandGems">
-            <use href="#gem" x="88" y="220" width="16" height="16"/>
-            <use href="#gem" x="130" y="258" width="16" height="16"/>
-            <use href="#gem" x="192" y="274" width="16" height="16"/>
-            <use href="#gem" x="254" y="258" width="16" height="16"/>
-            <use href="#gem" x="296" y="220" width="16" height="16"/>
-          </g>
-          <!-- inscription on the inner band -->
-          <text id="engraveText" font-size="30" fill="#5A4210" fill-opacity=".85" letter-spacing="1">
-            <textPath href="#engravePath" startOffset="50%" text-anchor="middle" id="engraveTP">always, A &amp; M</textPath>
-          </text>
-        </svg>
-        <span class="stage-note" id="stageNote">Nocturne band · 18k yellow gold</span>
+      <div class="stage ph" data-stone="aqua" data-metal="yellow">
+        <div class="band" id="band" data-metal="yellow">
+          <span class="engr" id="engr" data-font="script"></span>
+          <span class="hall l">750 · JWL</span>
+          <span class="hall r num" id="hallSize">US 6</span>
+        </div>
+        <span class="stage-note" data-i="e_view"></span>
       </div>
 
       <form class="studio-form" id="studio" novalidate>
         <div>
-          <div class="eyebrow">Engraving studio</div>
-          <h2>Write it <span class="script-accent" style="font-family:var(--script);color:var(--gold)">by hand</span>, inside the band</h2>
-          <p class="intro">Our engravers cut every inscription by hand with a graver. Choose a script, a metal and your size; we cast the Nocturne band to order.</p>
+          <div class="eyebrow" data-i="e_eyebrow"></div>
+          <h2 data-i="e_title" style="margin-top:10px"></h2>
+          <p class="intro" data-i="e_intro"></p>
         </div>
-
         <div class="field">
-          <label for="inscription">Inscription</label>
+          <label for="inscription" data-i="e_insc"></label>
           <input class="text-input" id="inscription" maxlength="18" value="always, A &amp; M" autocomplete="off">
-          <span class="counter num" id="counter">15 / 18</span>
+          <span class="counter num" id="counter"></span>
         </div>
-
         <fieldset class="field">
-          <legend>Lettering</legend>
+          <legend data-i="e_letter"></legend>
           <div class="opts">
-            <label class="opt"><input type="radio" name="font" id="font-script" value="script" checked><span style="font-family:var(--script);font-size:20px;padding-block:.35em">Script</span></label>
-            <label class="opt"><input type="radio" name="font" id="font-roman" value="roman"><span style="font-family:var(--display);font-style:italic">Roman italic</span></label>
-            <label class="opt"><input type="radio" name="font" id="font-caps" value="caps"><span style="letter-spacing:.18em">BLOCK CAPS</span></label>
+            <label class="opt"><input type="radio" name="font" id="font-script" value="script" checked><span style="font-family:var(--script);font-size:20px" data-i="e_script"></span></label>
+            <label class="opt"><input type="radio" name="font" id="font-roman" value="roman"><span style="font-family:var(--display);font-style:italic" data-i="e_roman"></span></label>
+            <label class="opt"><input type="radio" name="font" id="font-caps" value="caps"><span style="letter-spacing:.14em;text-transform:uppercase;font-size:12.5px" data-i="e_caps"></span></label>
           </div>
         </fieldset>
-
         <fieldset class="field">
-          <legend>Metal</legend>
+          <legend data-i="metal"></legend>
           <div class="opts">
-            <label class="opt"><input type="radio" name="metal" id="metal-yellow" value="yellow" checked><span><i class="swatch" style="background:linear-gradient(135deg,#F3DC94,#B98F36)"></i>18k yellow</span></label>
-            <label class="opt"><input type="radio" name="metal" id="metal-white" value="white"><span><i class="swatch" style="background:linear-gradient(135deg,#FFFFFF,#A9B0BF)"></i>18k white</span></label>
-            <label class="opt"><input type="radio" name="metal" id="metal-rose" value="rose"><span><i class="swatch" style="background:linear-gradient(135deg,#F5C9B4,#C07D66)"></i>18k rose</span></label>
+            <label class="opt"><input type="radio" name="metal" id="metal-yellow" value="yellow" checked><span><i class="dot" style="background:var(--g-yellow)"></i><b style="font-weight:inherit" data-i="yellow"></b></span></label>
+            <label class="opt"><input type="radio" name="metal" id="metal-white" value="white"><span><i class="dot" style="background:var(--g-white)"></i><b style="font-weight:inherit" data-i="white"></b></span></label>
+            <label class="opt"><input type="radio" name="metal" id="metal-rose" value="rose"><span><i class="dot" style="background:var(--g-rose)"></i><b style="font-weight:inherit" data-i="rose"></b></span></label>
           </div>
         </fieldset>
-
         <fieldset class="field">
-          <legend>Ring size (US)</legend>
-          <div class="size-grid" id="sizes"></div>
-          <span class="size-readout num" id="sizeReadout"></span>
+          <legend data-i="size"></legend>
+          <div class="sizes" id="sizes"></div>
+          <span class="readout num" id="readout"></span>
         </fieldset>
-
-        <div class="studio-total">
+        <div class="total">
           <div>
-            <div class="price num" id="studioPrice">$1,695</div>
-            <small>Band $1,650 + hand engraving $45 · ships in 3 weeks</small>
+            <div class="price num" id="studioPrice"></div>
+            <small id="breakdown" class="num"></small>
           </div>
-          <button class="btn btn-ink" type="submit">Add engraved band</button>
+          <button class="btn btn-ink" type="submit" data-i="e_add"></button>
         </div>
       </form>
     </div>
   </section>
 
-  <!-- Atelier story -->
-  <section class="block night" id="atelier">
+  <!-- Atelier -->
+  <section class="block band-sec" id="atelier">
     <div class="wrap story">
       <div>
-        <div class="eyebrow">The atelier</div>
+        <div class="eyebrow" data-i="a_eyebrow"></div>
         <blockquote>
-          “We set every stone as if it were going to be handed down, because most of them <span class="script">will</span> be.”
-          <cite>Inês Carvalho, head setter, Rua da Rosa, Lisbon</cite>
+          <span data-i="a_quote"></span>
+          <cite data-i="a_cite"></cite>
         </blockquote>
       </div>
       <div class="facts">
-        <div><b class="num">100%</b><span>recycled 18k gold, refined in Portugal</span></div>
-        <div><b class="num">7</b><span>goldsmiths and setters in one workshop</span></div>
-        <div><b class="num">3 wk</b><span>from your order to a hallmarked piece</span></div>
+        <div><b class="num gild">100%</b><span data-i="f1"></span></div>
+        <div><b class="num gild">7</b><span data-i="f2"></span></div>
+        <div><b class="num gild" data-i="f3v"></b><span data-i="f3"></span></div>
       </div>
     </div>
   </section>
@@ -546,12 +639,12 @@ footer.site{background:var(--night);color:var(--on-night-muted);padding-block:64
   <!-- Newsletter -->
   <section class="block">
     <div class="wrap letter">
-      <span class="script">Letters from Jewl</span>
-      <p>One letter a month on new stones from Ratnapura, atelier news and private previews of each collection.</p>
+      <h2 data-i="l_title"></h2>
+      <p data-i="l_body"></p>
       <form id="letterForm" novalidate>
-        <label for="email" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
-        <input id="email" type="email" placeholder="Your email address" autocomplete="email">
-        <button class="btn btn-ink" type="submit">Subscribe</button>
+        <label for="email" class="sr" data-i="l_label"></label>
+        <input id="email" type="email" autocomplete="email">
+        <button class="btn btn-ink" type="submit" data-i="l_btn"></button>
       </form>
       <div class="form-msg" id="letterMsg" role="status"></div>
     </div>
@@ -562,231 +655,495 @@ footer.site{background:var(--night);color:var(--on-night-muted);padding-block:64
   <div class="wrap">
     <div class="foot">
       <div>
-        <div class="logo">Jewl</div>
-        <p style="max-width:32ch;margin:10px 0 0">Fine jewelry in recycled gold and heat-free sapphire, made to order in Lisbon.</p>
+        <div class="logo gild">Jewl</div>
+        <p style="max-width:34ch;margin:10px 0 0" data-i="ft_about"></p>
       </div>
-      <div><h4>Shop</h4><ul><li><a href="#shop">Rings</a></li><li><a href="#shop">Necklaces</a></li><li><a href="#shop">Earrings</a></li><li><a href="#shop">Bracelets</a></li></ul></div>
-      <div><h4>Care</h4><ul><li><a href="#engrave">Ring size guide</a></li><li><a href="#top">Lifetime resizing</a></li><li><a href="#top">Shipping &amp; returns</a></li><li><a href="#top">Jewelry care</a></li></ul></div>
-      <div><h4>Visit</h4><ul><li>Rua da Rosa 112</li><li>1200-389 Lisboa</li><li>Tue – Sat, 11:00 – 19:00</li><li>hello@jewl.example</li></ul></div>
+      <div><h4 data-i="ft_shop"></h4><ul>
+        <li><a href="#shop" data-go="rings" data-i="rings"></a></li><li><a href="#shop" data-go="necklaces" data-i="necklaces"></a></li>
+        <li><a href="#shop" data-go="earrings" data-i="earrings"></a></li><li><a href="#shop" data-go="bracelets" data-i="bracelets"></a></li></ul></div>
+      <div><h4 data-i="ft_care"></h4><ul>
+        <li><a href="#engrave" data-i="ft_size"></a></li><li><a href="#top" data-i="ft_resize"></a></li>
+        <li><a href="#top" data-i="ft_ship"></a></li><li><a href="#top" data-i="ft_carejw"></a></li></ul></div>
+      <div><h4 data-i="ft_visit"></h4><ul>
+        <li>Rua da Rosa 112</li><li>1200-389 Lisboa</li><li data-i="ft_hours"></li><li>hello@jewl.example</li></ul></div>
     </div>
-    <div class="legal"><span>© 2026 Jewl Joalharia, Lda.</span><span>Design concept · prices in USD</span></div>
+    <div class="legal"><span>© 2026 Jewl Joalharia, Lda.</span><span data-i="ft_legal"></span></div>
   </div>
 </footer>
 
 <!-- Bag -->
 <div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" aria-label="Shopping bag" aria-hidden="true">
+<aside class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-head">
-    <h2>Your bag</h2>
-    <button class="icon-btn" id="closeBag" aria-label="Close bag"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h2 data-i="b_title"></h2>
+    <button class="x" id="closeBag">×</button>
   </div>
   <div class="drawer-body" id="bagBody"></div>
   <div class="drawer-foot" id="bagFoot">
-    <div class="row"><span>Subtotal</span><span class="price num" id="subtotal">$0</span></div>
-    <p class="note">Insured shipping is complimentary. Taxes are calculated at checkout.</p>
-    <button class="btn btn-ink btn-block" id="checkout">Checkout</button>
-    <p class="note" id="checkoutNote" hidden>This is a design concept, so checkout isn't connected yet.</p>
+    <div class="row"><span data-i="b_sub"></span><span class="price num" id="subtotal"></span></div>
+    <p class="note" data-i="b_note"></p>
+    <button class="btn btn-gold btn-block" id="checkout" data-i="b_checkout"></button>
+    <p class="note" id="checkoutNote" data-i="b_concept" hidden></p>
   </div>
 </aside>
+
+<!-- Quick view -->
+<dialog class="qv" id="qv">
+  <div class="qv-grid">
+    <div class="qv-media"><div class="ph" id="qvPh"><span class="ph-initial"></span></div></div>
+    <div class="qv-info" id="qvInfo"></div>
+  </div>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (() => {
-  const $ = (s, r = document) => r.querySelector(s);
-  const money = n => '$' + n.toLocaleString('en-US');
+/* ================= Copy, in nine languages ================= */
+const I18N = {
+en:{menu:"Menu",announce:"Complimentary insured shipping and free resizing for life",nav_shop:"Shop",nav_coll:"Collections",nav_engr:"Engraving",nav_atelier:"Atelier",bag:"Bag",wishlist:"Wishlist",lang:"Language",to_dark:"Switch to dark mode",to_light:"Switch to light mode",loader:"Fine jewelry, hand-set in Lisbon",
+hero_eyebrow:"The Lagoon Edit · Autumn 2026",hero_title:"Light, <em>held in gold</em>",hero_lede:"Aquamarines, Paraíba tourmalines and blue topaz, hand-set in recycled 18k gold in our Lisbon atelier.",cta1:"Shop the edit",cta2:"Engrave a ring",m_gold:"Recycled 18k gold",m_lisbon:"Hand-set in Lisbon",
+s1t:"18k recycled gold",s1d:"750 hallmark, assayed in Lisbon",s2t:"Certified stones",s2d:"A gem report with every stone over 0.5 ct",s3t:"Made to size",s3d:"US 4 – 9 in half sizes, cast to order",s4t:"Resized for life",s4d:"Up to two sizes, always complimentary",
+shop_eyebrow:"The catalog",shop_title:"Pieces worn <span class='s'>every day</span>",all:"All",rings:"Rings",necklaces:"Necklaces",earrings:"Earrings",bracelets:"Bracelets",saved:"Saved",sort:"Sort",sort_feat:"Featured",sort_low:"Price, low to high",sort_high:"Price, high to low",
+quick:"Quick view",add:"Add to bag",wish_add:"Save to wishlist",wish_rm:"Remove from wishlist",t_best:"Bestseller",t_new:"New",t_engr:"Engravable",showing:"{n} pieces",
+aqua:"Aquamarine",paraiba:"Paraíba tourmaline",topaz:"Blue topaz",turq:"Turquoise",yellow:"18k yellow gold",white:"18k white gold",rose:"18k rose gold",metal:"Metal",size:"Ring size (US)",length:"Length",pair:"Sold as a pair",
+d_rings:"Cast to your size in recycled 18k gold, then set by hand under the microscope. Comes with its gem report and a Jewl travel case.",d_necklaces:"The chain closes with a spring-ring clasp and a sliding bead, so it can be worn at two lengths.",d_earrings:"Posts in solid 18k gold with butterfly backs. Hypoallergenic and made for everyday wear.",d_bracelets:"Each stone sits in its own four-claw setting, with a hidden box clasp and a safety catch.",made:"Made to order · ships in 3 weeks",close:"Close",
+coll_eyebrow:"Collections",coll_title:"Three stories in <em>sky and gold</em>",coll_all:"View all 48 pieces",c1:"Aquamarine drops cut to hold the color of shallow water.",c2:"Open hoops and crescents shaped like the waterline in Cascais.",c3:"Signets and bands made to be engraved and passed on.",pieces:"{n} pieces",
+e_eyebrow:"Engraving studio",e_title:"Write it <span class='s'>by hand</span>, inside the band",e_intro:"Our engravers cut every inscription by hand with a graver. Choose a lettering style, a metal and your size, and we cast the Nocturne band to order.",e_insc:"Inscription",e_letter:"Lettering",e_script:"Script",e_roman:"Roman italic",e_caps:"Block caps",e_ph:"your words",e_view:"Inside of the band, shown flat",e_mm:"US {s} · {mm} mm inner diameter",e_break:"Band {band} + hand engraving {eng}",e_add:"Add engraved band",
+a_eyebrow:"The atelier",a_quote:"“We set every stone as if it were going to be handed down, because most of them <span class='s'>will</span> be.”",a_cite:"Inês Carvalho, head setter, Rua da Rosa, Lisbon",f1:"recycled 18k gold, refined in Portugal",f2:"goldsmiths and setters in one workshop",f3v:"3 wk",f3:"from your order to a hallmarked piece",
+l_title:"Letters from Jewl",l_body:"One letter a month on new stones, atelier news and private previews of each collection.",l_ph:"Your email address",l_btn:"Subscribe",l_ok:"Thank you. The next letter goes to {e}.",l_err:"Enter an email address like name@example.com.",l_label:"Email address",
+ft_about:"Fine jewelry in recycled gold and certified stones, made to order in Lisbon.",ft_shop:"Shop",ft_care:"Care",ft_visit:"Visit",ft_size:"Ring size guide",ft_resize:"Lifetime resizing",ft_ship:"Shipping and returns",ft_carejw:"Jewelry care",ft_hours:"Tue – Sat, 11:00 – 19:00",ft_legal:"Design concept · prices in USD",
+b_title:"Your bag",b_empty:"Empty for now",b_empty_d:"Add a piece and it will wait here for you.",b_sub:"Subtotal",b_note:"Insured shipping is complimentary. Taxes are calculated at checkout.",b_checkout:"Checkout",b_concept:"This is a design concept, so checkout isn't connected yet.",b_more:"Add one",b_less:"Remove one",
+toast_add:"{n} added to your bag",toast_wish:"{n} saved to your wishlist",toast_unwish:"{n} removed from your wishlist",no_saved:"Nothing saved yet. Tap ♡ on a piece to keep it here."},
 
-  /* ----- Jewelry drawings (inline SVG) ----- */
-  const art = {
-    ring: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <ellipse cx="100" cy="122" rx="56" ry="58" fill="none" stroke="url(#g-${m})" stroke-width="10"/>
-      <path d="M80 70 Q100 56 120 70 L114 78 Q100 70 86 78Z" fill="url(#g-${m})"/>
-      <use href="#gem" x="78" y="28" width="44" height="44"/></svg>`,
-    band: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <ellipse cx="100" cy="104" rx="64" ry="42" fill="none" stroke="url(#g-${m})" stroke-width="18"/>
-      ${[52,74,100,126,148].map((x,i)=>`<use href="#gem" x="${x-6}" y="${[128,140,142,140,128][i]}" width="12" height="12"/>`).join('')}</svg>`,
-    signet: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <ellipse cx="100" cy="118" rx="54" ry="56" fill="none" stroke="url(#g-${m})" stroke-width="14"/>
-      <rect x="70" y="40" width="60" height="38" rx="16" fill="url(#g-${m})"/>
-      <text x="100" y="69" text-anchor="middle" font-family="Pinyon Script, cursive" font-size="28" fill="#6B4E14" fill-opacity=".8">J</text></svg>`,
-    pendant: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M30 14 Q100 150 170 14" fill="none" stroke="url(#g-${m})" stroke-width="2.2" stroke-dasharray="4 2"/>
-      <circle cx="100" cy="100" r="6" fill="none" stroke="url(#g-${m})" stroke-width="3"/>
-      <path d="M100 108 C120 126 122 152 100 170 C78 152 80 126 100 108Z" fill="url(#g-${m})"/>
-      <path d="M100 115 C115 130 116 150 100 162 C84 150 85 130 100 115Z" fill="url(#sapph)"/>
-      <ellipse cx="95" cy="132" rx="3.5" ry="7" fill="#fff" opacity=".45" transform="rotate(20 95 132)"/></svg>`,
-    bar: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M26 20 Q100 140 174 20" fill="none" stroke="url(#g-${m})" stroke-width="2.2" stroke-dasharray="4 2"/>
-      <rect x="96" y="80" width="8" height="16" rx="3" fill="url(#g-${m})"/>
-      ${[0,1,2].map(i=>`<use href="#gem" x="88" y="${96+i*26}" width="24" height="24"/>`).join('')}</svg>`,
-    hoops: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <path d="M40 60 A34 34 0 1 0 74 94" fill="none" stroke="url(#g-${m})" stroke-width="8" stroke-linecap="round"/>
-      <path d="M126 60 A34 34 0 1 0 160 94" fill="none" stroke="url(#g-${m})" stroke-width="8" stroke-linecap="round"/>
-      <use href="#gem" x="62" y="84" width="22" height="22"/><use href="#gem" x="148" y="84" width="22" height="22"/></svg>`,
-    studs: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      ${[64,136].map(x=>`<circle cx="${x}" cy="100" r="26" fill="url(#g-${m})"/>
-      <use href="#gem" x="${x-21}" y="79" width="42" height="42"/>
-      ${[0,90,180,270].map(a=>`<circle cx="${x+Math.cos(a*Math.PI/180+.785)*22}" cy="${100+Math.sin(a*Math.PI/180+.785)*22}" r="3.2" fill="url(#g-${m})"/>`).join('')}`).join('')}</svg>`,
-    bracelet: m => `<svg viewBox="0 0 200 200" aria-hidden="true">
-      <ellipse cx="100" cy="100" rx="78" ry="34" fill="none" stroke="url(#g-${m})" stroke-width="6"/>
-      ${Array.from({length:11},(_,i)=>{const t=Math.PI*(i+.5)/11;return `<use href="#gem" x="${100-Math.cos(t)*78-6}" y="${100+Math.sin(t)*34-6}" width="12" height="12"/>`}).join('')}</svg>`
-  };
+fr:{menu:"Menu",announce:"Livraison assurée offerte et mise à taille gratuite à vie",nav_shop:"Boutique",nav_coll:"Collections",nav_engr:"Gravure",nav_atelier:"Atelier",bag:"Panier",wishlist:"Favoris",lang:"Langue",to_dark:"Passer en mode sombre",to_light:"Passer en mode clair",loader:"Joaillerie sertie à la main à Lisbonne",
+hero_eyebrow:"L'édition Lagune · Automne 2026",hero_title:"La lumière, <em>tenue dans l'or</em>",hero_lede:"Aigues-marines, tourmalines Paraíba et topazes bleues, serties à la main dans de l'or 18 carats recyclé, dans notre atelier de Lisbonne.",cta1:"Découvrir l'édition",cta2:"Graver une bague",m_gold:"Or 18 carats recyclé",m_lisbon:"Serti à la main à Lisbonne",
+s1t:"Or 18 carats recyclé",s1d:"Poinçon 750, contrôlé à Lisbonne",s2t:"Pierres certifiées",s2d:"Un certificat gemmologique pour toute pierre de plus de 0,5 ct",s3t:"Faites à votre taille",s3d:"Tailles US 4 à 9 par demi-taille, coulées sur commande",s4t:"Mise à taille à vie",s4d:"Jusqu'à deux tailles, toujours offerte",
+shop_eyebrow:"Le catalogue",shop_title:"Des pièces à porter <span class='s'>chaque jour</span>",all:"Tout",rings:"Bagues",necklaces:"Colliers",earrings:"Boucles d'oreilles",bracelets:"Bracelets",saved:"Favoris",sort:"Trier",sort_feat:"Sélection",sort_low:"Prix croissant",sort_high:"Prix décroissant",
+quick:"Aperçu",add:"Ajouter au panier",wish_add:"Ajouter aux favoris",wish_rm:"Retirer des favoris",t_best:"Best-seller",t_new:"Nouveau",t_engr:"Gravable",showing:"{n} pièces",
+aqua:"Aigue-marine",paraiba:"Tourmaline Paraíba",topaz:"Topaze bleue",turq:"Turquoise",yellow:"Or jaune 18 ct",white:"Or blanc 18 ct",rose:"Or rose 18 ct",metal:"Métal",size:"Taille de bague (US)",length:"Longueur",pair:"Vendues par paire",
+d_rings:"Coulée à votre taille en or 18 carats recyclé, puis sertie à la main sous le microscope. Livrée avec son certificat et un écrin de voyage Jewl.",d_necklaces:"La chaîne se ferme par un anneau ressort et une perle coulissante, pour la porter à deux longueurs.",d_earrings:"Tiges en or 18 carats massif avec fermoirs papillon. Hypoallergéniques et faites pour tous les jours.",d_bracelets:"Chaque pierre repose dans son propre serti à quatre griffes, avec un fermoir invisible et une sécurité.",made:"Fabriqué sur commande · expédié sous 3 semaines",close:"Fermer",
+coll_eyebrow:"Collections",coll_title:"Trois histoires <em>de ciel et d'or</em>",coll_all:"Voir les 48 pièces",c1:"Des gouttes d'aigue-marine taillées pour garder la couleur des eaux peu profondes.",c2:"Des créoles ouvertes et des croissants dessinés comme la ligne d'eau à Cascais.",c3:"Chevalières et alliances faites pour être gravées et transmises.",pieces:"{n} pièces",
+e_eyebrow:"Atelier de gravure",e_title:"Écrivez-le <span class='s'>à la main</span>, à l'intérieur de l'anneau",e_intro:"Nos graveurs taillent chaque inscription à la main, au burin. Choisissez un lettrage, un métal et votre taille : nous coulons l'alliance Nocturne sur commande.",e_insc:"Inscription",e_letter:"Lettrage",e_script:"Anglaise",e_roman:"Romaine italique",e_caps:"Capitales",e_ph:"vos mots",e_view:"Intérieur de l'anneau, présenté à plat",e_mm:"US {s} · {mm} mm de diamètre intérieur",e_break:"Alliance {band} + gravure à la main {eng}",e_add:"Ajouter l'alliance gravée",
+a_eyebrow:"L'atelier",a_quote:"« Nous sertissons chaque pierre comme si elle devait être transmise, parce que la plupart <span class='s'>le seront</span>. »",a_cite:"Inês Carvalho, cheffe sertisseuse, Rua da Rosa, Lisbonne",f1:"d'or 18 carats recyclé, affiné au Portugal",f2:"orfèvres et sertisseurs dans un seul atelier",f3v:"3 sem.",f3:"de la commande à la pièce poinçonnée",
+l_title:"Lettres de Jewl",l_body:"Une lettre par mois : nouvelles pierres, nouvelles de l'atelier et avant-premières privées de chaque collection.",l_ph:"Votre adresse e-mail",l_btn:"S'abonner",l_ok:"Merci. La prochaine lettre sera envoyée à {e}.",l_err:"Saisissez une adresse e-mail, par exemple nom@exemple.com.",l_label:"Adresse e-mail",
+ft_about:"Joaillerie en or recyclé et pierres certifiées, fabriquée sur commande à Lisbonne.",ft_shop:"Boutique",ft_care:"Services",ft_visit:"Nous rendre visite",ft_size:"Guide des tailles",ft_resize:"Mise à taille à vie",ft_ship:"Livraison et retours",ft_carejw:"Entretien des bijoux",ft_hours:"Mar. – sam., 11 h – 19 h",ft_legal:"Concept de design · prix en USD",
+b_title:"Votre panier",b_empty:"Vide pour l'instant",b_empty_d:"Ajoutez une pièce, elle vous attendra ici.",b_sub:"Sous-total",b_note:"La livraison assurée est offerte. Les taxes sont calculées au paiement.",b_checkout:"Paiement",b_concept:"Ceci est un concept de design : le paiement n'est pas encore relié.",b_more:"Ajouter un",b_less:"Retirer un",
+toast_add:"{n} ajouté au panier",toast_wish:"{n} ajouté aux favoris",toast_unwish:"{n} retiré des favoris",no_saved:"Aucun favori pour l'instant. Touchez ♡ sur une pièce pour la garder ici."},
 
-  const products = [
-    {id:'ondine',  name:'Ondine Solitaire',   cat:'Rings',     art:'ring',    metal:'yellow', price:2450, spec:'1.2 ct Ceylon sapphire · 18k yellow', tag:'Bestseller'},
-    {id:'maree',   name:'Marée Pendant',      cat:'Necklaces', art:'pendant', metal:'yellow', price:1180, spec:'0.8 ct pear sapphire · 45 cm chain'},
-    {id:'crescent',name:'Tide Crescent Hoops',cat:'Earrings',  art:'hoops',   metal:'yellow', price:890,  spec:'Pair · 0.4 ctw · 22 mm'},
-    {id:'celeste', name:'Céleste Tennis',     cat:'Bracelets', art:'bracelet',metal:'white',  price:3960, spec:'21 sapphires · 3.1 ctw · 18k white', tag:'New'},
-    {id:'signet',  name:'Heirloom Signet',    cat:'Rings',     art:'signet',  metal:'yellow', price:740,  spec:'Engravable face · 18k yellow'},
-    {id:'etoile',  name:'Petite Étoile Studs',cat:'Earrings',  art:'studs',   metal:'rose',   price:520,  spec:'Pair · 0.3 ctw · 18k rose'},
-    {id:'nocturne',name:'Nocturne Band',      cat:'Rings',     art:'band',    metal:'yellow', price:1650, spec:'Half eternity · 0.6 ctw', tag:'Engravable'},
-    {id:'azur',    name:'Azur Drop Necklace', cat:'Necklaces', art:'bar',     metal:'white',  price:1420, spec:'Three graduated sapphires · 42 cm'}
-  ];
-  const cats = ['All', 'Rings', 'Necklaces', 'Earrings', 'Bracelets'];
-  let active = 'All';
+de:{menu:"Menü",announce:"Kostenloser versicherter Versand und lebenslang kostenlose Größenanpassung",nav_shop:"Shop",nav_coll:"Kollektionen",nav_engr:"Gravur",nav_atelier:"Atelier",bag:"Warenkorb",wishlist:"Merkliste",lang:"Sprache",to_dark:"Dunkelmodus aktivieren",to_light:"Hellmodus aktivieren",loader:"Feiner Schmuck, von Hand gefasst in Lissabon",
+hero_eyebrow:"Die Lagunen-Edition · Herbst 2026",hero_title:"Licht, <em>in Gold gefasst</em>",hero_lede:"Aquamarine, Paraíba-Turmaline und Blautopase, von Hand in recyceltes 18-Karat-Gold gefasst, in unserem Atelier in Lissabon.",cta1:"Zur Edition",cta2:"Ring gravieren",m_gold:"Recyceltes 18-Karat-Gold",m_lisbon:"Von Hand gefasst in Lissabon",
+s1t:"Recyceltes 18-Karat-Gold",s1d:"750er-Punze, geprüft in Lissabon",s2t:"Zertifizierte Steine",s2d:"Gutachten für jeden Stein über 0,5 ct",s3t:"In Ihrer Größe",s3d:"US 4 – 9 in halben Größen, auf Bestellung gegossen",s4t:"Lebenslang angepasst",s4d:"Bis zu zwei Größen, immer kostenlos",
+shop_eyebrow:"Der Katalog",shop_title:"Schmuck für <span class='s'>jeden Tag</span>",all:"Alle",rings:"Ringe",necklaces:"Halsketten",earrings:"Ohrringe",bracelets:"Armbänder",saved:"Gemerkt",sort:"Sortieren",sort_feat:"Empfohlen",sort_low:"Preis aufsteigend",sort_high:"Preis absteigend",
+quick:"Schnellansicht",add:"In den Warenkorb",wish_add:"Auf die Merkliste",wish_rm:"Von der Merkliste entfernen",t_best:"Bestseller",t_new:"Neu",t_engr:"Gravierbar",showing:"{n} Stücke",
+aqua:"Aquamarin",paraiba:"Paraíba-Turmalin",topaz:"Blautopas",turq:"Türkis",yellow:"18 kt Gelbgold",white:"18 kt Weißgold",rose:"18 kt Roségold",metal:"Metall",size:"Ringgröße (US)",length:"Länge",pair:"Paarweise",
+d_rings:"In Ihrer Größe aus recyceltem 18-Karat-Gold gegossen und unter dem Mikroskop von Hand gefasst. Mit Gutachten und Jewl-Reiseetui.",d_necklaces:"Die Kette schließt mit einem Federring und einer Schiebeperle, so lässt sie sich in zwei Längen tragen.",d_earrings:"Stecker aus massivem 18-Karat-Gold mit Butterfly-Verschluss. Hypoallergen und für jeden Tag gemacht.",d_bracelets:"Jeder Stein sitzt in einer eigenen Vierkrappenfassung, mit verdecktem Kastenschloss und Sicherheitsbügel.",made:"Auf Bestellung gefertigt · Versand in 3 Wochen",close:"Schließen",
+coll_eyebrow:"Kollektionen",coll_title:"Drei Geschichten <em>aus Himmel und Gold</em>",coll_all:"Alle 48 Stücke ansehen",c1:"Aquamarin-Tropfen, geschliffen, um die Farbe von flachem Wasser zu halten.",c2:"Offene Creolen und Halbmonde, geformt wie die Wasserlinie in Cascais.",c3:"Siegelringe und Bänder, gemacht, um graviert und weitergegeben zu werden.",pieces:"{n} Stücke",
+e_eyebrow:"Gravurstudio",e_title:"Schreiben Sie es <span class='s'>von Hand</span>, in den Ring",e_intro:"Unsere Graveure stechen jede Inschrift von Hand mit dem Stichel. Wählen Sie Schrift, Metall und Größe, und wir gießen den Nocturne-Ring auf Bestellung.",e_insc:"Inschrift",e_letter:"Schrift",e_script:"Schreibschrift",e_roman:"Antiqua kursiv",e_caps:"Versalien",e_ph:"Ihre Worte",e_view:"Innenseite des Rings, flach dargestellt",e_mm:"US {s} · {mm} mm Innendurchmesser",e_break:"Ring {band} + Handgravur {eng}",e_add:"Gravierten Ring hinzufügen",
+a_eyebrow:"Das Atelier",a_quote:"„Wir fassen jeden Stein, als würde er weitervererbt, denn die meisten <span class='s'>werden</span> es.“",a_cite:"Inês Carvalho, leitende Fasserin, Rua da Rosa, Lissabon",f1:"recyceltes 18-Karat-Gold, raffiniert in Portugal",f2:"Goldschmiede und Fasser in einer Werkstatt",f3v:"3 Wo.",f3:"von der Bestellung bis zum gepunzten Stück",
+l_title:"Briefe von Jewl",l_body:"Ein Brief im Monat über neue Steine, Neuigkeiten aus dem Atelier und private Vorschauen jeder Kollektion.",l_ph:"Ihre E-Mail-Adresse",l_btn:"Abonnieren",l_ok:"Danke. Der nächste Brief geht an {e}.",l_err:"Geben Sie eine E-Mail-Adresse ein, z. B. name@beispiel.de.",l_label:"E-Mail-Adresse",
+ft_about:"Feiner Schmuck aus recyceltem Gold und zertifizierten Steinen, auf Bestellung gefertigt in Lissabon.",ft_shop:"Shop",ft_care:"Service",ft_visit:"Besuch",ft_size:"Ringgrößen-Ratgeber",ft_resize:"Lebenslange Größenanpassung",ft_ship:"Versand und Rückgabe",ft_carejw:"Schmuckpflege",ft_hours:"Di – Sa, 11:00 – 19:00",ft_legal:"Designkonzept · Preise in USD",
+b_title:"Ihr Warenkorb",b_empty:"Noch leer",b_empty_d:"Fügen Sie ein Stück hinzu, es wartet hier auf Sie.",b_sub:"Zwischensumme",b_note:"Versicherter Versand ist kostenlos. Steuern werden an der Kasse berechnet.",b_checkout:"Zur Kasse",b_concept:"Dies ist ein Designkonzept, die Kasse ist noch nicht angebunden.",b_more:"Eins mehr",b_less:"Eins weniger",
+toast_add:"{n} liegt im Warenkorb",toast_wish:"{n} ist auf der Merkliste",toast_unwish:"{n} von der Merkliste entfernt",no_saved:"Noch nichts gemerkt. Tippen Sie auf ♡, um ein Stück hier zu behalten."},
 
-  /* ----- Filters + grid ----- */
-  const filters = $('#filters'), grid = $('#grid');
-  filters.innerHTML = cats.map(c => `<button class="chip" type="button" aria-pressed="${c===active}" data-cat="${c}">${c}</button>`).join('');
-  filters.addEventListener('click', e => {
-    const b = e.target.closest('.chip'); if (!b) return;
-    active = b.dataset.cat;
-    filters.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
-    renderGrid();
+it:{menu:"Menu",announce:"Spedizione assicurata gratuita e ridimensionamento gratuito a vita",nav_shop:"Negozio",nav_coll:"Collezioni",nav_engr:"Incisione",nav_atelier:"Atelier",bag:"Carrello",wishlist:"Preferiti",lang:"Lingua",to_dark:"Passa alla modalità scura",to_light:"Passa alla modalità chiara",loader:"Gioielli incastonati a mano a Lisbona",
+hero_eyebrow:"L'edizione Laguna · Autunno 2026",hero_title:"La luce, <em>custodita nell'oro</em>",hero_lede:"Acquemarine, tormaline Paraíba e topazi azzurri, incastonati a mano in oro 18 carati riciclato nel nostro atelier di Lisbona.",cta1:"Scopri l'edizione",cta2:"Incidi un anello",m_gold:"Oro 18 carati riciclato",m_lisbon:"Incastonati a mano a Lisbona",
+s1t:"Oro 18 carati riciclato",s1d:"Punzone 750, saggiato a Lisbona",s2t:"Pietre certificate",s2d:"Certificato gemmologico per ogni pietra oltre 0,5 ct",s3t:"Su misura",s3d:"Misure US 4 – 9 con mezze misure, fusi su ordinazione",s4t:"Misura a vita",s4d:"Fino a due misure, sempre gratuito",
+shop_eyebrow:"Il catalogo",shop_title:"Gioielli da indossare <span class='s'>ogni giorno</span>",all:"Tutti",rings:"Anelli",necklaces:"Collane",earrings:"Orecchini",bracelets:"Bracciali",saved:"Salvati",sort:"Ordina",sort_feat:"In evidenza",sort_low:"Prezzo crescente",sort_high:"Prezzo decrescente",
+quick:"Anteprima",add:"Aggiungi al carrello",wish_add:"Aggiungi ai preferiti",wish_rm:"Rimuovi dai preferiti",t_best:"Più venduto",t_new:"Novità",t_engr:"Personalizzabile",showing:"{n} gioielli",
+aqua:"Acquamarina",paraiba:"Tormalina Paraíba",topaz:"Topazio azzurro",turq:"Turchese",yellow:"Oro giallo 18 kt",white:"Oro bianco 18 kt",rose:"Oro rosa 18 kt",metal:"Metallo",size:"Misura anello (US)",length:"Lunghezza",pair:"Venduti in coppia",
+d_rings:"Fuso nella tua misura in oro 18 carati riciclato, poi incastonato a mano al microscopio. Con certificato e custodia da viaggio Jewl.",d_necklaces:"La catena si chiude con un anellino a molla e una perlina scorrevole, per indossarla a due lunghezze.",d_earrings:"Perni in oro 18 carati massiccio con chiusura a farfalla. Anallergici e pensati per ogni giorno.",d_bracelets:"Ogni pietra ha la sua incastonatura a quattro griffe, con chiusura a scatola nascosta e sicura.",made:"Realizzato su ordinazione · spedito in 3 settimane",close:"Chiudi",
+coll_eyebrow:"Collezioni",coll_title:"Tre storie <em>di cielo e oro</em>",coll_all:"Vedi tutti i 48 gioielli",c1:"Gocce di acquamarina tagliate per trattenere il colore dell'acqua bassa.",c2:"Cerchi aperti e mezzelune modellati come la linea dell'acqua a Cascais.",c3:"Anelli con sigillo e fedi fatti per essere incisi e tramandati.",pieces:"{n} gioielli",
+e_eyebrow:"Studio di incisione",e_title:"Scrivilo <span class='s'>a mano</span>, dentro l'anello",e_intro:"I nostri incisori tagliano ogni scritta a mano con il bulino. Scegli uno stile di lettere, un metallo e la tua misura: fondiamo la fede Nocturne su ordinazione.",e_insc:"Dedica",e_letter:"Carattere",e_script:"Corsivo inglese",e_roman:"Romano corsivo",e_caps:"Maiuscolo",e_ph:"le tue parole",e_view:"Interno dell'anello, mostrato in piano",e_mm:"US {s} · {mm} mm di diametro interno",e_break:"Fede {band} + incisione a mano {eng}",e_add:"Aggiungi la fede incisa",
+a_eyebrow:"L'atelier",a_quote:"«Incastoniamo ogni pietra come se dovesse essere tramandata, perché quasi tutte <span class='s'>lo saranno</span>.»",a_cite:"Inês Carvalho, capo incastonatrice, Rua da Rosa, Lisbona",f1:"oro 18 carati riciclato, affinato in Portogallo",f2:"orafi e incastonatori in un solo laboratorio",f3v:"3 sett.",f3:"dall'ordine al gioiello punzonato",
+l_title:"Lettere da Jewl",l_body:"Una lettera al mese su nuove pietre, notizie dall'atelier e anteprime private di ogni collezione.",l_ph:"Il tuo indirizzo email",l_btn:"Iscriviti",l_ok:"Grazie. La prossima lettera arriverà a {e}.",l_err:"Inserisci un indirizzo email, ad esempio nome@esempio.it.",l_label:"Indirizzo email",
+ft_about:"Gioielli in oro riciclato e pietre certificate, realizzati su ordinazione a Lisbona.",ft_shop:"Negozio",ft_care:"Assistenza",ft_visit:"Visita",ft_size:"Guida alle misure",ft_resize:"Ridimensionamento a vita",ft_ship:"Spedizioni e resi",ft_carejw:"Cura dei gioielli",ft_hours:"Mar – sab, 11:00 – 19:00",ft_legal:"Concept di design · prezzi in USD",
+b_title:"Il tuo carrello",b_empty:"Ancora vuoto",b_empty_d:"Aggiungi un gioiello e ti aspetterà qui.",b_sub:"Subtotale",b_note:"La spedizione assicurata è gratuita. Le imposte sono calcolate al pagamento.",b_checkout:"Vai al pagamento",b_concept:"Questo è un concept di design: il pagamento non è ancora collegato.",b_more:"Aggiungi uno",b_less:"Togli uno",
+toast_add:"{n} aggiunto al carrello",toast_wish:"{n} salvato nei preferiti",toast_unwish:"{n} rimosso dai preferiti",no_saved:"Nessun preferito per ora. Tocca ♡ su un gioiello per tenerlo qui."},
+
+es:{menu:"Menú",announce:"Envío asegurado gratuito y ajuste de talla gratis de por vida",nav_shop:"Tienda",nav_coll:"Colecciones",nav_engr:"Grabado",nav_atelier:"Taller",bag:"Cesta",wishlist:"Favoritos",lang:"Idioma",to_dark:"Cambiar a modo oscuro",to_light:"Cambiar a modo claro",loader:"Joyería engastada a mano en Lisboa",
+hero_eyebrow:"La edición Laguna · Otoño 2026",hero_title:"La luz, <em>sostenida en oro</em>",hero_lede:"Aguamarinas, turmalinas Paraíba y topacios azules, engastados a mano en oro reciclado de 18 quilates en nuestro taller de Lisboa.",cta1:"Ver la edición",cta2:"Grabar un anillo",m_gold:"Oro reciclado de 18 k",m_lisbon:"Engastado a mano en Lisboa",
+s1t:"Oro reciclado de 18 k",s1d:"Contraste 750, ensayado en Lisboa",s2t:"Piedras certificadas",s2d:"Informe gemológico con cada piedra de más de 0,5 ct",s3t:"Hecho a tu talla",s3d:"Tallas US 4 – 9 con medias tallas, fundidas por encargo",s4t:"Ajuste de por vida",s4d:"Hasta dos tallas, siempre gratis",
+shop_eyebrow:"El catálogo",shop_title:"Piezas para llevar <span class='s'>cada día</span>",all:"Todo",rings:"Anillos",necklaces:"Collares",earrings:"Pendientes",bracelets:"Pulseras",saved:"Guardados",sort:"Ordenar",sort_feat:"Destacados",sort_low:"Precio: de menor a mayor",sort_high:"Precio: de mayor a menor",
+quick:"Vista rápida",add:"Añadir a la cesta",wish_add:"Guardar en favoritos",wish_rm:"Quitar de favoritos",t_best:"Más vendido",t_new:"Nuevo",t_engr:"Grabable",showing:"{n} piezas",
+aqua:"Aguamarina",paraiba:"Turmalina Paraíba",topaz:"Topacio azul",turq:"Turquesa",yellow:"Oro amarillo de 18 k",white:"Oro blanco de 18 k",rose:"Oro rosa de 18 k",metal:"Metal",size:"Talla de anillo (US)",length:"Largo",pair:"Se venden en pareja",
+d_rings:"Fundido a tu talla en oro reciclado de 18 quilates y engastado a mano bajo el microscopio. Incluye su informe gemológico y un estuche de viaje Jewl.",d_necklaces:"La cadena cierra con una reasa y una bolita deslizante, para llevarla en dos largos.",d_earrings:"Postes de oro macizo de 18 quilates con cierre de mariposa. Hipoalergénicos y pensados para el día a día.",d_bracelets:"Cada piedra va en su propio engaste de cuatro garras, con cierre de caja oculto y cierre de seguridad.",made:"Hecho por encargo · se envía en 3 semanas",close:"Cerrar",
+coll_eyebrow:"Colecciones",coll_title:"Tres historias <em>de cielo y oro</em>",coll_all:"Ver las 48 piezas",c1:"Gotas de aguamarina talladas para guardar el color del agua poco profunda.",c2:"Aros abiertos y medialunas con la forma de la orilla en Cascais.",c3:"Sellos y alianzas hechos para grabarse y heredarse.",pieces:"{n} piezas",
+e_eyebrow:"Estudio de grabado",e_title:"Escríbelo <span class='s'>a mano</span>, dentro del aro",e_intro:"Nuestros grabadores tallan cada inscripción a mano con buril. Elige una letra, un metal y tu talla, y fundimos la alianza Nocturne por encargo.",e_insc:"Inscripción",e_letter:"Tipo de letra",e_script:"Caligráfica",e_roman:"Romana cursiva",e_caps:"Mayúsculas",e_ph:"tus palabras",e_view:"Interior del aro, mostrado en plano",e_mm:"US {s} · {mm} mm de diámetro interior",e_break:"Alianza {band} + grabado a mano {eng}",e_add:"Añadir alianza grabada",
+a_eyebrow:"El taller",a_quote:"«Engastamos cada piedra como si fuera a heredarse, porque la mayoría <span class='s'>lo será</span>.»",a_cite:"Inês Carvalho, jefa de engaste, Rua da Rosa, Lisboa",f1:"oro reciclado de 18 k, refinado en Portugal",f2:"orfebres y engastadores en un solo taller",f3v:"3 sem.",f3:"del pedido a la pieza contrastada",
+l_title:"Cartas de Jewl",l_body:"Una carta al mes sobre piedras nuevas, noticias del taller y avances privados de cada colección.",l_ph:"Tu correo electrónico",l_btn:"Suscribirme",l_ok:"Gracias. La próxima carta irá a {e}.",l_err:"Escribe un correo como nombre@ejemplo.com.",l_label:"Correo electrónico",
+ft_about:"Joyería en oro reciclado y piedras certificadas, hecha por encargo en Lisboa.",ft_shop:"Tienda",ft_care:"Atención",ft_visit:"Visítanos",ft_size:"Guía de tallas",ft_resize:"Ajuste de por vida",ft_ship:"Envíos y devoluciones",ft_carejw:"Cuidado de las joyas",ft_hours:"Mar – sáb, 11:00 – 19:00",ft_legal:"Concepto de diseño · precios en USD",
+b_title:"Tu cesta",b_empty:"Vacía por ahora",b_empty_d:"Añade una pieza y te esperará aquí.",b_sub:"Subtotal",b_note:"El envío asegurado es gratuito. Los impuestos se calculan al pagar.",b_checkout:"Pagar",b_concept:"Esto es un concepto de diseño: el pago aún no está conectado.",b_more:"Añadir uno",b_less:"Quitar uno",
+toast_add:"{n} añadido a la cesta",toast_wish:"{n} guardado en favoritos",toast_unwish:"{n} quitado de favoritos",no_saved:"Aún no has guardado nada. Toca ♡ en una pieza para tenerla aquí."},
+
+zh:{menu:"菜单",announce:"免费投保配送，终身免费改圈",nav_shop:"选购",nav_coll:"系列",nav_engr:"刻字",nav_atelier:"工坊",bag:"购物袋",wishlist:"心愿单",lang:"语言",to_dark:"切换至深色模式",to_light:"切换至浅色模式",loader:"里斯本手工镶嵌珠宝",
+hero_eyebrow:"泻湖系列 · 2026 秋季",hero_title:"光，<em>藏于金中</em>",hero_lede:"海蓝宝石、帕拉伊巴碧玺与蓝色托帕石，在我们的里斯本工坊中手工镶嵌于再生 18K 金。",cta1:"选购本季系列",cta2:"为戒指刻字",m_gold:"再生 18K 金",m_lisbon:"里斯本手工镶嵌",
+s1t:"再生 18K 金",s1d:"750 印记，于里斯本检验",s2t:"认证宝石",s2d:"0.5 克拉以上宝石均附鉴定证书",s3t:"按尺寸定制",s3d:"美国尺码 4 – 9，含半码，接单铸造",s4t:"终身改圈",s4d:"最多两个尺码，始终免费",
+shop_eyebrow:"珠宝目录",shop_title:"适合<span class='s'>每一天</span>佩戴的作品",all:"全部",rings:"戒指",necklaces:"项链",earrings:"耳饰",bracelets:"手链",saved:"已收藏",sort:"排序",sort_feat:"精选",sort_low:"价格从低到高",sort_high:"价格从高到低",
+quick:"快速查看",add:"加入购物袋",wish_add:"加入心愿单",wish_rm:"从心愿单移除",t_best:"畅销",t_new:"新品",t_engr:"可刻字",showing:"{n} 件作品",
+aqua:"海蓝宝石",paraiba:"帕拉伊巴碧玺",topaz:"蓝色托帕石",turq:"绿松石",yellow:"18K 黄金",white:"18K 白金",rose:"18K 玫瑰金",metal:"金属",size:"戒指尺码（美国）",length:"长度",pair:"成对出售",
+d_rings:"以再生 18K 金按您的尺寸铸造，再于显微镜下手工镶嵌。附宝石鉴定证书与 Jewl 旅行首饰盒。",d_necklaces:"链条采用弹簧扣与滑动珠，可调节为两种长度佩戴。",d_earrings:"实心 18K 金耳针，配蝴蝶耳堵。低致敏，适合日常佩戴。",d_bracelets:"每颗宝石均采用独立四爪镶嵌，配隐藏式箱扣与安全扣。",made:"接单制作 · 3 周内发货",close:"关闭",
+coll_eyebrow:"系列",coll_title:"关于<em>天空与黄金</em>的三个故事",coll_all:"查看全部 48 件作品",c1:"海蓝宝石水滴，切割出浅海的颜色。",c2:"开口圈与新月造型，形如卡斯凯什的水岸线。",c3:"印章戒与素圈，为刻字与传承而作。",pieces:"{n} 件",
+e_eyebrow:"刻字工作室",e_title:"在戒圈内侧，<span class='s'>亲手</span>写下",e_intro:"我们的雕刻师以刻刀手工完成每一段铭文。选择字体、金属与尺码，我们将按订单铸造 Nocturne 戒指。",e_insc:"铭文",e_letter:"字体",e_script:"花体",e_roman:"罗马斜体",e_caps:"大写字母",e_ph:"您的文字",e_view:"戒圈内侧展开图",e_mm:"美国 {s} 号 · 内径 {mm} 毫米",e_break:"戒指 {band} + 手工刻字 {eng}",e_add:"加入刻字戒指",
+a_eyebrow:"工坊",a_quote:"“我们镶嵌每一颗宝石，都像它将被代代相传，因为大多数<span class='s'>确实会</span>。”",a_cite:"Inês Carvalho，首席镶嵌师，里斯本玫瑰街",f1:"再生 18K 金，于葡萄牙精炼",f2:"名金匠与镶嵌师共处一间工坊",f3v:"3 周",f3:"从下单到打上印记的成品",
+l_title:"Jewl 来信",l_body:"每月一封信：新到宝石、工坊消息，以及每个系列的私享预览。",l_ph:"您的电子邮箱",l_btn:"订阅",l_ok:"谢谢。下一封信将寄往 {e}。",l_err:"请输入电子邮箱，例如 name@example.com。",l_label:"电子邮箱",
+ft_about:"再生金与认证宝石打造的精品珠宝，于里斯本接单制作。",ft_shop:"选购",ft_care:"服务",ft_visit:"到访",ft_size:"戒指尺码指南",ft_resize:"终身改圈",ft_ship:"配送与退换",ft_carejw:"珠宝保养",ft_hours:"周二至周六 11:00 – 19:00",ft_legal:"设计概念 · 价格以美元计",
+b_title:"您的购物袋",b_empty:"暂时是空的",b_empty_d:"加入一件作品，它会在这里等您。",b_sub:"小计",b_note:"投保配送免费。税费将在结账时计算。",b_checkout:"结账",b_concept:"这是设计概念，结账功能尚未接入。",b_more:"加一件",b_less:"减一件",
+toast_add:"{n} 已加入购物袋",toast_wish:"{n} 已加入心愿单",toast_unwish:"{n} 已从心愿单移除",no_saved:"还没有收藏。点击作品上的 ♡ 即可保存在这里。"},
+
+ja:{menu:"メニュー",announce:"保険付き配送無料・サイズ直しは生涯無料",nav_shop:"ショップ",nav_coll:"コレクション",nav_engr:"刻印",nav_atelier:"アトリエ",bag:"バッグ",wishlist:"お気に入り",lang:"言語",to_dark:"ダークモードに切り替え",to_light:"ライトモードに切り替え",loader:"リスボンで手留めするファインジュエリー",
+hero_eyebrow:"ラグーン・エディット · 2026年秋",hero_title:"光を、<em>金に留めて</em>",hero_lede:"アクアマリン、パライバトルマリン、ブルートパーズを、リスボンのアトリエでリサイクル18Kゴールドに一つひとつ手留めしています。",cta1:"エディットを見る",cta2:"リングに刻印する",m_gold:"リサイクル18Kゴールド",m_lisbon:"リスボンで手留め",
+s1t:"リサイクル18Kゴールド",s1d:"750刻印、リスボンで品位検査済み",s2t:"鑑別済みの石",s2d:"0.5ct以上の石には鑑別書が付属",s3t:"サイズに合わせて",s3d:"USサイズ4〜9（ハーフサイズあり）、受注鋳造",s4t:"生涯サイズ直し",s4d:"2サイズまで、いつでも無料",
+shop_eyebrow:"カタログ",shop_title:"<span class='s'>毎日</span>身につけるジュエリー",all:"すべて",rings:"リング",necklaces:"ネックレス",earrings:"ピアス",bracelets:"ブレスレット",saved:"保存済み",sort:"並べ替え",sort_feat:"おすすめ",sort_low:"価格の安い順",sort_high:"価格の高い順",
+quick:"クイックビュー",add:"バッグに追加",wish_add:"お気に入りに追加",wish_rm:"お気に入りから削除",t_best:"ベストセラー",t_new:"新作",t_engr:"刻印可",showing:"{n}点",
+aqua:"アクアマリン",paraiba:"パライバトルマリン",topaz:"ブルートパーズ",turq:"ターコイズ",yellow:"18Kイエローゴールド",white:"18Kホワイトゴールド",rose:"18Kローズゴールド",metal:"地金",size:"リングサイズ（US）",length:"長さ",pair:"ペアでの販売",
+d_rings:"リサイクル18Kゴールドをご指定のサイズで鋳造し、顕微鏡の下で手留めします。鑑別書とJewlのトラベルケース付き。",d_necklaces:"チェーンは引き輪とスライドボール付きで、2つの長さで着けられます。",d_earrings:"18K無垢のポストにキャッチ付き。金属アレルギーに配慮した、毎日のためのピアスです。",d_bracelets:"石は一つずつ4本爪で留め、隠しボックス留め具とセーフティキャッチを備えています。",made:"受注制作 · 3週間で発送",close:"閉じる",
+coll_eyebrow:"コレクション",coll_title:"<em>空と金</em>の3つの物語",coll_all:"全48点を見る",c1:"浅瀬の水の色を閉じ込めるようにカットした、アクアマリンのドロップ。",c2:"カスカイスの水際を思わせる、オープンフープとクレセント。",c3:"刻印して受け継ぐための、シグネットとバンド。",pieces:"{n}点",
+e_eyebrow:"刻印スタジオ",e_title:"リングの内側に、<span class='s'>手書き</span>の言葉を",e_intro:"職人がタガネで一文字ずつ手彫りします。書体、地金、サイズを選ぶと、Nocturneバンドを受注で鋳造します。",e_insc:"刻印する言葉",e_letter:"書体",e_script:"スクリプト",e_roman:"ローマン・イタリック",e_caps:"大文字",e_ph:"あなたの言葉",e_view:"リング内側の展開図",e_mm:"US {s}号 · 内径 {mm} mm",e_break:"バンド {band} + 手彫り刻印 {eng}",e_add:"刻印したバンドを追加",
+a_eyebrow:"アトリエ",a_quote:"「受け継がれていくつもりで、すべての石を留めています。実際、そのほとんどが<span class='s'>受け継がれる</span>のですから。」",a_cite:"イネス・カルヴァーリョ、チーフセッター、リスボン ローザ通り",f1:"ポルトガルで精錬したリサイクル18Kゴールド",f2:"人の金工職人と石留め職人がひとつの工房に",f3v:"3週間",f3:"ご注文から刻印入りの完成品まで",
+l_title:"Jewl からの手紙",l_body:"新しい石のこと、アトリエの便り、各コレクションの特別内覧を、月に一度お届けします。",l_ph:"メールアドレス",l_btn:"登録する",l_ok:"ありがとうございます。次の手紙は {e} にお届けします。",l_err:"name@example.com のような形式でメールアドレスを入力してください。",l_label:"メールアドレス",
+ft_about:"リサイクルゴールドと鑑別済みの石によるファインジュエリー。リスボンで受注制作しています。",ft_shop:"ショップ",ft_care:"サービス",ft_visit:"アクセス",ft_size:"リングサイズガイド",ft_resize:"生涯サイズ直し",ft_ship:"配送と返品",ft_carejw:"お手入れ",ft_hours:"火〜土 11:00〜19:00",ft_legal:"デザインコンセプト · 価格は米ドル",
+b_title:"バッグ",b_empty:"まだ空です",b_empty_d:"ジュエリーを追加すると、ここでお待ちしています。",b_sub:"小計",b_note:"保険付き配送は無料です。税金はご購入手続き時に計算されます。",b_checkout:"購入手続きへ",b_concept:"これはデザインコンセプトのため、購入手続きはまだ接続されていません。",b_more:"1点追加",b_less:"1点減らす",
+toast_add:"{n}をバッグに追加しました",toast_wish:"{n}をお気に入りに保存しました",toast_unwish:"{n}をお気に入りから削除しました",no_saved:"まだ保存したものはありません。♡をタップするとここに残せます。"},
+
+ru:{menu:"Меню",announce:"Бесплатная застрахованная доставка и пожизненная подгонка размера",nav_shop:"Магазин",nav_coll:"Коллекции",nav_engr:"Гравировка",nav_atelier:"Ателье",bag:"Корзина",wishlist:"Избранное",lang:"Язык",to_dark:"Включить тёмную тему",to_light:"Включить светлую тему",loader:"Украшения ручной закрепки из Лиссабона",
+hero_eyebrow:"Коллекция «Лагуна» · Осень 2026",hero_title:"Свет, <em>заключённый в золото</em>",hero_lede:"Аквамарины, турмалины Параиба и голубые топазы, закреплённые вручную в переработанном золоте 750 пробы в нашем ателье в Лиссабоне.",cta1:"Смотреть коллекцию",cta2:"Гравировать кольцо",m_gold:"Переработанное золото 750",m_lisbon:"Ручная закрепка в Лиссабоне",
+s1t:"Переработанное золото 750",s1d:"Проба 750, подтверждена в Лиссабоне",s2t:"Сертифицированные камни",s2d:"Геммологический сертификат для каждого камня от 0,5 карата",s3t:"По вашему размеру",s3d:"Размеры US 4 – 9 с половинками, отливка под заказ",s4t:"Подгонка на всю жизнь",s4d:"До двух размеров, всегда бесплатно",
+shop_eyebrow:"Каталог",shop_title:"Украшения <span class='s'>на каждый день</span>",all:"Все",rings:"Кольца",necklaces:"Колье",earrings:"Серьги",bracelets:"Браслеты",saved:"Избранное",sort:"Сортировка",sort_feat:"Рекомендуемые",sort_low:"Сначала дешевле",sort_high:"Сначала дороже",
+quick:"Быстрый просмотр",add:"В корзину",wish_add:"В избранное",wish_rm:"Убрать из избранного",t_best:"Бестселлер",t_new:"Новинка",t_engr:"С гравировкой",showing:"Изделий: {n}",
+aqua:"Аквамарин",paraiba:"Турмалин Параиба",topaz:"Голубой топаз",turq:"Бирюза",yellow:"Жёлтое золото 750",white:"Белое золото 750",rose:"Розовое золото 750",metal:"Металл",size:"Размер кольца (US)",length:"Длина",pair:"Продаются парой",
+d_rings:"Отливается по вашему размеру из переработанного золота 750 пробы и закрепляется вручную под микроскопом. С сертификатом и дорожным футляром Jewl.",d_necklaces:"Цепочка с пружинным замком и скользящей бусиной, её можно носить в двух длинах.",d_earrings:"Штифты из цельного золота 750 пробы с застёжками-бабочками. Гипоаллергенны и подходят для каждого дня.",d_bracelets:"Каждый камень в собственной четырёхкрапановой закрепке, со скрытым коробчатым замком и страховкой.",made:"Изготовление под заказ · отправка через 3 недели",close:"Закрыть",
+coll_eyebrow:"Коллекции",coll_title:"Три истории <em>о небе и золоте</em>",coll_all:"Все 48 изделий",c1:"Капли аквамарина, огранённые так, чтобы удержать цвет мелководья.",c2:"Открытые кольца и полумесяцы по линии воды в Кашкайше.",c3:"Печатки и обручальные кольца для гравировки и передачи по наследству.",pieces:"Изделий: {n}",
+e_eyebrow:"Студия гравировки",e_title:"Напишите <span class='s'>от руки</span> внутри кольца",e_intro:"Наши граверы вырезают каждую надпись вручную штихелем. Выберите шрифт, металл и размер, и мы отольём кольцо Nocturne под заказ.",e_insc:"Надпись",e_letter:"Шрифт",e_script:"Рукописный",e_roman:"Антиква курсив",e_caps:"Прописные",e_ph:"ваши слова",e_view:"Внутренняя сторона кольца в развёртке",e_mm:"US {s} · внутренний диаметр {mm} мм",e_break:"Кольцо {band} + ручная гравировка {eng}",e_add:"Добавить кольцо с гравировкой",
+a_eyebrow:"Ателье",a_quote:"«Мы закрепляем каждый камень так, будто его передадут по наследству, ведь большинство <span class='s'>передадут</span>.»",a_cite:"Инеш Карвалью, главный закрепщик, Руа-да-Роза, Лиссабон",f1:"переработанного золота 750, аффинированного в Португалии",f2:"ювелиров и закрепщиков в одной мастерской",f3v:"3 нед.",f3:"от заказа до изделия с клеймом",
+l_title:"Письма от Jewl",l_body:"Одно письмо в месяц: новые камни, новости ателье и закрытые показы каждой коллекции.",l_ph:"Ваш адрес эл. почты",l_btn:"Подписаться",l_ok:"Спасибо. Следующее письмо придёт на {e}.",l_err:"Введите адрес эл. почты, например name@example.com.",l_label:"Адрес эл. почты",
+ft_about:"Украшения из переработанного золота и сертифицированных камней, изготовленные под заказ в Лиссабоне.",ft_shop:"Магазин",ft_care:"Сервис",ft_visit:"Адрес",ft_size:"Таблица размеров",ft_resize:"Пожизненная подгонка",ft_ship:"Доставка и возврат",ft_carejw:"Уход за украшениями",ft_hours:"Вт – сб, 11:00 – 19:00",ft_legal:"Дизайн-концепция · цены в USD",
+b_title:"Ваша корзина",b_empty:"Пока пусто",b_empty_d:"Добавьте украшение, и оно будет ждать вас здесь.",b_sub:"Промежуточный итог",b_note:"Застрахованная доставка бесплатна. Налоги рассчитываются при оформлении.",b_checkout:"Оформить заказ",b_concept:"Это дизайн-концепция, оформление заказа пока не подключено.",b_more:"Добавить ещё",b_less:"Убрать одно",
+toast_add:"{n}: добавлено в корзину",toast_wish:"{n}: сохранено в избранном",toast_unwish:"{n}: убрано из избранного",no_saved:"В избранном пока пусто. Нажмите ♡ на украшении, чтобы сохранить его здесь."},
+
+ar:{menu:"القائمة",announce:"شحن مؤمَّن مجاني وتعديل مقاس مجاني مدى الحياة",nav_shop:"المتجر",nav_coll:"المجموعات",nav_engr:"النقش",nav_atelier:"المشغل",bag:"الحقيبة",wishlist:"المفضلة",lang:"اللغة",to_dark:"التبديل إلى الوضع الداكن",to_light:"التبديل إلى الوضع الفاتح",loader:"مجوهرات راقية مرصّعة يدويًا في لشبونة",
+hero_eyebrow:"إصدار البحيرة · خريف 2026",hero_title:"الضوء، <em>محفوظًا في الذهب</em>",hero_lede:"أكوامارين وتورمالين بارايبا وتوباز أزرق، مرصّعة يدويًا في ذهب معاد تدويره عيار 18 داخل مشغلنا في لشبونة.",cta1:"تسوّق الإصدار",cta2:"انقش خاتمًا",m_gold:"ذهب معاد تدويره عيار 18",m_lisbon:"ترصيع يدوي في لشبونة",
+s1t:"ذهب معاد تدويره عيار 18",s1d:"دمغة 750، مفحوص في لشبونة",s2t:"أحجار موثّقة",s2d:"تقرير أحجار كريمة مع كل حجر يزيد على 0.5 قيراط",s3t:"مصنوع على مقاسك",s3d:"مقاسات أمريكية من 4 إلى 9 مع أنصاف المقاسات، تُصبّ حسب الطلب",s4t:"تعديل المقاس مدى الحياة",s4d:"حتى مقاسين، مجانًا دائمًا",
+shop_eyebrow:"الكتالوج",shop_title:"قطع تُرتدى <span class='s'>كل يوم</span>",all:"الكل",rings:"خواتم",necklaces:"قلادات",earrings:"أقراط",bracelets:"أساور",saved:"المحفوظة",sort:"الترتيب",sort_feat:"المختارة",sort_low:"السعر من الأقل إلى الأعلى",sort_high:"السعر من الأعلى إلى الأقل",
+quick:"عرض سريع",add:"أضف إلى الحقيبة",wish_add:"احفظ في المفضلة",wish_rm:"أزل من المفضلة",t_best:"الأكثر مبيعًا",t_new:"جديد",t_engr:"قابل للنقش",showing:"{n} قطع",
+aqua:"أكوامارين",paraiba:"تورمالين بارايبا",topaz:"توباز أزرق",turq:"فيروز",yellow:"ذهب أصفر عيار 18",white:"ذهب أبيض عيار 18",rose:"ذهب وردي عيار 18",metal:"المعدن",size:"مقاس الخاتم (أمريكي)",length:"الطول",pair:"يُباع زوجًا",
+d_rings:"يُصبّ على مقاسك من ذهب معاد تدويره عيار 18، ثم يُرصَّع يدويًا تحت المجهر. يأتي مع تقرير الحجر وعلبة سفر من Jewl.",d_necklaces:"تُغلق السلسلة بمشبك حلقي وخرزة منزلقة، لتُرتدى بطولين.",d_earrings:"دبابيس من ذهب خالص عيار 18 مع أغطية فراشة. مضادة للحساسية ومصممة للاستخدام اليومي.",d_bracelets:"كل حجر في ترصيع خاص بأربعة مخالب، مع قفل صندوقي مخفي وقفل أمان.",made:"يُصنع حسب الطلب · يُشحن خلال 3 أسابيع",close:"إغلاق",
+coll_eyebrow:"المجموعات",coll_title:"ثلاث حكايات <em>من السماء والذهب</em>",coll_all:"عرض القطع الـ48 كلها",c1:"قطرات أكوامارين مقطوعة لتحفظ لون المياه الضحلة.",c2:"أقراط دائرية مفتوحة وأهلّة على شكل خط الماء في كاشكايش.",c3:"خواتم ختم ودبل صُنعت لتُنقش وتُورَّث.",pieces:"{n} قطعة",
+e_eyebrow:"استوديو النقش",e_title:"اكتبها <span class='s'>بخط يدك</span> داخل الخاتم",e_intro:"ينقش حرفيونا كل عبارة يدويًا بالإزميل. اختر نوع الخط والمعدن والمقاس، وسنصبّ خاتم Nocturne حسب الطلب.",e_insc:"العبارة",e_letter:"الخط",e_script:"خط يدوي",e_roman:"روماني مائل",e_caps:"أحرف كبيرة",e_ph:"كلماتك",e_view:"الجهة الداخلية للخاتم، معروضة مسطّحة",e_mm:"مقاس أمريكي {s} · قطر داخلي {mm} مم",e_break:"الخاتم {band} + نقش يدوي {eng}",e_add:"أضف الخاتم المنقوش",
+a_eyebrow:"المشغل",a_quote:"«نرصّع كل حجر كأنه سيُورَّث، لأن معظمها <span class='s'>سيُورَّث</span> فعلًا.»",a_cite:"إينيش كارفاليو، كبيرة المرصِّعين، روا دا روزا، لشبونة",f1:"ذهب معاد تدويره عيار 18، مكرَّر في البرتغال",f2:"صاغة ومرصّعين في مشغل واحد",f3v:"3 أسابيع",f3:"من الطلب إلى قطعة مدموغة",
+l_title:"رسائل من Jewl",l_body:"رسالة واحدة كل شهر عن الأحجار الجديدة وأخبار المشغل وعروض خاصة مسبقة لكل مجموعة.",l_ph:"بريدك الإلكتروني",l_btn:"اشترك",l_ok:"شكرًا لك. ستصل الرسالة التالية إلى {e}.",l_err:"أدخل بريدًا إلكترونيًا مثل name@example.com.",l_label:"البريد الإلكتروني",
+ft_about:"مجوهرات راقية من الذهب المعاد تدويره والأحجار الموثّقة، تُصنع حسب الطلب في لشبونة.",ft_shop:"المتجر",ft_care:"الخدمات",ft_visit:"زورونا",ft_size:"دليل مقاسات الخواتم",ft_resize:"تعديل المقاس مدى الحياة",ft_ship:"الشحن والإرجاع",ft_carejw:"العناية بالمجوهرات",ft_hours:"الثلاثاء – السبت، 11:00 – 19:00",ft_legal:"تصميم مبدئي · الأسعار بالدولار الأمريكي",
+b_title:"حقيبتك",b_empty:"فارغة حاليًا",b_empty_d:"أضف قطعة وستنتظرك هنا.",b_sub:"المجموع الفرعي",b_note:"الشحن المؤمَّن مجاني. تُحتسب الضرائب عند الدفع.",b_checkout:"إتمام الشراء",b_concept:"هذا تصميم مبدئي، لذا لم يُربط الدفع بعد.",b_more:"أضف واحدة",b_less:"أزل واحدة",
+toast_add:"أُضيفت {n} إلى حقيبتك",toast_wish:"حُفظت {n} في المفضلة",toast_unwish:"أُزيلت {n} من المفضلة",no_saved:"لا شيء محفوظ بعد. اضغط ♡ على أي قطعة لحفظها هنا."}
+};
+
+const LANGS = [["en","English"],["fr","Français"],["de","Deutsch"],["it","Italiano"],["es","Español"],["zh","中文"],["ja","日本語"],["ru","Русский"],["ar","العربية"]];
+const LOCALE = {en:"en-US",fr:"fr-FR",de:"de-DE",it:"it-IT",es:"es-ES",zh:"zh-CN",ja:"ja-JP",ru:"ru-RU",ar:"ar-u-nu-latn"};
+const FONTS = {
+  ru:"Marck+Script&family=Cormorant:ital,wght@0,400;0,500;1,400;1,500",
+  zh:"Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500&family=Noto+Sans+SC:wght@300;400;500",
+  ja:"Yuji+Syuku&family=Shippori+Mincho:wght@400;500&family=Noto+Sans+JP:wght@300;400;500",
+  ar:"Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500"
+};
+
+/* ================= Catalog data ================= */
+const PRODUCTS = [
+  {id:"ondine",  name:"Ondine Solitaire",    cat:"rings",     stone:"aqua",    ct:"1.2 ct",  metal:"yellow", price:2450, tag:"t_best"},
+  {id:"maree",   name:"Marée Pendant",       cat:"necklaces", stone:"paraiba", ct:"0.8 ct",  metal:"yellow", price:1980},
+  {id:"crescent",name:"Tide Crescent Hoops", cat:"earrings",  stone:"topaz",   ct:"0.4 ctw", metal:"rose",   price:890},
+  {id:"celeste", name:"Céleste Tennis",      cat:"bracelets", stone:"aqua",    ct:"3.1 ctw", metal:"white",  price:3960, tag:"t_new"},
+  {id:"signet",  name:"Heirloom Signet",     cat:"rings",     stone:"turq",    ct:"0.9 ct",  metal:"yellow", price:740,  tag:"t_engr"},
+  {id:"etoile",  name:"Petite Étoile Studs", cat:"earrings",  stone:"paraiba", ct:"0.3 ctw", metal:"white",  price:1120},
+  {id:"nocturne",name:"Nocturne Band",       cat:"rings",     stone:"aqua",    ct:"0.6 ctw", metal:"yellow", price:1650, tag:"t_engr"},
+  {id:"azur",    name:"Azur Drop Necklace",  cat:"necklaces", stone:"topaz",   ct:"1.5 ctw", metal:"white",  price:1420}
+];
+const METALS = ["yellow","white","rose"];
+const CATS = ["all","rings","necklaces","earrings","bracelets"];
+const SIZES = [[4,14.9],[4.5,15.3],[5,15.7],[5.5,16.1],[6,16.5],[6.5,16.9],[7,17.3],[7.5,17.7],[8,18.1],[8.5,18.5],[9,19.0]];
+const OPTS = {rings:SIZES.map(s=>String(s[0])), necklaces:["40 cm","42 cm","45 cm"], bracelets:["16 cm","17 cm","18 cm"], earrings:null};
+const ENGRAVE = 45, BAND = 1650;
+
+/* ================= State ================= */
+const store = {get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const st = {
+  lang: I18N[document.documentElement.lang] ? document.documentElement.lang : "en",
+  cat:"all", sort:"feat",
+  wish:new Set(store.get("jewl-wish",[])),
+  bag:store.get("jewl-bag",[]).filter(i => PRODUCTS.some(p => p.id===i.pid)),
+  cardMetal:{}
+};
+const $ = (s,r=document)=>r.querySelector(s), $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const t = (k,v={}) => (I18N[st.lang][k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g,(_,x)=>v[x]??"");
+const money = n => new Intl.NumberFormat(LOCALE[st.lang],{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const byId = id => PRODUCTS.find(p=>p.id===id);
+const metalOf = p => st.cardMetal[p.id] || p.metal;
+const spec = (p,m) => `${t(p.stone)} · ${p.ct} · ${t(m)}`;
+const ph = (p,m,extra="") => `<div class="ph" data-stone="${p.stone}" data-metal="${m}" ${extra}><span class="ph-initial">${p.name[0]}</span></div>`;
+const fine = matchMedia("(hover:hover) and (pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+const defaultOpt = p => OPTS[p.cat] ? OPTS[p.cat][p.cat==="rings" ? 4 : 1] : null;
+
+/* ================= Language ================= */
+const loadedFonts = new Set();
+function setLang(l){
+  st.lang = l;
+  const root = document.documentElement;
+  root.lang = l; root.dir = l==="ar" ? "rtl" : "ltr";
+  if (FONTS[l] && !loadedFonts.has(l)){
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = `https://fonts.googleapis.com/css2?family=${FONTS[l]}&display=swap`;
+    document.head.appendChild(link); loadedFonts.add(l);
+  }
+  try{localStorage.setItem("jewl-lang", l)}catch(e){}
+  renderAll();
+}
+function applyStatic(){
+  $$("[data-i]").forEach(el => { el.innerHTML = t(el.dataset.i, {n: el.dataset.n}); });
+  $("#email").placeholder = t("l_ph");
+  $("#langCode").textContent = st.lang.toUpperCase();
+  $("#langBtn").setAttribute("aria-label", t("lang"));
+  $("#wishBtn").setAttribute("aria-label", t("wishlist"));
+  $("#closeBag").setAttribute("aria-label", t("close"));
+  $("#drawer").setAttribute("aria-label", t("b_title"));
+  $("#filters").setAttribute("aria-label", t("shop_eyebrow"));
+  $("#heroArch").setAttribute("aria-label", `${t("quick")}: Ondine Solitaire`);
+  $("#heroCap").textContent = `${t("aqua")} · 1.2 ct · ${money(2450)}`;
+  $("#langMenu").innerHTML = LANGS.map(([c,n]) => `<li><button type="button" data-lang="${c}" lang="${c}" aria-current="${c===st.lang}">${n}<small>${c.toUpperCase()}</small></button></li>`).join("");
+  const words = [t("aqua"),t("paraiba"),t("topaz"),t("turq"),t("m_gold"),t("m_lisbon")];
+  $("#marquee").innerHTML = [...words,...words].map(w=>`<span>${w}</span>`).join("");
+  $("#sort").innerHTML = ["feat","low","high"].map(s=>`<option value="${s}" ${s===st.sort?"selected":""}>${t("sort_"+s)}</option>`).join("");
+  syncTheme();
+}
+
+/* ================= Theme ================= */
+const mq = matchMedia("(prefers-color-scheme: dark)");
+const isDark = () => { const a = document.documentElement.getAttribute("data-theme"); return a ? a==="dark" : mq.matches; };
+function syncTheme(){
+  $("#themeGlyph").textContent = isDark() ? "☼" : "☾";
+  $("#themeBtn").setAttribute("aria-label", t(isDark() ? "to_light" : "to_dark"));
+}
+$("#themeBtn").addEventListener("click", () => {
+  const next = isDark() ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try{localStorage.setItem("jewl-theme", next)}catch(e){}
+  syncTheme();
+});
+mq.addEventListener?.("change", syncTheme);
+
+/* ================= Catalog ================= */
+function renderFilters(){
+  $("#filters").innerHTML = [...CATS,"saved"].map(c => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${c===st.cat}">${c==="saved" ? "♡&#xFE0E; "+t("saved") : t(c)}${c==="saved" && st.wish.size ? `<span class="count num">${st.wish.size}</span>` : ""}</button>`).join("");
+}
+function renderGrid(){
+  let list = PRODUCTS.filter(p => st.cat==="all" || (st.cat==="saved" ? st.wish.has(p.id) : p.cat===st.cat));
+  if (st.sort==="low") list = [...list].sort((a,b)=>a.price-b.price);
+  if (st.sort==="high") list = [...list].sort((a,b)=>b.price-a.price);
+  $("#showing").textContent = t("showing",{n:list.length});
+  if (!list.length){ $("#grid").innerHTML = `<div class="empty-grid"><span class="s">♡&#xFE0E;</span>${t("no_saved")}</div>`; return; }
+  $("#grid").innerHTML = list.map((p,i) => {
+    const m = metalOf(p), w = st.wish.has(p.id);
+    return `<article class="card" style="--d:${i}">
+      <div class="card-media"><div class="tilt">
+        ${ph(p,m,`data-qv="${p.id}" aria-hidden="true"`)}
+        <div class="actions"><button type="button" data-qv="${p.id}">${t("quick")}</button><button type="button" data-add="${p.id}">${t("add")}</button></div>
+      </div></div>
+      <div class="card-info">
+        <div class="card-tag">${p.tag ? t(p.tag) : ""}</div>
+        <div class="card-row"><h3><button type="button" data-qv="${p.id}">${p.name}</button></h3>
+          <button class="heart" type="button" data-wish="${p.id}" aria-pressed="${w}" aria-label="${t(w?"wish_rm":"wish_add")}"><span>${w?"♥":"♡"}&#xFE0E;</span></button></div>
+        <div class="card-spec">${spec(p,m)}</div>
+        <div class="card-row"><span class="price num">${money(p.price)}</span>
+          <div class="swatches" role="group" aria-label="${t("metal")}">${METALS.map(x=>`<button class="sw" type="button" data-sw="${x}" data-pid="${p.id}" aria-pressed="${x===m}" aria-label="${t(x)}" style="--sw:var(--g-${x})"></button>`).join("")}</div></div>
+      </div></article>`;
+  }).join("");
+}
+$("#filters").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  st.cat = b.dataset.cat; renderFilters(); renderGrid();
+});
+$("#sort").addEventListener("change", e => { st.sort = e.target.value; renderGrid(); });
+
+document.addEventListener("click", e => {
+  const go = e.target.closest("[data-go]");
+  if (go){ st.cat = go.dataset.go; renderFilters(); renderGrid(); if (go.tagName==="BUTTON") $("#shop").scrollIntoView({behavior:"smooth"}); return; }
+  const qv = e.target.closest("[data-qv]"); if (qv) return openQV(qv.dataset.qv);
+  const add = e.target.closest("[data-add]");
+  if (add){ const p = byId(add.dataset.add); return addToBag({pid:p.id, metal:metalOf(p), opt:defaultOpt(p)}); }
+  const w = e.target.closest("[data-wish]"); if (w) return toggleWish(w.dataset.wish);
+  const sw = e.target.closest("[data-sw]");
+  if (sw){
+    const p = byId(sw.dataset.pid); st.cardMetal[p.id] = sw.dataset.sw;
+    const card = sw.closest(".card");
+    card.querySelector(".ph").dataset.metal = sw.dataset.sw;
+    card.querySelector(".card-spec").textContent = spec(p, sw.dataset.sw);
+    $$(".sw", card).forEach(s => s.setAttribute("aria-pressed", s===sw));
+  }
+});
+
+/* Tilt, plus a highlight that follows the pointer */
+function tiltable(root, sel, amt){
+  if (!fine) return;
+  root.addEventListener("pointermove", e => {
+    const el = e.target.closest(sel); if (!el) return;
+    const r = el.getBoundingClientRect(), x = (e.clientX-r.left)/r.width, y = (e.clientY-r.top)/r.height;
+    el.style.transform = `rotateY(${(x-.5)*amt}deg) rotateX(${(.5-y)*amt}deg)`;
+    const p = el.querySelector(".ph") || el; p.style.setProperty("--mx", x*100+"%"); p.style.setProperty("--my", y*100+"%");
   });
-  function renderGrid(){
-    grid.innerHTML = products.filter(p => active === 'All' || p.cat === active).map(p => `
-      <article class="card">
-        <div class="card-media">
-          ${p.tag ? `<span class="tag">${p.tag}</span>` : ''}
-          ${art[p.art](p.metal)}
-          <button class="quick" type="button" data-add="${p.id}">Add to bag</button>
-        </div>
-        <div>
-          <div class="card-meta"><h3>${p.name}</h3><span class="price num">${money(p.price)}</span></div>
-          <div class="card-spec">${p.spec}</div>
-        </div>
-      </article>`).join('');
-  }
-  renderGrid();
-  grid.addEventListener('click', e => {
-    const b = e.target.closest('[data-add]'); if (!b) return;
-    const p = products.find(x => x.id === b.dataset.add);
-    addToBag({key:p.id, name:p.name, detail:p.spec, price:p.price, art:p.art, metal:p.metal});
+  root.addEventListener("pointerout", e => {
+    const el = e.target.closest(sel); if (el && !el.contains(e.relatedTarget)) el.style.transform = "";
   });
+}
+tiltable($("#grid"), ".tilt", 9);
+tiltable($(".hero-piece"), ".arch-btn", 7);
 
-  /* ----- Engraving studio ----- */
-  const sizes = [[4,14.9],[4.5,15.3],[5,15.7],[5.5,16.1],[6,16.5],[6.5,16.9],[7,17.3],[7.5,17.7],[8,18.1],[8.5,18.5],[9,19.0]];
-  $('#sizes').innerHTML = sizes.map(([s]) => `<label class="opt"><input type="radio" name="size" id="size-${String(s).replace('.','-')}" value="${s}" ${s===6?'checked':''}><span>${s}</span></label>`).join('');
-  const fonts = {
-    script:{family:'Pinyon Script, cursive', size:32, style:'normal', transform:t=>t, spacing:1},
-    roman:{family:'Bodoni Moda, Georgia, serif', size:24, style:'italic', transform:t=>t, spacing:1},
-    caps:{family:'Jost, sans-serif', size:18, style:'normal', transform:t=>t.toUpperCase(), spacing:5}
-  };
-  const metalNames = {yellow:'18k yellow gold', white:'18k white gold', rose:'18k rose gold'};
-  const inkFor = {yellow:'#5A4210', white:'#3A4150', rose:'#6A3526'};
-  const form = $('#studio'), input = $('#inscription'), txt = $('#engraveText'), tp = $('#engraveTP');
+/* ================= Wishlist ================= */
+function toggleWish(id){
+  const p = byId(id), on = !st.wish.has(id);
+  on ? st.wish.add(id) : st.wish.delete(id);
+  store.set("jewl-wish", [...st.wish]);
+  renderWishCount(); renderFilters(); renderGrid();
+  if ($("#qv").open) renderQV();
+  toast(t(on ? "toast_wish" : "toast_unwish", {n:p.name}));
+}
+function renderWishCount(){ const c=$("#wishCount"); c.textContent = st.wish.size; c.hidden = !st.wish.size; }
+$("#wishBtn").addEventListener("click", () => { st.cat = "saved"; renderFilters(); renderGrid(); $("#shop").scrollIntoView({behavior:"smooth"}); });
 
-  function studioState(){
-    const fd = new FormData(form);
-    return {text: input.value.trim(), font: fd.get('font'), metal: fd.get('metal'), size: parseFloat(fd.get('size'))};
-  }
-  function renderStudio(){
-    const s = studioState(), f = fonts[s.font];
-    tp.textContent = s.text ? f.transform(s.text) : (s.font === 'caps' ? 'YOUR WORDS' : 'your words');
-    txt.setAttribute('font-family', f.family);
-    txt.setAttribute('font-size', f.size);
-    txt.setAttribute('font-style', f.style);
-    txt.setAttribute('letter-spacing', f.spacing);
-    txt.setAttribute('fill', inkFor[s.metal]);
-    txt.setAttribute('fill-opacity', s.text ? .85 : .35);
-    ['#bandBack', '#bandFront'].forEach(id => $(id).setAttribute('stroke', `url(#g-${s.metal})`));
-    $('#counter').textContent = `${input.value.length} / 18`;
-    const mm = sizes.find(([z]) => z === s.size)[1];
-    $('#sizeReadout').textContent = `US ${s.size} · ${mm.toFixed(1)} mm inner diameter`;
-    $('#stageNote').textContent = `Nocturne band · ${metalNames[s.metal]}`;
-    $('#studioPrice').textContent = money(1650 + (s.text ? 45 : 0));
-  }
-  form.addEventListener('input', renderStudio);
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const s = studioState();
-    addToBag({
-      key:`nocturne-${s.metal}-${s.size}-${s.font}-${s.text}`,
-      name:'Nocturne Band',
-      detail:`${metalNames[s.metal]} · US ${s.size}${s.text ? ` · “${s.text}”` : ''}`,
-      price:1650 + (s.text ? 45 : 0), art:'band', metal:s.metal
-    });
-  });
-  renderStudio();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderStudio);
+/* ================= Quick view ================= */
+const qvState = {pid:null, metal:null, opt:null};
+function openQV(id){
+  const p = byId(id);
+  Object.assign(qvState, {pid:id, metal:metalOf(p), opt:defaultOpt(p)});
+  renderQV(); $("#qv").showModal();
+}
+function renderQV(){
+  const p = byId(qvState.pid), w = st.wish.has(p.id), opts = OPTS[p.cat];
+  const phEl = $("#qvPh"); phEl.dataset.stone = p.stone; phEl.dataset.metal = qvState.metal; phEl.firstElementChild.textContent = p.name[0];
+  const mm = p.cat==="rings" ? SIZES.find(s=>String(s[0])===qvState.opt)?.[1] : null;
+  $("#qvInfo").innerHTML = `
+    <button class="x" type="button" data-close aria-label="${t("close")}">×</button>
+    <div><div class="eyebrow">${t(p.cat)}${p.tag ? " · "+t(p.tag) : ""}</div>
+      <h2 style="margin-top:10px">${p.name}</h2>
+      <p class="spec">${spec(p,qvState.metal)}</p></div>
+    <div class="price num">${money(p.price)}</div>
+    <div class="field"><span class="eyebrow" style="color:var(--muted)">${t("metal")}</span>
+      <div class="opts">${METALS.map(m=>`<label class="opt"><input type="radio" name="qvm" value="${m}" ${m===qvState.metal?"checked":""}><span><i class="dot" style="background:var(--g-${m})"></i>${t(m)}</span></label>`).join("")}</div></div>
+    ${opts ? `<div class="field"><span class="eyebrow" style="color:var(--muted)">${t(p.cat==="rings"?"size":"length")}</span>
+      <div class="${p.cat==="rings"?"sizes":"opts"}">${opts.map(o=>`<label class="opt"><input type="radio" name="qvo" value="${o}" ${o===qvState.opt?"checked":""}><span class="num">${o}</span></label>`).join("")}</div>
+      ${mm ? `<span class="readout num">${t("e_mm",{s:qvState.opt,mm:mm.toFixed(1)})}</span>` : ""}</div>`
+      : `<div class="made" style="color:var(--muted)">${t("pair")}</div>`}
+    <p class="desc">${t("d_"+p.cat)}</p>
+    <div class="qv-actions"><button class="btn btn-gold" type="button" data-qvadd>${t("add")}</button>
+      <button class="heart" type="button" data-wish="${p.id}" aria-pressed="${w}" aria-label="${t(w?"wish_rm":"wish_add")}"><span>${w?"♥":"♡"}&#xFE0E;</span></button></div>
+    <div class="made">${t("made")}</div>`;
+}
+$("#qvInfo").addEventListener("change", e => {
+  if (e.target.name==="qvm") qvState.metal = e.target.value;
+  if (e.target.name==="qvo") qvState.opt = e.target.value;
+  renderQV();
+});
+$("#qvInfo").addEventListener("click", e => {
+  if (e.target.closest("[data-close]")) $("#qv").close();
+  if (e.target.closest("[data-qvadd]")){ addToBag({pid:qvState.pid, metal:qvState.metal, opt:qvState.opt}); $("#qv").close(); }
+});
+$("#qv").addEventListener("click", e => { if (e.target === $("#qv")) $("#qv").close(); });
 
-  /* ----- Bag ----- */
-  const bag = [];
-  const drawer = $('#drawer'), scrim = $('#scrim'), bagBtn = $('#bagBtn');
-  function addToBag(item){
-    const found = bag.find(i => i.key === item.key);
-    found ? found.qty++ : bag.push({...item, qty:1});
-    renderBag();
-    toast(`${item.name} added to your bag`);
-  }
-  function renderBag(){
-    const count = bag.reduce((n, i) => n + i.qty, 0);
-    const badge = $('#bagCount');
-    badge.textContent = count; badge.hidden = count === 0;
-    bagBtn.setAttribute('aria-label', `Open bag, ${count} item${count === 1 ? '' : 's'}`);
-    $('#bagFoot').hidden = count === 0;
-    $('#bagBody').innerHTML = count === 0
-      ? `<div class="empty"><span class="script">Empty for now</span>Add a piece and it will wait here for you.</div>`
-      : bag.map((i, idx) => `
-        <div class="line">
-          <div class="thumb">${art[i.art](i.metal)}</div>
-          <div><h3>${i.name}</h3><small>${i.detail}</small>
-            <div class="qty"><button type="button" data-dec="${idx}" aria-label="Remove one ${i.name}">−</button><span class="num">${i.qty}</span><button type="button" data-inc="${idx}" aria-label="Add one ${i.name}">+</button></div>
-          </div>
-          <span class="price num">${money(i.price * i.qty)}</span>
-        </div>`).join('');
-    $('#subtotal').textContent = money(bag.reduce((n, i) => n + i.price * i.qty, 0));
-  }
-  $('#bagBody').addEventListener('click', e => {
-    const inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]');
-    if (inc) bag[+inc.dataset.inc].qty++;
-    if (dec){ const i = +dec.dataset.dec; if (--bag[i].qty === 0) bag.splice(i, 1); }
-    if (inc || dec) renderBag();
-  });
-  function openBag(on){
-    if (on){ scrim.hidden = false; requestAnimationFrame(() => { scrim.classList.add('on'); drawer.classList.add('on'); }); $('#closeBag').focus(); }
-    else { scrim.classList.remove('on'); drawer.classList.remove('on'); setTimeout(() => scrim.hidden = true, 300); bagBtn.focus(); }
-    drawer.setAttribute('aria-hidden', !on);
-  }
-  bagBtn.addEventListener('click', () => openBag(true));
-  $('#closeBag').addEventListener('click', () => openBag(false));
-  scrim.addEventListener('click', () => openBag(false));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('on')) openBag(false); });
-  $('#checkout').addEventListener('click', () => { $('#checkoutNote').hidden = false; });
-  renderBag();
+/* ================= Engraving studio ================= */
+$("#sizes").innerHTML = SIZES.map(([s]) => `<label class="opt"><input type="radio" name="size" id="size-${String(s).replace(".","-")}" value="${s}" ${s===6?"checked":""}><span>${s}</span></label>`).join("");
+const form = $("#studio"), ins = $("#inscription");
+const studio = () => { const f = new FormData(form); return {text:ins.value.trim(), font:f.get("font"), metal:f.get("metal"), size:f.get("size")}; };
+function renderStudio(){
+  const s = studio(), mm = SIZES.find(x=>String(x[0])===s.size)[1];
+  const engr = $("#engr");
+  engr.textContent = s.text || t("e_ph"); engr.classList.toggle("empty", !s.text); engr.dataset.font = s.font;
+  $("#band").dataset.metal = s.metal; $(".stage").dataset.metal = s.metal;
+  $("#hallSize").textContent = `US ${s.size}`;
+  $("#counter").textContent = `${ins.value.length} / 18`;
+  $("#readout").textContent = t("e_mm",{s:s.size, mm:mm.toFixed(1)});
+  $("#studioPrice").textContent = money(BAND + (s.text ? ENGRAVE : 0));
+  $("#breakdown").textContent = t("e_break",{band:money(BAND), eng:money(s.text ? ENGRAVE : 0)});
+}
+form.addEventListener("input", renderStudio);
+form.addEventListener("submit", e => { e.preventDefault(); const s = studio(); addToBag({pid:"nocturne", metal:s.metal, opt:s.size, text:s.text, font:s.font}); });
 
-  let tId;
-  function toast(msg){
-    const t = $('#toast'); t.textContent = msg; t.classList.add('on');
-    clearTimeout(tId); tId = setTimeout(() => t.classList.remove('on'), 2400);
-  }
+/* ================= Bag ================= */
+const drawer = $("#drawer"), scrim = $("#scrim"), bagBtn = $("#bagBtn");
+const lineKey = i => [i.pid,i.metal,i.opt,i.text||"",i.font||""].join("|");
+const linePrice = i => byId(i.pid).price + (i.text ? ENGRAVE : 0);
+function addToBag(item){
+  const k = lineKey(item), f = st.bag.find(i => lineKey(i)===k);
+  f ? f.qty++ : st.bag.push({...item, qty:1});
+  saveBag(); renderBag(); toast(t("toast_add",{n:byId(item.pid).name}));
+}
+function saveBag(){ store.set("jewl-bag", st.bag); }
+function renderBag(){
+  const count = st.bag.reduce((n,i)=>n+i.qty,0), c = $("#bagCount");
+  c.textContent = count; c.hidden = !count;
+  bagBtn.setAttribute("aria-label", `${t("bag")} (${count})`);
+  $("#bagFoot").hidden = !count;
+  $("#bagBody").innerHTML = !count
+    ? `<div class="empty"><span class="s">${t("b_empty")}</span>${t("b_empty_d")}</div>`
+    : st.bag.map((i,idx) => { const p = byId(i.pid);
+      const det = [t(i.metal), i.opt ? (p.cat==="rings" ? "US "+i.opt : i.opt) : "", i.text ? `“${esc(i.text)}”` : ""].filter(Boolean).join(" · ");
+      return `<div class="line">${ph(p,i.metal)}
+        <div><h3>${p.name}</h3><small>${det}</small>
+          <div class="qty"><button type="button" data-dec="${idx}" aria-label="${t("b_less")}">−</button><span class="num">${i.qty}</span><button type="button" data-inc="${idx}" aria-label="${t("b_more")}">+</button></div></div>
+        <span class="price num">${money(linePrice(i)*i.qty)}</span></div>`; }).join("");
+  $("#subtotal").textContent = money(st.bag.reduce((n,i)=>n+linePrice(i)*i.qty,0));
+}
+$("#bagBody").addEventListener("click", e => {
+  const inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]");
+  if (inc) st.bag[+inc.dataset.inc].qty++;
+  if (dec){ const i = +dec.dataset.dec; if (--st.bag[i].qty===0) st.bag.splice(i,1); }
+  if (inc||dec){ saveBag(); renderBag(); }
+});
+function openBag(on){
+  if (on){ scrim.hidden = false; requestAnimationFrame(()=>{ scrim.classList.add("on"); drawer.classList.add("on"); }); document.body.classList.add("locked"); setTimeout(()=>$("#closeBag").focus(), 60); }
+  else { scrim.classList.remove("on"); drawer.classList.remove("on"); document.body.classList.remove("locked"); setTimeout(()=>scrim.hidden = true, 350); bagBtn.focus(); }
+  drawer.setAttribute("aria-hidden", !on);
+}
+bagBtn.addEventListener("click", () => openBag(true));
+$("#closeBag").addEventListener("click", () => openBag(false));
+scrim.addEventListener("click", () => openBag(false));
+$("#checkout").addEventListener("click", () => { $("#checkoutNote").hidden = false; });
 
-  /* ----- Mobile menu ----- */
-  const menuBtn = $('#menuBtn'), mnav = $('#mobileNav');
-  menuBtn.addEventListener('click', () => {
-    mnav.hidden = !mnav.hidden;
-    menuBtn.setAttribute('aria-expanded', !mnav.hidden);
-  });
-  mnav.addEventListener('click', e => { if (e.target.closest('a')){ mnav.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); } });
+/* ================= Header menus ================= */
+const langBtn = $("#langBtn"), langMenu = $("#langMenu");
+function showLang(on){ langMenu.hidden = !on; langBtn.setAttribute("aria-expanded", on); if (on) langMenu.querySelector('[aria-current="true"]')?.focus(); }
+langBtn.addEventListener("click", e => { e.stopPropagation(); showLang(langMenu.hidden); });
+langMenu.addEventListener("click", e => { const b = e.target.closest("[data-lang]"); if (b){ setLang(b.dataset.lang); showLang(false); langBtn.focus(); } });
+document.addEventListener("click", e => { if (!langMenu.hidden && !e.target.closest(".lang-wrap")) showLang(false); });
+document.addEventListener("keydown", e => {
+  if (e.key!=="Escape") return;
+  if (!langMenu.hidden){ showLang(false); langBtn.focus(); }
+  if (drawer.classList.contains("on")) openBag(false);
+});
+const menuBtn = $("#menuBtn"), mnav = $("#mobileNav");
+menuBtn.addEventListener("click", () => { mnav.hidden = !mnav.hidden; menuBtn.setAttribute("aria-expanded", !mnav.hidden); });
+mnav.addEventListener("click", e => { if (e.target.closest("a")){ mnav.hidden = true; menuBtn.setAttribute("aria-expanded","false"); } });
 
-  /* ----- Newsletter ----- */
-  $('#letterForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const v = $('#email').value.trim();
-    $('#letterMsg').textContent = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)
-      ? `Thank you. The next letter goes to ${v}.`
-      : 'Enter an email address like name@example.com.';
-  });
+/* ================= Newsletter ================= */
+$("#letterForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const v = $("#email").value.trim();
+  $("#letterMsg").textContent = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? t("l_ok",{e:v}) : t("l_err");
+});
+
+/* ================= Toast ================= */
+let tId;
+function toast(msg){ const el = $("#toast"); el.textContent = msg; el.classList.add("on"); clearTimeout(tId); tId = setTimeout(()=>el.classList.remove("on"), 2600); }
+
+/* ================= Boot ================= */
+function renderAll(){ applyStatic(); renderFilters(); renderGrid(); renderStudio(); renderBag(); renderWishCount(); if ($("#qv").open) renderQV(); }
+setLang(st.lang);
+if (document.fonts?.ready) document.fonts.ready.then(renderStudio);
+
+/* Loading page: holds ~2s so the signature can write itself in, then fades */
+const loader = $("#loader"), t0 = performance.now();
+const minMs = matchMedia("(prefers-reduced-motion: reduce)").matches ? 400 : 2100;
+const hideLoader = () => setTimeout(() => loader.classList.add("done"), Math.max(0, minMs - (performance.now()-t0)));
+document.readyState === "complete" ? hideLoader() : addEventListener("load", hideLoader);
+loader.addEventListener("click", () => loader.classList.add("done"));
 })();
 </script>
 </body>

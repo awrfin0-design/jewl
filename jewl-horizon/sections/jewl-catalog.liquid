@@ -1,0 +1,49 @@
+{%- liquid
+  assign source = section.settings.collection
+  if source == blank
+    assign source = collections.all
+  endif
+-%}
+<div class="jewl">
+  <section class="j-block" id="shop" data-j-catalog>
+    <script type="application/json" data-j-products>
+      [
+        {%- for product in source.products limit: section.settings.limit -%}
+          {% render 'jewl-product-json', product: product %}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    </script>
+    <div class="j-wrap">
+      <div class="j-head">
+        <div>
+          <div class="j-eyebrow">{{ 'jewl.shop_eyebrow' | t }}</div>
+          <h2>{{ 'jewl.shop_title_html' | t }}</h2>
+        </div>
+      </div>
+      <div class="j-toolbar">
+        <div class="j-filters" role="group" aria-label="{{ 'jewl.shop_eyebrow' | t | escape }}"></div>
+        <div class="j-sorter">
+          <span class="j-showing j-num" aria-live="polite"></span>
+          <label class="j-sr" for="j-sort-{{ section.id }}">{{ 'jewl.sort' | t }}</label>
+          <select id="j-sort-{{ section.id }}"></select>
+        </div>
+      </div>
+      <div class="j-grid"></div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl catalog",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to show all products. With no products in the store, the eight sample pieces are shown." },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 4, "max": 48, "step": 4, "default": 16 },
+    {
+      "type": "paragraph",
+      "content": "Filters use the product type (Ring, Necklace, Earrings, Bracelet). Add the tag stone:aquamarine, stone:paraiba, stone:topaz or stone:turquoise to tint a piece, and badge:New to label it. Metal swatches come from an option named Metal."
+    }
+  ],
+  "presets": [{ "name": "Jewl catalog" }]
+}
+{% endschema %}

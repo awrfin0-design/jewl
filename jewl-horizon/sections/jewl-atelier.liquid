@@ -1,0 +1,26 @@
+<div class="jewl">
+  <section class="j-block j-band-sec" id="atelier">
+    <div class="j-wrap j-story">
+      <div>
+        <div class="j-eyebrow">{{ 'jewl.a_eyebrow' | t }}</div>
+        <blockquote>
+          <span>{{ 'jewl.a_quote_html' | t }}</span>
+          <cite>{{ 'jewl.a_cite' | t }}</cite>
+        </blockquote>
+      </div>
+      <div class="j-facts">
+        <div><b class="j-num j-gild">100%</b><span>{{ 'jewl.f1' | t }}</span></div>
+        <div><b class="j-num j-gild">7</b><span>{{ 'jewl.f2' | t }}</span></div>
+        <div><b class="j-num j-gild">{{ 'jewl.f3v' | t }}</b><span>{{ 'jewl.f3' | t }}</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl atelier",
+  "settings": [],
+  "presets": [{ "name": "Jewl atelier" }]
+}
+{% endschema %}

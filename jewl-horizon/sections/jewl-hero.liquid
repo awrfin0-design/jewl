@@ -1,0 +1,69 @@
+{%- liquid
+  assign p = section.settings.product
+  assign wordmark = settings.jewl_wordmark | default: 'Jewl'
+-%}
+<div class="jewl">
+  <section class="j-hero" id="hero">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-hero-grid">
+      <div>
+        <div class="j-eyebrow">{% if section.settings.eyebrow != blank %}{{ section.settings.eyebrow }}{% else %}{{ 'jewl.hero_eyebrow' | t }}{% endif %}</div>
+        <div class="j-hero-mark j-gild" aria-hidden="true">{{ wordmark }}</div>
+        <h1>{% if section.settings.title != blank %}{{ section.settings.title }}{% else %}{{ 'jewl.hero_title_html' | t }}{% endif %}</h1>
+        <p class="j-lede">{% if section.settings.lede != blank %}{{ section.settings.lede }}{% else %}{{ 'jewl.hero_lede' | t }}{% endif %}</p>
+        <div class="j-hero-ctas">
+          <a class="j-btn j-btn-gold" href="#shop">{{ 'jewl.cta1' | t }}</a>
+          <a class="j-btn j-btn-line" href="#engrave">{{ 'jewl.cta2' | t }}</a>
+        </div>
+      </div>
+      <div class="j-hero-piece">
+        {%- if p != blank -%}
+          <script type="application/json" data-j-products>[{% render 'jewl-product-json', product: p %}]</script>
+          <button class="j-arch-btn" type="button" data-j-hero-qv="{{ p.handle }}" aria-label="{{ 'jewl.quick' | t | escape }}: {{ p.title | escape }}">
+            <div class="j-ph{% if p.featured_image %} j-has-img{% endif %}" data-stone="{{ section.settings.stone }}" data-metal="yellow">
+              {%- if p.featured_image -%}
+                {{ p.featured_image | image_url: width: 1000 | image_tag: loading: 'eager', alt: p.title, sizes: '(min-width: 860px) 430px, 80vw' }}
+              {%- endif -%}
+              <span class="j-ph-initial">{{ p.title | slice: 0 }}</span>
+            </div>
+          </button>
+          <div class="j-arch-cap">
+            <span class="j-brand j-gild">{{ p.title }}</span>
+            {%- assign hero_spec = p.metafields.custom.spec.value | default: p.type -%}
+            <span class="j-num">{% if hero_spec != blank %}{{ hero_spec }} · {% endif %}{{ p.price | money_without_trailing_zeros }}</span>
+          </div>
+        {%- else -%}
+          <button class="j-arch-btn" type="button" data-j-hero-qv="ondine" aria-label="{{ 'jewl.quick' | t | escape }}: Ondine Solitaire">
+            <div class="j-ph" data-stone="{{ section.settings.stone }}" data-metal="yellow"><span class="j-ph-initial">O</span></div>
+          </button>
+          <div class="j-arch-cap">
+            <span class="j-brand j-gild">Ondine</span>
+            <span class="j-num">{{ 'jewl.aqua' | t }} · 1.2 ct · {{ 245000 | money_without_trailing_zeros }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl hero",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Featured piece", "info": "Shown in the arch. Leave empty to show the Ondine sample." },
+    {
+      "type": "select", "id": "stone", "label": "Stone glow", "default": "aqua",
+      "options": [
+        { "value": "aqua", "label": "Aquamarine" },
+        { "value": "paraiba", "label": "Paraíba tourmaline" },
+        { "value": "topaz", "label": "Blue topaz" },
+        { "value": "turq", "label": "Turquoise" }
+      ]
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "info": "Leave text fields empty to use the translated defaults." },
+    { "type": "text", "id": "title", "label": "Heading" },
+    { "type": "textarea", "id": "lede", "label": "Intro" }
+  ],
+  "presets": [{ "name": "Jewl hero" }]
+}
+{% endschema %}

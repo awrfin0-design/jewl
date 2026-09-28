@@ -1,0 +1,24 @@
+{%- doc -%}
+  Jewl fonts, stylesheet and the early theme / loader switch. Rendered in the layout <head>.
+{%- enddoc -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
+{%- case request.locale.iso_code -%}
+  {%- when 'ru' -%}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Cormorant:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+  {%- when 'zh-CN', 'zh-TW' -%}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500&family=Noto+Sans+SC:wght@300;400;500&display=swap">
+  {%- when 'ja' -%}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Shippori+Mincho:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap">
+  {%- when 'ar' -%}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap">
+{%- endcase -%}
+{{ 'jewl.css' | asset_url | stylesheet_tag }}
+<script>
+  try {
+    var jewlTheme = localStorage.getItem('jewl-theme');
+    if (jewlTheme) document.documentElement.setAttribute('data-theme', jewlTheme);
+    if (sessionStorage.getItem('jewl-seen')) document.documentElement.classList.add('j-no-loader');
+  } catch (e) {}
+</script>

@@ -1,0 +1,40 @@
+{%- doc -%}
+  Outputs one product as JSON for assets/jewl.js (catalog cards, quick view, hero, engraving studio).
+
+  Optional product data the Jewl design reads:
+  - Tag `stone:aquamarine` (or paraiba, topaz, turquoise) or metafield custom.stone, which tints the image slot
+  - Tag `badge:New` or metafield custom.badge, shown above the product name
+  - Metafield custom.spec, the one-line spec under the name (for example "Aquamarine · 1.2 ct")
+
+  @param {product} product - The product to output
+{%- enddoc -%}
+{%- liquid
+  assign stone = product.metafields.custom.stone.value | default: ''
+  assign badge = product.metafields.custom.badge.value | default: ''
+  assign spec = product.metafields.custom.spec.value | default: ''
+-%}
+{
+  "key": {{ product.handle | json }},
+  "url": {{ product.url | json }},
+  "title": {{ product.title | json }},
+  "type": {{ product.type | json }},
+  "tags": {{ product.tags | json }},
+  "price": {{ product.price | json }},
+  "available": {{ product.available | json }},
+  "img": {% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | json }}{% else %}null{% endif %},
+  "stone": {{ stone | json }},
+  "badge": {{ badge | json }},
+  "spec": {{ spec | json }},
+  "options": [
+    {%- for option in product.options_with_values -%}
+      {"name": {{ option.name | json }}, "values": [
+        {%- for value in option.values -%}{{ value.name | default: value | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
+      ]}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ],
+  "variants": [
+    {%- for variant in product.variants -%}
+      {"id": {{ variant.id | json }}, "price": {{ variant.price | json }}, "available": {{ variant.available | json }}, "options": {{ variant.options | json }}, "img": {% if variant.featured_image %}{{ variant.featured_image | image_url: width: 900 | json }}{% else %}null{% endif %}}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}

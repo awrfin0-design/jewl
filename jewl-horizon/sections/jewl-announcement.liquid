@@ -1,0 +1,22 @@
+<div class="jewl">
+  <div class="j-announce">
+    {%- if section.settings.text != blank -%}{{ section.settings.text }}{%- else -%}{{ 'jewl.announce' | t }}{%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl announcement",
+  "class": "jewl-announcement-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "info": "Leave empty to use the translated default for each language."
+    }
+  ],
+  "presets": [{ "name": "Jewl announcement" }]
+}
+{% endschema %}

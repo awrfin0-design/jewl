@@ -1,0 +1,94 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign wordmark = settings.jewl_wordmark | default: 'Jewl'
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+-%}
+
+{%- liquid
+  assign use_menu = false
+  if menu != blank and menu.links.size > 0
+    assign use_menu = true
+  endif
+-%}
+
+<div class="jewl">
+  <header class="j-site">
+    <div class="j-wrap">
+      <nav class="j-nav" aria-label="{{ 'jewl.menu' | t | escape }}">
+        <button class="j-tool j-menu-btn" id="j-menu-btn" type="button" aria-expanded="false" aria-controls="j-mobile-nav">
+          <span class="j-glyph" aria-hidden="true">≡</span><span class="j-sr">{{ 'jewl.menu' | t }}</span>
+        </button>
+        <ul class="j-nav-links">
+          {%- if use_menu -%}
+            {%- for link in menu.links -%}<li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>{%- endfor -%}
+          {%- else -%}
+            <li><a href="{{ root }}/#shop">{{ 'jewl.nav_shop' | t }}</a></li>
+            <li><a href="{{ root }}/#collections">{{ 'jewl.nav_coll' | t }}</a></li>
+            <li><a href="{{ root }}/#engrave">{{ 'jewl.nav_engr' | t }}</a></li>
+            <li><a href="{{ root }}/#atelier">{{ 'jewl.nav_atelier' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+        <a class="j-logo j-gild" href="{{ routes.root_url }}" aria-label="{{ wordmark | escape }}">{{ wordmark }}</a>
+        <div class="j-tools">
+          {%- if localization.available_languages.size > 1 -%}
+            <div class="j-lang-wrap">
+              <button class="j-tool" id="j-lang-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="j-lang-menu" aria-label="{{ 'jewl.lang' | t | escape }}">
+                <span>{{ request.locale.iso_code | split: '-' | first | upcase }}</span><span aria-hidden="true" style="font-size:9px">▼</span>
+              </button>
+              {%- form 'localization', id: 'JewlLanguageForm', class: 'j-localization' -%}
+                <ul class="j-lang-menu" id="j-lang-menu" hidden>
+                  {%- for language in localization.available_languages -%}
+                    <li>
+                      <button type="submit" name="language_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}" aria-current="{% if language.iso_code == localization.language.iso_code %}true{% else %}false{% endif %}">
+                        {{ language.endonym_name | capitalize }}<small>{{ language.iso_code | split: '-' | first | upcase }}</small>
+                      </button>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                <input type="hidden" name="return_to" value="{{ request.path }}">
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+          <button class="j-tool" id="j-theme-btn" type="button"><span class="j-glyph" id="j-theme-glyph" aria-hidden="true">☾</span></button>
+          <button class="j-tool j-hide-sm" id="j-wish-btn" type="button" aria-label="{{ 'jewl.wishlist' | t | escape }}">
+            <span class="j-glyph" aria-hidden="true">♡&#xFE0E;</span><span class="j-count j-num" id="j-wish-count" hidden>0</span>
+          </button>
+          <button class="j-tool" id="j-bag-btn" type="button" aria-controls="j-drawer">
+            <span>{{ 'jewl.bag' | t }}</span><span class="j-count j-num" id="j-bag-count"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </nav>
+      <div class="j-mobile-nav" id="j-mobile-nav" hidden>
+        {%- if use_menu -%}
+          {%- for link in menu.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
+        {%- else -%}
+          <a href="{{ root }}/#shop">{{ 'jewl.nav_shop' | t }}</a><a href="{{ root }}/#collections">{{ 'jewl.nav_coll' | t }}</a><a href="{{ root }}/#engrave">{{ 'jewl.nav_engr' | t }}</a><a href="{{ root }}/#atelier">{{ 'jewl.nav_atelier' | t }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl header",
+  "class": "jewl-header-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Leave empty to link to the Shop, Collections, Engraving and Atelier sections of the home page."
+    },
+    {
+      "type": "paragraph",
+      "content": "The language menu lists the languages published in Settings > Languages."
+    }
+  ],
+  "presets": [{ "name": "Jewl header" }]
+}
+{% endschema %}

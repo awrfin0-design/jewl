@@ -1,0 +1,16 @@
+{%- capture words -%}
+  <span>{{ 'jewl.aqua' | t }}</span><span>{{ 'jewl.paraiba' | t }}</span><span>{{ 'jewl.topaz' | t }}</span><span>{{ 'jewl.turq' | t }}</span><span>{{ 'jewl.m_gold' | t }}</span><span>{{ 'jewl.m_lisbon' | t }}</span>
+{%- endcapture -%}
+<div class="jewl">
+  <div class="j-marquee" aria-hidden="true">
+    <div class="j-marquee-track">{{ words }}{{ words }}</div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl marquee",
+  "settings": [],
+  "presets": [{ "name": "Jewl marquee" }]
+}
+{% endschema %}

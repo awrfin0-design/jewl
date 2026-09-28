@@ -1,0 +1,106 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "jewl_hero": {
+      "type": "jewl-hero",
+      "settings": {
+        "stone": "aqua",
+        "eyebrow": "",
+        "title": "",
+        "lede": ""
+      }
+    },
+    "jewl_marquee": {
+      "type": "jewl-marquee",
+      "settings": {}
+    },
+    "jewl_standards": {
+      "type": "jewl-standards",
+      "settings": {}
+    },
+    "jewl_catalog": {
+      "type": "jewl-catalog",
+      "settings": {
+        "limit": 16
+      }
+    },
+    "jewl_collections": {
+      "type": "jewl-collections",
+      "blocks": {
+        "lagoon": {
+          "type": "collection",
+          "settings": {
+            "name": "Lagoon",
+            "category": "necklaces",
+            "count": 18,
+            "stone": "aqua",
+            "metal": "yellow",
+            "description": ""
+          }
+        },
+        "tide": {
+          "type": "collection",
+          "settings": {
+            "name": "Tide",
+            "category": "earrings",
+            "count": 14,
+            "stone": "paraiba",
+            "metal": "rose",
+            "description": ""
+          }
+        },
+        "heirloom": {
+          "type": "collection",
+          "settings": {
+            "name": "Heirloom",
+            "category": "rings",
+            "count": 16,
+            "stone": "topaz",
+            "metal": "white",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "lagoon",
+        "tide",
+        "heirloom"
+      ],
+      "settings": {
+        "all_link": ""
+      }
+    },
+    "jewl_engraving": {
+      "type": "jewl-engraving",
+      "settings": {
+        "sample_text": "always, A & M"
+      }
+    },
+    "jewl_atelier": {
+      "type": "jewl-atelier",
+      "settings": {}
+    },
+    "jewl_newsletter": {
+      "type": "jewl-newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "jewl_hero",
+    "jewl_marquee",
+    "jewl_standards",
+    "jewl_catalog",
+    "jewl_collections",
+    "jewl_engraving",
+    "jewl_atelier",
+    "jewl_newsletter"
+  ]
+}

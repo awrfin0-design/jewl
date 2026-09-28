@@ -1,0 +1,111 @@
+<div class="jewl">
+  <section class="j-block j-band-sec" id="collections">
+    <div class="j-aurora" aria-hidden="true" style="opacity:.5"><i></i><i></i><i></i></div>
+    <div class="j-wrap" style="position:relative">
+      <div class="j-head">
+        <div>
+          <div class="j-eyebrow">{{ 'jewl.coll_eyebrow' | t }}</div>
+          <h2>{{ 'jewl.coll_title_html' | t }}</h2>
+        </div>
+        <a class="j-btn j-btn-line" href="{% if section.settings.all_link != blank %}{{ section.settings.all_link }}{% else %}#shop{% endif %}">
+          {{- 'jewl.coll_all' | t -}}
+        </a>
+      </div>
+      <div class="j-colls">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign c = block.settings.collection
+            assign image = block.settings.image
+            if image == blank and c != blank
+              assign image = c.featured_image
+            endif
+            assign count = block.settings.count
+            if c != blank
+              assign count = c.products_count
+            endif
+            assign desc_key = 'jewl.c' | append: forloop.index
+          -%}
+          <a
+            class="j-coll"
+            href="{% if c != blank %}{{ c.url }}{% else %}#shop{% endif %}"
+            {% if c == blank %}data-j-go="{{ block.settings.category }}"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="j-ph{% if image %} j-has-img{% endif %}" data-stone="{{ block.settings.stone }}" data-metal="{{ block.settings.metal }}" aria-hidden="true">
+              {%- if image -%}{{ image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+              <span class="j-ph-initial">{{ block.settings.name | slice: 0 }}</span>
+            </div>
+            <small class="j-num">{{ 'jewl.pieces' | t: n: count }}</small>
+            <span class="j-brand j-gild">{{ block.settings.name }}</span>
+            <p>
+              {%- if block.settings.description != blank -%}
+                {{ block.settings.description }}
+              {%- elsif forloop.index <= 3 -%}
+                {{ desc_key | t }}
+              {%- endif -%}
+            </p>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl collections",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "url", "id": "all_link", "label": "View all link", "info": "Leave empty to jump to the catalog." }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Lagoon" },
+        { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to filter the catalog by the category below." },
+        {
+          "type": "select", "id": "category", "label": "Catalog filter", "default": "necklaces",
+          "options": [
+            { "value": "rings", "label": "Rings" },
+            { "value": "necklaces", "label": "Necklaces" },
+            { "value": "earrings", "label": "Earrings" },
+            { "value": "bracelets", "label": "Bracelets" }
+          ]
+        },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "textarea", "id": "description", "label": "Description", "info": "Leave empty to use the translated default." },
+        { "type": "number", "id": "count", "label": "Piece count", "default": 18, "info": "Used when no collection is chosen." },
+        {
+          "type": "select", "id": "stone", "label": "Stone glow", "default": "aqua",
+          "options": [
+            { "value": "aqua", "label": "Aquamarine" },
+            { "value": "paraiba", "label": "Paraíba tourmaline" },
+            { "value": "topaz", "label": "Blue topaz" },
+            { "value": "turq", "label": "Turquoise" }
+          ]
+        },
+        {
+          "type": "select", "id": "metal", "label": "Initial metal", "default": "yellow",
+          "options": [
+            { "value": "yellow", "label": "Yellow gold" },
+            { "value": "white", "label": "White gold" },
+            { "value": "rose", "label": "Rose gold" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Jewl collections",
+      "blocks": [
+        { "type": "collection", "settings": { "name": "Lagoon", "category": "necklaces", "count": 18, "stone": "aqua", "metal": "yellow" } },
+        { "type": "collection", "settings": { "name": "Tide", "category": "earrings", "count": 14, "stone": "paraiba", "metal": "rose" } },
+        { "type": "collection", "settings": { "name": "Heirloom", "category": "rings", "count": 16, "stone": "topaz", "metal": "white" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

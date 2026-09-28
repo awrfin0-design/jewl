@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:names.footer",
+  "sections": {
+    "jewl_footer": {
+      "type": "jewl-footer",
+      "settings": {
+        "about": "",
+        "address": "Rua da Rosa 112\n1200-389 Lisboa",
+        "hours": "",
+        "email": "hello@jewl.example",
+        "legal_name": "Jewl Joalharia, Lda."
+      }
+    }
+  },
+  "order": [
+    "jewl_footer"
+  ]
+}

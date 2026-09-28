@@ -1,0 +1,38 @@
+{%- doc -%}
+  Jewl loading page, bag drawer, quick view and toast. Rendered once at the top of <body>.
+{%- enddoc -%}
+<div class="jewl" id="j-overlays">
+  {%- if settings.jewl_loader and request.design_mode == false -%}
+  <div class="j-loader" id="j-loader" aria-hidden="true">
+    <div class="j-aurora"><i></i><i></i><i></i></div>
+    <div class="j-loader-mark j-gild">{{ settings.jewl_wordmark | default: 'Jewl' }}</div>
+    <div class="j-loader-line"><i></i></div>
+    <p>{{ 'jewl.loader' | t }}</p>
+  </div>
+  {%- endif -%}
+
+  <div class="j-scrim" id="j-scrim" hidden></div>
+  <aside class="j-drawer" id="j-drawer" aria-hidden="true" aria-label="{{ 'jewl.b_title' | t | escape }}">
+    <div class="j-drawer-head">
+      <h2>{{ 'jewl.b_title' | t }}</h2>
+      <button class="j-x" id="j-close-bag" type="button" aria-label="{{ 'jewl.close' | t | escape }}">×</button>
+    </div>
+    <div class="j-drawer-body" id="j-bag-body">
+      <div class="j-empty"><span class="j-s">{{ 'jewl.b_empty' | t }}</span>{{ 'jewl.b_empty_d' | t }}</div>
+    </div>
+    <form class="j-drawer-foot" id="j-bag-foot" action="{{ routes.cart_url }}" method="post" hidden>
+      <div class="j-row"><span>{{ 'jewl.b_sub' | t }}</span><span class="j-price j-num" id="j-subtotal"></span></div>
+      <p class="j-note">{{ 'jewl.b_note' | t }}</p>
+      <button class="j-btn j-btn-gold j-btn-block" type="submit" name="checkout">{{ 'jewl.b_checkout' | t }}</button>
+    </form>
+  </aside>
+
+  <dialog class="j-qv" id="j-qv">
+    <div class="j-qv-grid">
+      <div class="j-qv-media" id="j-qv-media"></div>
+      <div class="j-qv-info" id="j-qv-info"></div>
+    </div>
+  </dialog>
+
+  <div class="j-toast" id="j-toast" role="status" aria-live="polite"></div>
+</div>

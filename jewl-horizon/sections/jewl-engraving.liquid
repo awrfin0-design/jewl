@@ -1,0 +1,80 @@
+{%- liquid
+  assign band = section.settings.band_product
+  assign fee = section.settings.fee_product
+-%}
+<div class="jewl">
+  <section class="j-block" id="engrave" data-j-studio>
+    <script type="application/json" data-j-studio-config>
+      {
+        "band": {% if band != blank %}{% render 'jewl-product-json', product: band %}{% else %}null{% endif %},
+        "fee": {% if fee != blank %}{"id": {{ fee.selected_or_first_available_variant.id | json }}, "price": {{ fee.selected_or_first_available_variant.price | json }}}{% else %}null{% endif %}
+      }
+    </script>
+    <div class="j-wrap j-studio">
+      <div class="j-stage j-ph" data-stone="aqua" data-metal="yellow">
+        <div class="j-band" data-metal="yellow">
+          <span class="j-engr" data-font="script"></span>
+          <span class="j-hall j-l">750 · JWL</span>
+          <span class="j-hall j-r j-hall-size j-num">US 6</span>
+        </div>
+        <span class="j-stage-note">{{ 'jewl.e_view' | t }}</span>
+      </div>
+
+      <form class="j-studio-form" id="j-studio-{{ section.id }}" novalidate>
+        <div>
+          <div class="j-eyebrow">{{ 'jewl.e_eyebrow' | t }}</div>
+          <h2 style="margin-top:10px">{{ 'jewl.e_title_html' | t }}</h2>
+          <p class="j-intro">{{ 'jewl.e_intro' | t }}</p>
+        </div>
+        <div class="j-field">
+          <label for="j-inscription-{{ section.id }}">{{ 'jewl.e_insc' | t }}</label>
+          <input class="j-text-input" id="j-inscription-{{ section.id }}" maxlength="18" value="{{ section.settings.sample_text | escape }}" autocomplete="off">
+          <span class="j-counter j-num"></span>
+        </div>
+        <fieldset class="j-field">
+          <legend>{{ 'jewl.e_letter' | t }}</legend>
+          <div class="j-opts">
+            <label class="j-opt"><input type="radio" name="font" id="j-font-script-{{ section.id }}" value="script" checked><span style="font-family:var(--j-script);font-size:20px">{{ 'jewl.e_script' | t }}</span></label>
+            <label class="j-opt"><input type="radio" name="font" id="j-font-roman-{{ section.id }}" value="roman"><span style="font-family:var(--j-display);font-style:italic">{{ 'jewl.e_roman' | t }}</span></label>
+            <label class="j-opt"><input type="radio" name="font" id="j-font-caps-{{ section.id }}" value="caps"><span style="letter-spacing:.14em;text-transform:uppercase;font-size:12.5px">{{ 'jewl.e_caps' | t }}</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="j-field">
+          <legend>{{ 'jewl.metal' | t }}</legend>
+          <div class="j-opts">
+            <label class="j-opt"><input type="radio" name="metal" id="j-metal-yellow-{{ section.id }}" value="yellow" checked><span><i class="j-dot" style="background:var(--j-g-yellow)"></i>{{ 'jewl.yellow' | t }}</span></label>
+            <label class="j-opt"><input type="radio" name="metal" id="j-metal-white-{{ section.id }}" value="white"><span><i class="j-dot" style="background:var(--j-g-white)"></i>{{ 'jewl.white' | t }}</span></label>
+            <label class="j-opt"><input type="radio" name="metal" id="j-metal-rose-{{ section.id }}" value="rose"><span><i class="j-dot" style="background:var(--j-g-rose)"></i>{{ 'jewl.rose' | t }}</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="j-field">
+          <legend>{{ 'jewl.size' | t }}</legend>
+          <div class="j-sizes"></div>
+          <span class="j-readout j-num"></span>
+        </fieldset>
+        <div class="j-total">
+          <div>
+            <div class="j-price j-num j-studio-price"></div>
+            <small class="j-breakdown j-num"></small>
+          </div>
+          <button class="j-btn j-btn-ink" type="submit">{{ 'jewl.e_add' | t }}</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl engraving studio",
+  "settings": [
+    {
+      "type": "product", "id": "band_product", "label": "Band product",
+      "info": "Needs a Metal option (yellow, white, rose gold) and a Size option (4 to 9). The inscription is added to the order as a line item property."
+    },
+    { "type": "product", "id": "fee_product", "label": "Engraving fee product", "info": "Optional. Added to the bag when an inscription is entered." },
+    { "type": "text", "id": "sample_text", "label": "Sample inscription", "default": "always, A & M" }
+  ],
+  "presets": [{ "name": "Jewl engraving studio" }]
+}
+{% endschema %}

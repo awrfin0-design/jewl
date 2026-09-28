@@ -1,0 +1,81 @@
+{%- liquid
+  assign wordmark = settings.jewl_wordmark | default: 'Jewl'
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+-%}
+<div class="jewl">
+  <footer class="j-site">
+    <div class="j-wrap">
+      <div class="j-foot">
+        <div>
+          <div class="j-logo j-gild">{{ wordmark }}</div>
+          <p style="max-width:34ch;margin:10px 0 0">
+            {%- if section.settings.about != blank -%}{{ section.settings.about }}{%- else -%}{{ 'jewl.ft_about' | t }}{%- endif -%}
+          </p>
+        </div>
+        <div>
+          <h4>{{ 'jewl.ft_shop' | t }}</h4>
+          <ul>
+            {%- if section.settings.shop_menu != blank and section.settings.shop_menu.links.size > 0 -%}
+              {%- for link in section.settings.shop_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- else -%}
+              <li><a href="{{ root }}/#shop" data-j-go="rings">{{ 'jewl.rings' | t }}</a></li>
+              <li><a href="{{ root }}/#shop" data-j-go="necklaces">{{ 'jewl.necklaces' | t }}</a></li>
+              <li><a href="{{ root }}/#shop" data-j-go="earrings">{{ 'jewl.earrings' | t }}</a></li>
+              <li><a href="{{ root }}/#shop" data-j-go="bracelets">{{ 'jewl.bracelets' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </div>
+        <div>
+          <h4>{{ 'jewl.ft_care' | t }}</h4>
+          <ul>
+            {%- if section.settings.care_menu != blank and section.settings.care_menu.links.size > 0 -%}
+              {%- for link in section.settings.care_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- else -%}
+              <li><a href="{{ root }}/#engrave">{{ 'jewl.ft_size' | t }}</a></li>
+              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_resize' | t }}</a></li>
+              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_ship' | t }}</a></li>
+              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_carejw' | t }}</a></li>
+            {%- endif -%}
+          </ul>
+        </div>
+        <div>
+          <h4>{{ 'jewl.ft_visit' | t }}</h4>
+          <ul>
+            {%- assign address_lines = section.settings.address | newline_to_br | split: '<br />' -%}
+            {%- for address_line in address_lines -%}
+              {%- assign address_line_clean = address_line | strip -%}
+              {%- if address_line_clean != blank -%}<li>{{ address_line_clean }}</li>{%- endif -%}
+            {%- endfor -%}
+            <li>{% if section.settings.hours != blank %}{{ section.settings.hours }}{% else %}{{ 'jewl.ft_hours' | t }}{% endif %}</li>
+            {%- if section.settings.email != blank -%}<li>{{ section.settings.email }}</li>{%- endif -%}
+          </ul>
+        </div>
+      </div>
+      <div class="j-legal">
+        <span>© {{ 'now' | date: '%Y' }} {{ section.settings.legal_name }}</span>
+        <span>{{ powered_by_link }}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl footer",
+  "class": "jewl-footer-section",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "textarea", "id": "about", "label": "About text", "info": "Leave empty to use the translated default." },
+    { "type": "link_list", "id": "shop_menu", "label": "Shop column menu", "info": "Leave empty to show Rings, Necklaces, Earrings and Bracelets." },
+    { "type": "link_list", "id": "care_menu", "label": "Care column menu" },
+    { "type": "textarea", "id": "address", "label": "Address", "default": "Rua da Rosa 112\n1200-389 Lisboa" },
+    { "type": "text", "id": "hours", "label": "Opening hours", "info": "Leave empty to use the translated default." },
+    { "type": "text", "id": "email", "label": "Email", "default": "hello@jewl.example" },
+    { "type": "text", "id": "legal_name", "label": "Company name", "default": "Jewl Joalharia, Lda." }
+  ],
+  "presets": [{ "name": "Jewl footer" }]
+}
+{% endschema %}

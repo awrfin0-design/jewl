@@ -1,0 +1,30 @@
+<div class="jewl">
+  <section class="j-block">
+    <div class="j-wrap j-letter">
+      <h2>{{ 'jewl.l_title' | t }}</h2>
+      <p>{{ 'jewl.l_body' | t }}</p>
+      {%- form 'customer', id: 'JewlNewsletter', class: 'j-letter-form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label for="j-email-{{ section.id }}" class="j-sr">{{ 'jewl.l_label' | t }}</label>
+        <input id="j-email-{{ section.id }}" type="email" name="contact[email]" autocomplete="email" required placeholder="{{ 'jewl.l_ph' | t | escape }}">
+        <button class="j-btn j-btn-ink" type="submit">{{ 'jewl.l_btn' | t }}</button>
+        {%- capture newsletter_message -%}
+          {%- if form.posted_successfully? -%}
+            {{ 'jewl.subscribed' | t }}
+          {%- elsif form.errors -%}
+            {{ 'jewl.l_err' | t }}
+          {%- endif -%}
+        {%- endcapture -%}
+      {%- endform -%}
+      <div class="j-form-msg" role="status">{{ newsletter_message }}</div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl newsletter",
+  "settings": [],
+  "presets": [{ "name": "Jewl newsletter" }]
+}
+{% endschema %}

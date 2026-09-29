@@ -196,6 +196,7 @@
     store.set('jewl-wish', [...wish]);
     renderWishCount(); catalogs.forEach((c) => c.render());
     if (qv.open) renderQV();
+    productPages.forEach((r) => r());
     toast(t(on ? 'toast_wish' : 'toast_unwish', { n: p.title }));
   }
   $('#j-wish-btn')?.addEventListener('click', () => {
@@ -242,9 +243,9 @@
     if (badge) { badge.textContent = count; badge.hidden = !count; }
     bagBtn?.setAttribute('aria-label', `${t('bag')} (${count})`);
     const foot = $('#j-bag-foot'), body = $('#j-bag-body');
-    if (!body) return;
-    foot.hidden = !count;
-    body.innerHTML = !count
+    if (foot) foot.hidden = !count;
+    $$('[data-j-cart-summary]').forEach((el) => { el.hidden = !count; });
+    const html = !count
       ? `<div class="j-empty"><span class="j-s">${esc(t('b_empty'))}</span>${esc(t('b_empty_d'))}</div>`
       : cart.items.map((i) => {
           const props = Object.entries(i.properties || {}).filter(([k, v]) => v && !k.startsWith('_')).map(([, v]) => `“${esc(v)}”`);
@@ -256,9 +257,12 @@
               <div class="j-qty"><button type="button" data-j-dec="${esc(i.key)}" data-q="${i.quantity - 1}" aria-label="${esc(t('b_less'))}">−</button><span class="j-num">${i.quantity}</span><button type="button" data-j-dec="${esc(i.key)}" data-q="${i.quantity + 1}" aria-label="${esc(t('b_more'))}">+</button></div></div>
             <span class="j-price j-num">${money(i.final_line_price)}</span></div>`;
         }).join('');
-    const sub = $('#j-subtotal'); if (sub) sub.textContent = money(cart.total_price);
+    if (body) body.innerHTML = html;
+    $$('[data-j-cart-lines]').forEach((el) => { el.innerHTML = html; });
+    $$('#j-subtotal, [data-j-subtotal]').forEach((el) => { el.textContent = money(cart.total_price); });
   }
-  $('#j-bag-body')?.addEventListener('click', (e) => {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#j-bag-body, [data-j-cart-lines]')) return;
     const b = e.target.closest('[data-j-dec]');
     if (b) changeLine(b.dataset.jDec, Math.max(0, +b.dataset.q));
   });
@@ -301,11 +305,8 @@
     qvState.key = key; qvState.sel = [...(sel || p.defaultSel)];
     renderQV(); qv.showModal();
   }
-  function renderQV() {
-    const p = byKey(qvState.key), sel = qvState.sel, w = wish.has(p.key);
-    const mediaWrap = $('#j-qv-media');
-    mediaWrap.innerHTML = phHTML(p, sel);
-    const ok = availableFor(p, sel);
+  function panelHTML(p, sel, page) {
+    const w = wish.has(p.key), ok = availableFor(p, sel);
     const catLabel = p.cat !== 'other' ? t(p.cat) : '';
     const sizeIdx = p.options.findIndex((o) => o.name === 'size' || SIZE_NAME.test(o.name));
     const mm = sizeIdx >= 0 ? (SIZES.find((s) => String(s[0]) === String(parseFloat(sel[sizeIdx]))) || [])[1] : null;
@@ -318,24 +319,59 @@
         <div class="${grid}">${o.values.map((v) => {
           const probe = [...sel]; probe[oi] = v;
           const dis = !p.demo && !variantFor(p, probe) ? 'disabled' : '';
-          return `<label class="j-opt"><input type="radio" name="j-qvo-${oi}" value="${esc(v)}" data-oi="${oi}" ${v === sel[oi] ? 'checked' : ''} ${dis}><span class="j-num">${isMetal ? `<i class="j-dot" style="background:var(--j-g-${p.demo ? v : metalKind(v)})"></i>` : ''}${esc(optLabel(p, oi, v))}</span></label>`;
+          return `<label class="j-opt"><input type="radio" name="j-o-${page ? 'pg' : 'qv'}-${oi}" value="${esc(v)}" data-oi="${oi}" ${v === sel[oi] ? 'checked' : ''} ${dis}><span class="j-num">${isMetal ? `<i class="j-dot" style="background:var(--j-g-${p.demo ? v : metalKind(v)})"></i>` : ''}${esc(optLabel(p, oi, v))}</span></label>`;
         }).join('')}</div>
         ${oi === sizeIdx && mm ? `<span class="j-readout j-num">${esc(t('e_mm', { s: parseFloat(sel[sizeIdx]), mm: mm.toFixed(1) }))}</span>` : ''}</div>`;
     }).join('');
-    $('#j-qv-info').innerHTML = `
-      <button class="j-x" type="button" data-j-close aria-label="${esc(t('close'))}">×</button>
+    const title = page ? `<h1 class="j-pd-title">${esc(p.title)}</h1>` : `<h2 style="margin-top:10px">${esc(p.title)}</h2>`;
+    return `
+      ${page ? '' : `<button class="j-x" type="button" data-j-close aria-label="${esc(t('close'))}">×</button>`}
       <div><div class="j-eyebrow">${esc([catLabel, badgeFor(p)].filter(Boolean).join(' · '))}</div>
-        <h2 style="margin-top:10px">${esc(p.title)}</h2>
+        ${title}
         <p class="j-spec">${esc(specFor(p, sel))}</p></div>
       <div class="j-price j-num">${money(priceFor(p, sel))}</div>
       ${optionsHTML}
       ${p.cat === 'earrings' ? `<div class="j-made" style="color:var(--j-muted)">${esc(t('pair'))}</div>` : ''}
-      ${p.cat !== 'other' ? `<p class="j-desc">${esc(t('d_' + p.cat))}</p>` : ''}
+      ${!page && p.cat !== 'other' ? `<p class="j-desc">${esc(t('d_' + p.cat))}</p>` : ''}
       <div class="j-qv-actions"><button class="j-btn j-btn-gold" type="button" data-j-qvadd ${ok ? '' : 'disabled'}>${esc(ok ? t('add') : t('sold_out'))}</button>
         <button class="j-heart" type="button" data-j-wish="${esc(p.key)}" aria-pressed="${w}" aria-label="${esc(t(w ? 'wish_rm' : 'wish_add'))}">${HEART(w)}</button></div>
       <div class="j-made">${esc(t('made'))}</div>
-      ${p.url ? `<a class="j-qv-link" href="${esc(p.url)}">${esc(t('view_product'))}</a>` : ''}`;
+      ${!page && p.url ? `<a class="j-qv-link" href="${esc(p.url)}">${esc(t('view_product'))}</a>` : ''}`;
   }
+  function renderQV() {
+    const p = byKey(qvState.key), sel = qvState.sel;
+    $('#j-qv-media').innerHTML = phHTML(p, sel);
+    $('#j-qv-info').innerHTML = panelHTML(p, sel, false);
+  }
+  const productPages = [];
+  $$('[data-j-product]').forEach((sec) => {
+    const raw = JSON.parse($('script[data-j-products]', sec).textContent)[0];
+    const p = REG.get(raw.key), info = $('.j-pd-info', sec), main = $('.j-pd-main', sec);
+    const params = new URLSearchParams(location.search), vid = params.get('variant');
+    const start = vid && p.variants.find((v) => String(v.id) === vid);
+    const state = { sel: [...(start ? start.options : p.defaultSel)] };
+    const idInput = $('input[name="id"]', sec);
+    function render() {
+      info.innerHTML = panelHTML(p, state.sel, true);
+      const v = variantFor(p, state.sel);
+      if (idInput && v) idInput.value = v.id;
+      const img = imgFor(p, state.sel);
+      main.dataset.metal = metalOfSel(p, state.sel);
+      if (img && v && v.img) { const el = $('img', main); if (el) { el.src = img; el.removeAttribute('srcset'); } }
+      if (v && history.replaceState) { const u = new URL(location.href); u.searchParams.set('variant', v.id); history.replaceState(null, '', u); }
+    }
+    info.addEventListener('change', (e) => { const oi = e.target.dataset.oi; if (oi == null) return; state.sel[+oi] = e.target.value; render(); });
+    info.addEventListener('click', (e) => {
+      if (e.target.closest('[data-j-qvadd]')) { const v = variantFor(p, state.sel); if (v) addItems([{ id: v.id, quantity: 1 }], p.title); }
+    });
+    $$('[data-j-thumb]', sec).forEach((b) => b.addEventListener('click', () => {
+      const el = $('img', main); if (el) { el.src = b.dataset.jThumb; el.removeAttribute('srcset'); }
+      $$('[data-j-thumb]', sec).forEach((x) => x.setAttribute('aria-current', x === b));
+    }));
+    if (fine) tilt(sec, '.j-pd-tilt', 5);
+    render();
+    productPages.push(render);
+  });
   if (qv.showModal) {
     $('#j-qv-info').addEventListener('change', (e) => {
       const oi = e.target.dataset.oi; if (oi == null) return;
@@ -359,14 +395,17 @@
       this.el = el;
       let list = [];
       try { list = JSON.parse($('script[data-j-products]', el)?.textContent || '[]').filter(Boolean).map((r) => REG.get(r.key)); } catch (e) {}
-      this.items = list.length ? list : DEMO;
+      this.items = list.length || el.hasAttribute('data-j-no-demo') ? list : DEMO;
+      if (!this.items.length && el.hasAttribute('data-j-no-demo')) { el.hidden = true; }
       this.cat = location.hash === '#saved' ? 'saved' : 'all';
       this.sort = 'feat';
       this.sel = {};
       this.grid = $('.j-grid', el); this.filters = $('.j-filters', el); this.sortEl = $('select', el); this.showing = $('.j-showing', el);
-      this.sortEl.innerHTML = ['feat', 'low', 'high'].map((s) => `<option value="${s}">${esc(t('sort_' + s))}</option>`).join('');
-      this.sortEl.addEventListener('change', (e) => { this.sort = e.target.value; this.renderGrid(); });
-      this.filters.addEventListener('click', (e) => { const b = e.target.closest('[data-cat]'); if (b) this.setCat(b.dataset.cat); });
+      if (this.sortEl) {
+        this.sortEl.innerHTML = ['feat', 'low', 'high'].map((s) => `<option value="${s}">${esc(t('sort_' + s))}</option>`).join('');
+        this.sortEl.addEventListener('change', (e) => { this.sort = e.target.value; this.renderGrid(); });
+      }
+      this.filters?.addEventListener('click', (e) => { const b = e.target.closest('[data-cat]'); if (b) this.setCat(b.dataset.cat); });
       el.addEventListener('click', (e) => this.onClick(e));
       if (fine) tilt(this.grid, '.j-tilt', 9);
       this.render();
@@ -375,6 +414,7 @@
     setCat(c) { this.cat = c; this.render(); }
     render() { this.renderFilters(); this.renderGrid(); }
     renderFilters() {
+      if (!this.filters) return;
       const cats = ['all', ...['rings', 'necklaces', 'earrings', 'bracelets'].filter((c) => this.items.some((p) => p.cat === c)), 'saved'];
       this.filters.innerHTML = cats.map((c) => `<button class="j-chip" type="button" data-cat="${c}" aria-pressed="${c === this.cat}">${
         c === 'saved' ? '♡&#xFE0E; ' + esc(t('saved')) : esc(t(c))}${c === 'saved' && wish.size ? `<span class="j-count j-num">${wish.size}</span>` : ''}</button>`).join('');
@@ -383,7 +423,7 @@
       let list = this.items.filter((p) => this.cat === 'all' || (this.cat === 'saved' ? wish.has(p.key) : p.cat === this.cat));
       if (this.sort === 'low') list = [...list].sort((a, b) => priceFor(a, this.selOf(a)) - priceFor(b, this.selOf(b)));
       if (this.sort === 'high') list = [...list].sort((a, b) => priceFor(b, this.selOf(b)) - priceFor(a, this.selOf(a)));
-      this.showing.textContent = t('showing', { n: list.length });
+      if (this.showing) this.showing.textContent = t('showing', { n: list.length });
       if (!list.length) { this.grid.innerHTML = `<div class="j-empty-grid"><span class="j-s">♡&#xFE0E;</span>${esc(t('no_saved'))}</div>`; return; }
       this.grid.innerHTML = list.map((p, i) => this.card(p, i)).join('');
     }
@@ -502,6 +542,29 @@
     });
     render();
     document.fonts?.ready?.then(render);
+  });
+
+  /* ============ Ring size finder ============ */
+  $$('[data-j-finder]').forEach((sec) => {
+    const num = $('.j-finder-input input', sec), range = $('.j-finder-range', sec), out = $('.j-finder-out', sec);
+    const ring = $('.j-finder-ring', sec), rows = $$('tbody tr', sec);
+    const chart = rows.map((r) => ({ el: r, size: r.dataset.size, d: parseFloat(r.dataset.d) }));
+    function update(v) {
+      const d = parseFloat(String(v).replace(',', '.'));
+      rows.forEach((r) => r.classList.remove('j-hit'));
+      if (!d) { out.textContent = ''; return; }
+      ring.style.setProperty('--j-dia', Math.min(22, Math.max(12, d)));
+      const first = chart[0], last = chart[chart.length - 1];
+      if (d < first.d - 0.25 || d > last.d + 0.25) { out.textContent = t('rsg_out'); return; }
+      let best = chart.reduce((a, b) => (Math.abs(b.d - d) < Math.abs(a.d - d) ? b : a));
+      const exact = Math.abs(best.d - d) <= 0.1;
+      if (!exact && d > best.d) best = chart[Math.min(chart.length - 1, chart.indexOf(best) + 1)];
+      best.el.classList.add('j-hit');
+      out.textContent = t(exact ? 'rsg_result' : 'rsg_between', { s: best.size });
+    }
+    num.addEventListener('input', () => { range.value = num.value; update(num.value); });
+    range.addEventListener('input', () => { num.value = range.value; update(range.value); });
+    update(num.value);
   });
 
   /* ============ Horizon hooks ============ */

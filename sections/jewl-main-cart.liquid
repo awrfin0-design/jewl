@@ -1,0 +1,34 @@
+<div class="jewl">
+  <section class="j-page-hero j-band-sec">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-page-hero-inner">
+      <nav class="j-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a></nav>
+      <h1>{{ 'jewl.b_title' | t }}</h1>
+      <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
+    </div>
+  </section>
+  <section class="j-block j-block-tight">
+    <div class="j-wrap j-cart">
+      <div class="j-cart-lines" data-j-cart-lines>
+        {%- if cart.item_count == 0 -%}
+          <div class="j-empty"><span class="j-s">{{ 'jewl.b_empty' | t }}</span>{{ 'jewl.b_empty_d' | t }}</div>
+        {%- endif -%}
+      </div>
+      <form class="j-cart-summary" action="{{ routes.cart_url }}" method="post" data-j-cart-summary{% if cart.item_count == 0 %} hidden{% endif %}>
+        <div class="j-row"><span>{{ 'jewl.b_sub' | t }}</span><span class="j-price j-num" data-j-subtotal>{{ cart.total_price | money }}</span></div>
+        <p class="j-note">{{ 'jewl.b_note' | t }}</p>
+        <label class="j-note" for="j-cart-note">{{ 'jewl.cart_note' | t }}</label>
+        <textarea class="j-input" id="j-cart-note" name="note" rows="3">{{ cart.note }}</textarea>
+        <button class="j-btn j-btn-gold j-btn-block" type="submit" name="checkout">{{ 'jewl.b_checkout' | t }}</button>
+        <a class="j-qv-link" href="{{ routes.all_products_collection_url }}">{{ 'jewl.cart_continue' | t }}</a>
+      </form>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl cart",
+  "settings": []
+}
+{% endschema %}

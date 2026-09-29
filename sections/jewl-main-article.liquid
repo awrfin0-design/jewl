@@ -1,0 +1,31 @@
+<div class="jewl">
+  <section class="j-page-hero j-band-sec">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-page-hero-inner">
+      <nav class="j-crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a><span aria-hidden="true">·</span><a href="{{ blog.url }}">{{ blog.title }}</a>
+      </nav>
+      <div class="j-eyebrow j-num">{{ article.published_at | time_tag: format: 'date' }}{% if article.author != blank %} · {{ article.author }}{% endif %}</div>
+      <h1>{{ article.title }}</h1>
+      <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
+    </div>
+  </section>
+  <section class="j-block j-block-tight">
+    <div class="j-wrap j-article">
+      {%- if article.image -%}
+        <div class="j-ph j-has-img j-article-img" data-stone="aqua" data-metal="yellow">
+          {{ article.image | image_url: width: 1600 | image_tag: loading: 'eager', alt: article.image.alt | default: article.title }}
+        </div>
+      {%- endif -%}
+      <div class="j-rte">{{ article.content }}</div>
+      <a class="j-btn j-btn-line" href="{{ blog.url }}">← {{ 'jewl.bl_back' | t }}</a>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl article",
+  "settings": []
+}
+{% endschema %}

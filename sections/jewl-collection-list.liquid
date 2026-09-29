@@ -1,0 +1,36 @@
+<div class="jewl">
+  <section class="j-page-hero j-band-sec">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-page-hero-inner">
+      <nav class="j-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a></nav>
+      <div class="j-eyebrow">{{ 'jewl.coll_eyebrow' | t }}</div>
+      <h1>{{ 'jewl.coll_title_html' | t }}</h1>
+      <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
+    </div>
+  </section>
+  <section class="j-block j-block-tight">
+    <div class="j-wrap j-coll-grid">
+      {%- assign stones = 'aqua,paraiba,topaz,turq' | split: ',' -%}
+      {%- assign metals = 'yellow,rose,white' | split: ',' -%}
+      {%- for c in collections -%}
+        {%- assign si = forloop.index0 | modulo: 4 -%}
+        {%- assign mi = forloop.index0 | modulo: 3 -%}
+        <a class="j-coll" href="{{ c.url }}">
+          <div class="j-ph{% if c.featured_image %} j-has-img{% endif %}" data-stone="{{ stones[si] }}" data-metal="{{ metals[mi] }}" aria-hidden="true">
+            {%- if c.featured_image -%}{{ c.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+            <span class="j-ph-initial">{{ c.title | slice: 0 }}</span>
+          </div>
+          <small class="j-num">{{ 'jewl.pieces' | t: n: c.products_count }}</small>
+          <span class="j-brand j-gild">{{ c.title }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl collection list",
+  "settings": []
+}
+{% endschema %}

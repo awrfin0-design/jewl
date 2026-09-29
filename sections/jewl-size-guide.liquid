@@ -1,0 +1,80 @@
+{%- liquid
+  assign sizes = '4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9' | split: ','
+  assign diameters = '14.9,15.3,15.7,16.1,16.5,16.9,17.3,17.7,18.1,18.5,19.0' | split: ','
+  assign uk = 'H,I,J½,K½,L½,M½,N½,O½,P½,Q½,R½' | split: ','
+  assign resize_page = pages['lifetime-resizing']
+-%}
+<div class="jewl">
+  <section class="j-block j-block-tight" data-j-finder>
+    <div class="j-wrap j-guide">
+      <div class="j-finder">
+        <h2>{{ 'jewl.rsg_finder' | t }}</h2>
+        <p class="j-intro">{{ 'jewl.rsg_finder_help' | t }}</p>
+        <div class="j-finder-row">
+          <label class="j-sr" for="j-finder-{{ section.id }}">{{ 'jewl.rsg_input' | t }}</label>
+          <div class="j-finder-input">
+            <input id="j-finder-{{ section.id }}" type="number" inputmode="decimal" min="12" max="24" step="0.1" value="16.5" aria-describedby="j-finder-out-{{ section.id }}">
+            <span>mm</span>
+          </div>
+          <input class="j-finder-range" type="range" min="14" max="20" step="0.1" value="16.5" aria-label="{{ 'jewl.rsg_input' | t | escape }}">
+        </div>
+        <div class="j-finder-ring" aria-hidden="true"><i></i></div>
+        <p class="j-finder-out" id="j-finder-out-{{ section.id }}" role="status"></p>
+      </div>
+
+      <div>
+        <h2>{{ 'jewl.rsg_table' | t }}</h2>
+        <div class="j-table-wrap">
+          <table class="j-size-table">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'jewl.col_us' | t }}</th>
+                <th scope="col">{{ 'jewl.col_uk' | t }}</th>
+                <th scope="col">{{ 'jewl.col_eu' | t }}</th>
+                <th scope="col">{{ 'jewl.col_d' | t }}</th>
+                <th scope="col">{{ 'jewl.col_c' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for size in sizes -%}
+                {%- liquid
+                  assign d = diameters[forloop.index0] | times: 1.0
+                  assign c = d | times: 3.14159 | round: 1
+                  assign eu = d | times: 3.14159 | round
+                -%}
+                <tr data-size="{{ size }}" data-d="{{ diameters[forloop.index0] }}">
+                  <th scope="row">{{ size }}</th>
+                  <td>{{ uk[forloop.index0] }}</td>
+                  <td>{{ eu }}</td>
+                  <td>{{ diameters[forloop.index0] }} mm</td>
+                  <td>{{ c }} mm</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="j-wrap j-tips">
+      <h3>{{ 'jewl.rsg_tips' | t }}</h3>
+      <ul>
+        <li>{{ 'jewl.rsg_tip1' | t }}</li>
+        <li>{{ 'jewl.rsg_tip2' | t }}</li>
+        <li>{{ 'jewl.rsg_tip3' | t }}</li>
+      </ul>
+      <p class="j-tips-cta">
+        {{ 'jewl.rsg_cta' | t }}
+        {%- if resize_page.handle != blank %} <a href="{{ resize_page.url }}">{{ resize_page.title }} →</a>{%- endif -%}
+      </p>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl size guide",
+  "settings": [],
+  "presets": [{ "name": "Jewl size guide" }]
+}
+{% endschema %}

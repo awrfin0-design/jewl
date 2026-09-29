@@ -1,0 +1,68 @@
+<div class="jewl">
+  <section class="j-block j-block-tight">
+    <div class="j-wrap j-contact">
+      {%- form 'contact', id: 'JewlContactForm', class: 'j-contact-form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="j-form-msg j-form-ok" role="status">{{ 'jewl.ct_sent' | t }}</p>
+        {%- elsif form.errors -%}
+          <p class="j-form-msg j-form-bad" role="alert">{{ 'jewl.ct_err' | t }}</p>
+        {%- endif -%}
+        <div class="j-field-row">
+          <div class="j-field">
+            <label for="j-ct-name">{{ 'jewl.ct_name' | t }}</label>
+            <input class="j-input" id="j-ct-name" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}">
+          </div>
+          <div class="j-field">
+            <label for="j-ct-email">{{ 'jewl.ct_email' | t }}</label>
+            <input class="j-input" id="j-ct-email" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+          </div>
+        </div>
+        <div class="j-field-row">
+          <div class="j-field">
+            <label for="j-ct-phone">{{ 'jewl.ct_phone' | t }}</label>
+            <input class="j-input" id="j-ct-phone" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}">
+          </div>
+          <div class="j-field">
+            <label for="j-ct-topic">{{ 'jewl.ct_topic' | t }}</label>
+            <select class="j-input" id="j-ct-topic" name="contact[topic]">
+              {%- for i in (1..5) -%}
+                {%- assign topic_key = 'jewl.ct_t' | append: i -%}
+                <option>{{ topic_key | t }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </div>
+        <div class="j-field">
+          <label for="j-ct-msg">{{ 'jewl.ct_msg' | t }}</label>
+          <textarea class="j-input" id="j-ct-msg" name="contact[body]" rows="6" required>{{ form.body }}</textarea>
+        </div>
+        <button class="j-btn j-btn-gold" type="submit">{{ 'jewl.ct_send' | t }}</button>
+      {%- endform -%}
+
+      <aside class="j-contact-card">
+        <div class="j-ph" data-stone="aqua" data-metal="yellow" aria-hidden="true"><span class="j-ph-initial">J</span></div>
+        <h2>{{ 'jewl.ct_visit' | t }}</h2>
+        <p>{{ 'jewl.ct_visit_d' | t }}</p>
+        <dl>
+          <dt>{{ 'jewl.ft_visit' | t }}</dt>
+          <dd>{{ section.settings.address | newline_to_br }}</dd>
+          <dt>{{ 'jewl.ct_hours' | t }}</dt>
+          <dd>{{ 'jewl.ft_hours' | t }}</dd>
+          <dt>{{ 'jewl.ct_email' | t }}</dt>
+          <dd><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></dd>
+        </dl>
+      </aside>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl contact",
+  "settings": [
+    { "type": "textarea", "id": "address", "label": "Address", "default": "Rua da Rosa 112\n1200-389 Lisboa" },
+    { "type": "text", "id": "email", "label": "Email", "default": "hello@jewl.example" }
+  ],
+  "presets": [{ "name": "Jewl contact" }]
+}
+{% endschema %}

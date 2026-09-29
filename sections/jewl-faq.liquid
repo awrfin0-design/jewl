@@ -1,0 +1,81 @@
+{%- liquid
+  assign kind = section.settings.content
+  if kind == 'shipping'
+    assign prefix = 'shp'
+    assign count = 5
+  else
+    assign prefix = 'care'
+    assign count = 4
+  endif
+-%}
+<div class="jewl">
+  <section class="j-block j-block-tight">
+    {%- if kind == 'shipping' -%}
+      <div class="j-wrap">
+        <div class="j-facts j-facts-light">
+          {%- for i in (1..3) -%}
+            {%- liquid
+              assign vk = 'jewl.shp_f' | append: i | append: 'v'
+              assign dk = 'jewl.shp_f' | append: i
+            -%}
+            <div><b class="j-num j-gild">{{ vk | t }}</b><span>{{ dk | t }}</span></div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="j-wrap">
+        <h2 class="j-sub-h">{{ 'jewl.care_stones' | t }}</h2>
+        <div class="j-stones">
+          {%- assign stones = 'aqua:7.5–8,paraiba:7–7.5,topaz:8,turq:5–6,gold:2.5–3' | split: ',' -%}
+          {%- for entry in stones -%}
+            {%- liquid
+              assign parts = entry | split: ':'
+              assign stone = parts[0]
+              assign care_key = 'jewl.care_' | append: stone
+              if stone == 'gold'
+                assign name_key = 'jewl.care_gold_t'
+              else
+                assign name_key = 'jewl.' | append: stone
+              endif
+            -%}
+            <article class="j-stone-card">
+              <div class="j-ph j-stone-ph" data-stone="{% if stone == 'gold' %}aqua{% else %}{{ stone }}{% endif %}" data-metal="yellow" aria-hidden="true"><span class="j-ph-initial">{% if stone == 'gold' %}Au{% else %}{{ name_key | t | slice: 0 }}{% endif %}</span></div>
+              <h3>{{ name_key | t }}</h3>
+              <p class="j-mohs j-num">{{ 'jewl.care_mohs' | t }} · {{ parts[1] }}</p>
+              <p>{{ care_key | t }}</p>
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="j-wrap j-faq">
+      {%- for i in (1..count) -%}
+        {%- liquid
+          assign qk = 'jewl.' | append: prefix | append: '_q' | append: i
+          assign ak = 'jewl.' | append: prefix | append: '_a' | append: i
+        -%}
+        <details{% if forloop.first %} open{% endif %}>
+          <summary><span>{{ qk | t }}</span><i aria-hidden="true"></i></summary>
+          <p>{{ ak | t }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl questions",
+  "settings": [
+    {
+      "type": "select", "id": "content", "label": "Content", "default": "shipping",
+      "options": [
+        { "value": "shipping", "label": "Shipping & returns" },
+        { "value": "care", "label": "Jewelry care" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Jewl questions" }]
+}
+{% endschema %}

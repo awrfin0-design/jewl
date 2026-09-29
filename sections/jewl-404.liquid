@@ -1,0 +1,21 @@
+<div class="jewl">
+  <section class="j-hero j-nf">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-nf-inner">
+      <div class="j-hero-mark j-gild" aria-hidden="true">404</div>
+      <h1>{{ 'jewl.nf_title' | t }}</h1>
+      <p class="j-lede">{{ 'jewl.nf_text' | t }}</p>
+      <div class="j-hero-ctas">
+        <a class="j-btn j-btn-gold" href="{{ routes.all_products_collection_url }}">{{ 'jewl.cta1' | t }}</a>
+        <a class="j-btn j-btn-line" href="{{ routes.root_url }}">{{ 'jewl.nf_home' | t }}</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl not found",
+  "settings": []
+}
+{% endschema %}

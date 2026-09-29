@@ -1,0 +1,68 @@
+{%- paginate search.results by 24 -%}
+  <div class="jewl">
+    <section class="j-page-hero j-band-sec">
+      <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="j-wrap j-page-hero-inner">
+        <nav class="j-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a></nav>
+        <h1>{{ 'jewl.se_title' | t }}</h1>
+        <form class="j-search-form" action="{{ routes.search_url }}" method="get" role="search">
+          <label class="j-sr" for="j-search-q">{{ 'jewl.se_title' | t }}</label>
+          <input class="j-input" id="j-search-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'jewl.se_ph' | t | escape }}">
+          <button class="j-btn j-btn-ink" type="submit">{{ 'jewl.se_btn' | t }}</button>
+        </form>
+        {%- if search.performed -%}
+          <p class="j-lede j-num">
+            {%- if search.results_count > 0 -%}
+              {{ 'jewl.se_results' | t: n: search.results_count, q: search.terms }}
+            {%- else -%}
+              {{ 'jewl.se_none' | t: q: search.terms }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+    </section>
+
+    {%- if search.performed and search.results_count > 0 -%}
+      <section class="j-block j-block-tight" data-j-catalog data-j-no-demo>
+        <script type="application/json" data-j-products>
+          [
+            {%- assign first_product = true -%}
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {%- unless first_product -%},{%- endunless -%}
+                {% render 'jewl-product-json', product: item %}
+                {%- assign first_product = false -%}
+              {%- endif -%}
+            {%- endfor -%}
+          ]
+        </script>
+        <div class="j-wrap"><div class="j-grid"></div></div>
+      </section>
+      {%- capture other_results -%}
+        {%- for item in search.results -%}
+          {%- unless item.object_type == 'product' -%}
+            <li><a href="{{ item.url }}"><span>{{ item.title }}</span><i aria-hidden="true">→</i></a></li>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+      {%- if other_results != blank -%}
+        <section class="j-block j-block-tight">
+          <div class="j-wrap">
+            <h2 class="j-sub-h">{{ 'jewl.se_pages' | t }}</h2>
+            <ul class="j-link-list">{{ other_results }}</ul>
+          </div>
+        </section>
+      {%- endif -%}
+      {%- if paginate.pages > 1 -%}
+        <div class="j-wrap"><nav class="j-pagination" aria-label="Pagination">{{ paginate | default_pagination: next: '→', previous: '←' }}</nav></div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Jewl search",
+  "settings": []
+}
+{% endschema %}

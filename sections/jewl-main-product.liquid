@@ -1,0 +1,113 @@
+{%- liquid
+  assign p = product
+  assign first_variant = p.selected_or_first_available_variant
+  assign stone = 'aqua'
+  for tag in p.tags
+    assign tag_lower = tag | downcase
+    if tag_lower contains 'stone:'
+      if tag_lower contains 'para'
+        assign stone = 'paraiba'
+      elsif tag_lower contains 'topa'
+        assign stone = 'topaz'
+      elsif tag_lower contains 'turq'
+        assign stone = 'turq'
+      endif
+    endif
+  endfor
+  assign ship_page = pages['shipping-returns']
+  assign care_page = pages['jewelry-care']
+  assign related_source = p.collections.first
+  if related_source == blank
+    assign related_source = collections.all
+  endif
+-%}
+<div class="jewl">
+  <section class="j-block j-block-tight j-pd-section" data-j-product>
+    <script type="application/json" data-j-products>[{% render 'jewl-product-json', product: p %}]</script>
+    <div class="j-wrap">
+      <nav class="j-crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a>
+        {%- if p.collections.first -%}<span aria-hidden="true">·</span><a href="{{ p.collections.first.url }}">{{ p.collections.first.title }}</a>{%- endif -%}
+        <span aria-hidden="true">·</span><span aria-current="page">{{ p.title }}</span>
+      </nav>
+      <div class="j-pd">
+        <div class="j-pd-gallery">
+          <div class="j-pd-tilt">
+            <div class="j-ph j-pd-main{% if p.featured_image %} j-has-img{% endif %}" data-stone="{{ stone }}" data-metal="yellow">
+              {%- if p.featured_image -%}
+                {{ p.featured_image | image_url: width: 1400 | image_tag: loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 860px) 50vw, 100vw', alt: p.featured_image.alt | default: p.title }}
+              {%- endif -%}
+              <span class="j-ph-initial">{{ p.title | slice: 0 }}</span>
+            </div>
+          </div>
+          {%- if p.images.size > 1 -%}
+            <div class="j-pd-thumbs">
+              {%- for image in p.images limit: 8 -%}
+                <button type="button" data-j-thumb="{{ image | image_url: width: 1400 }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="{{ image.alt | default: p.title | escape }}">
+                  {{ image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="j-pd-side">
+          <div class="j-qv-info j-pd-info">
+            <h1 class="j-pd-title">{{ p.title }}</h1>
+            <div class="j-price j-num">{{ first_variant.price | money }}</div>
+          </div>
+          {%- form 'product', p, class: 'j-pd-form' -%}
+            <input type="hidden" name="id" value="{{ first_variant.id }}">
+            {{ form | payment_button }}
+          {%- endform -%}
+          <div class="j-faq j-pd-acc">
+            {%- if p.description != blank -%}
+              <details open>
+                <summary><span>{{ 'jewl.pd_details' | t }}</span><i aria-hidden="true"></i></summary>
+                <div class="j-rte">{{ p.description }}</div>
+              </details>
+            {%- endif -%}
+            <details>
+              <summary><span>{{ 'jewl.shp_title' | t }}</span><i aria-hidden="true"></i></summary>
+              <p>{{ 'jewl.shp_a1' | t }} {{ 'jewl.shp_a3' | t }}{% if ship_page.handle != blank %} <a href="{{ ship_page.url }}">{{ ship_page.title }} →</a>{% endif %}</p>
+            </details>
+            <details>
+              <summary><span>{{ 'jewl.care_title' | t }}</span><i aria-hidden="true"></i></summary>
+              <p>{{ 'jewl.care_a1' | t }}{% if care_page.handle != blank %} <a href="{{ care_page.url }}">{{ care_page.title }} →</a>{% endif %}</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- if section.settings.show_related -%}
+    <section class="j-block j-block-tight" data-j-catalog data-j-no-demo>
+      <script type="application/json" data-j-products>
+        [
+          {%- assign shown = 0 -%}
+          {%- for item in related_source.products limit: 9 -%}
+            {%- if item.id != p.id and shown < 4 -%}
+              {%- if shown > 0 -%},{%- endif -%}
+              {% render 'jewl-product-json', product: item %}
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      </script>
+      <div class="j-wrap">
+        <div class="j-head"><div><div class="j-eyebrow">{{ 'jewl.shop_eyebrow' | t }}</div><h2>{{ 'jewl.pd_related' | t }}</h2></div></div>
+        <div class="j-grid"></div>
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Jewl product",
+  "settings": [
+    { "type": "checkbox", "id": "show_related", "label": "Show related pieces", "default": true }
+  ]
+}
+{% endschema %}

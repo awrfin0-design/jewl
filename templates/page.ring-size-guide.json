@@ -12,8 +12,12 @@
     "heading": {
       "type": "jewl-page-hero",
       "settings": {
-        "content": "page"
+        "content": "rsg"
       }
+    },
+    "guide": {
+      "type": "jewl-size-guide",
+      "settings": {}
     },
     "content": {
       "type": "jewl-page-content",
@@ -22,6 +26,7 @@
   },
   "order": [
     "heading",
+    "guide",
     "content"
   ]
 }

@@ -1,0 +1,47 @@
+{%- paginate blog.articles by 12 -%}
+  <div class="jewl">
+    <section class="j-page-hero j-band-sec">
+      <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="j-wrap j-page-hero-inner">
+        <nav class="j-crumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a></nav>
+        <div class="j-eyebrow">{{ 'jewl.a_eyebrow' | t }}</div>
+        <h1>{{ blog.title }}</h1>
+        <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
+      </div>
+    </section>
+    <section class="j-block j-block-tight">
+      <div class="j-wrap">
+        {%- if blog.articles_count == 0 -%}
+          <p class="j-lede j-center">{{ 'jewl.bl_empty' | t }}</p>
+        {%- else -%}
+          <div class="j-stories">
+            {%- assign stones = 'aqua,paraiba,topaz,turq' | split: ',' -%}
+            {%- for article in blog.articles -%}
+              {%- assign si = forloop.index0 | modulo: 4 -%}
+              <article class="j-story-card">
+                <a href="{{ article.url }}" class="j-ph{% if article.image %} j-has-img{% endif %}" data-stone="{{ stones[si] }}" data-metal="yellow" tabindex="-1" aria-hidden="true">
+                  {%- if article.image -%}{{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+                  <span class="j-ph-initial">{{ article.title | slice: 0 }}</span>
+                </a>
+                <div class="j-eyebrow j-num">{{ article.published_at | time_tag: format: 'date' }}</div>
+                <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+                <p>{{ article.excerpt_or_content | strip_html | truncatewords: 26 }}</p>
+                <a class="j-qv-link" href="{{ article.url }}">{{ 'jewl.bl_read' | t }} →</a>
+              </article>
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <nav class="j-pagination" aria-label="Pagination">{{ paginate | default_pagination: next: '→', previous: '←' }}</nav>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Jewl blog",
+  "settings": []
+}
+{% endschema %}

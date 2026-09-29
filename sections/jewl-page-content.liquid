@@ -1,0 +1,19 @@
+{%- if page.content != blank -%}
+  <div class="jewl">
+    <section class="j-block j-block-tight">
+      <div class="j-wrap">
+        <div class="j-rte">{{ page.content }}</div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Jewl page content",
+  "settings": [
+    { "type": "paragraph", "content": "Shows the text written on the page in Online Store > Pages. Hidden when the page is empty." }
+  ],
+  "presets": [{ "name": "Jewl page content" }]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+{%- assign contact_page = pages.contact -%}
+<div class="jewl">
+  <section class="j-block j-block-tight">
+    <div class="j-wrap">
+      <ol class="j-steps">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            assign tk = 'jewl.res_s' | append: i | append: '_t'
+            assign dk = 'jewl.res_s' | append: i | append: '_d'
+          -%}
+          <li>
+            <span class="j-step-n j-num j-gild">{{ i }}</span>
+            <h3>{{ tk | t }}</h3>
+            <p>{{ dk | t }}</p>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+    <div class="j-wrap j-tips">
+      <h3>{{ 'jewl.res_terms' | t }}</h3>
+      <ul>
+        <li>{{ 'jewl.res_t1' | t }}</li>
+        <li>{{ 'jewl.res_t2' | t }}</li>
+        <li>{{ 'jewl.res_t3' | t }}</li>
+        <li>{{ 'jewl.res_t4' | t }}</li>
+      </ul>
+      {%- if contact_page.handle != blank -%}
+        <a class="j-btn j-btn-gold" href="{{ contact_page.url }}">{{ 'jewl.res_cta' | t }}</a>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl resizing steps",
+  "settings": [],
+  "presets": [{ "name": "Jewl resizing steps" }]
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{%- paginate collection.products by 48 -%}
+  <div class="jewl">
+    <section class="j-page-hero j-band-sec">
+      <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="j-wrap j-page-hero-inner">
+        <nav class="j-crumbs" aria-label="Breadcrumb">
+          <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a><span aria-hidden="true">·</span><a href="{{ routes.collections_url }}">{{ 'jewl.coll_eyebrow' | t }}</a>
+        </nav>
+        <div class="j-eyebrow j-num">{{ 'jewl.pieces' | t: n: collection.products_count }}</div>
+        <h1>{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}<div class="j-lede j-rte">{{ collection.description }}</div>{%- endif -%}
+        <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
+      </div>
+    </section>
+
+    <section class="j-block j-block-tight" id="shop" data-j-catalog data-j-no-demo>
+      <script type="application/json" data-j-products>
+        [
+          {%- for product in collection.products -%}
+            {% render 'jewl-product-json', product: product %}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      </script>
+      <div class="j-wrap">
+        <div class="j-toolbar">
+          <div class="j-filters" role="group" aria-label="{{ collection.title | escape }}"></div>
+          <div class="j-sorter">
+            <span class="j-showing j-num" aria-live="polite"></span>
+            <label class="j-sr" for="j-sort-{{ section.id }}">{{ 'jewl.sort' | t }}</label>
+            <select id="j-sort-{{ section.id }}"></select>
+          </div>
+        </div>
+        <div class="j-grid"></div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="j-pagination" aria-label="Pagination">{{ paginate | default_pagination: next: '→', previous: '←' }}</nav>
+        {%- endif -%}
+      </div>
+    </section>
+    {%- if collection.products_count == 0 -%}
+      <section class="j-block j-block-tight">
+        <div class="j-wrap j-center">
+          <p class="j-lede">{{ 'jewl.bl_empty' | t }}</p>
+          <a class="j-btn j-btn-gold" href="{{ routes.all_products_collection_url }}">{{ 'jewl.cta1' | t }}</a>
+        </div>
+      </section>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Jewl collection",
+  "settings": []
+}
+{% endschema %}

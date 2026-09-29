@@ -64,7 +64,10 @@
       "demo": {{ 'jewl.demo' | t | json }},
       "sold_out": {{ 'jewl.sold_out' | t | json }},
       "error": {{ 'jewl.error' | t | json }},
-      "view_product": {{ 'jewl.view_product' | t | json }}
+      "view_product": {{ 'jewl.view_product' | t | json }},
+      "rsg_result": {{ 'jewl.rsg_result' | t: s: '{s}' | json }},
+      "rsg_between": {{ 'jewl.rsg_between' | t: s: '{s}' | json }},
+      "rsg_out": {{ 'jewl.rsg_out' | t | json }}
     }
   };
 </script>

@@ -12,7 +12,13 @@
     "heading": {
       "type": "jewl-page-hero",
       "settings": {
-        "content": "page"
+        "content": "shp"
+      }
+    },
+    "questions": {
+      "type": "jewl-faq",
+      "settings": {
+        "content": "shipping"
       }
     },
     "content": {
@@ -22,6 +28,7 @@
   },
   "order": [
     "heading",
+    "questions",
     "content"
   ]
 }

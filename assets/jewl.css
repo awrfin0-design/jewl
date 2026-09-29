@@ -485,3 +485,181 @@ html:root[data-theme="dark"]{
 
 /* Loader shows on the first page of each visit only */
 html.j-no-loader .jewl .j-loader{display:none}
+
+/* =====================================================================
+   Jewl pages: heading, rich text, size guide, steps, questions, contact
+   ===================================================================== */
+.jewl .j-block-tight{padding-block:clamp(48px,6vw,88px)}
+.jewl .j-page-hero{padding-block:clamp(40px,6vw,80px) clamp(36px,5vw,64px)}
+.jewl .j-page-hero-inner{position:relative;display:grid;gap:14px}
+.jewl .j-page-hero h1{font-size:clamp(40px,6vw,76px);max-width:16ch}
+.jewl .j-page-hero .j-lede{margin:6px 0 0}
+.jewl .j-page-mark{position:absolute;inset-inline-end:var(--j-gutter);bottom:-.2em;font-family:var(--j-brand);font-size:clamp(90px,14vw,200px);line-height:1;opacity:.35;pointer-events:none;direction:ltr}
+.jewl .j-crumbs{display:flex;gap:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--j-muted)}
+.jewl .j-crumbs a{text-decoration:none}.jewl .j-crumbs a:hover{color:var(--j-ink)}
+.jewl .j-rte{max-width:68ch;font-size:17px;line-height:1.75}
+.jewl .j-rte h2,.jewl .j-rte h3{margin:1.6em 0 .5em}
+.jewl .j-rte p,.jewl .j-rte ul,.jewl .j-rte ol{margin:0 0 1em}
+.jewl .j-rte a{color:var(--j-accent)}
+.jewl .j-sub-h{font-size:clamp(28px,3.4vw,40px);margin-bottom:28px}
+
+/* Size guide */
+.jewl .j-guide{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,72px);align-items:start}
+.jewl .j-guide h2{font-size:clamp(26px,3vw,36px);margin-bottom:12px}
+.jewl .j-finder{position:sticky;top:120px;display:grid;gap:18px;padding:clamp(22px,3vw,36px);background:var(--j-surface);border:1px solid var(--j-line)}
+.jewl .j-finder .j-intro{color:var(--j-muted);margin:0}
+.jewl .j-finder-row{display:grid;gap:14px}
+.jewl .j-finder-input{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--j-ink);width:max-content}
+.jewl .j-finder-input input{width:4.2ch;border:0;background:none;padding:6px 0;font:400 44px/1 var(--j-display);color:var(--j-ink);-moz-appearance:textfield}
+.jewl .j-finder-input input::-webkit-inner-spin-button{display:none}
+.jewl .j-finder-input input:focus{outline:none}
+.jewl .j-finder-input span{font-size:14px;color:var(--j-muted)}
+.jewl .j-finder-range{width:100%;accent-color:var(--j-accent)}
+.jewl .j-finder-ring{display:grid;place-items:center;height:150px}
+.jewl .j-finder-ring i{display:block;width:calc(var(--j-dia,16.5) * 6px);aspect-ratio:1;border-radius:50%;border:8px solid transparent;background:linear-gradient(var(--j-surface),var(--j-surface)) padding-box,var(--j-g-yellow) border-box;box-shadow:0 18px 30px -18px rgba(8,50,60,.5);transition:width .25s var(--j-ease)}
+.jewl .j-finder-out{margin:0;font:400 22px/1.3 var(--j-display);min-height:1.3em}
+.jewl .j-table-wrap{overflow-x:auto;border:1px solid var(--j-line)}
+.jewl .j-size-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px;min-width:420px}
+.jewl .j-size-table th,.jewl .j-size-table td{padding:12px 14px;text-align:start;border-bottom:1px solid var(--j-line)}
+.jewl .j-size-table thead th{font:500 11px/1 var(--j-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--j-muted);background:var(--j-surface)}
+.jewl .j-size-table tbody th{font:400 18px/1 var(--j-display)}
+.jewl .j-size-table tbody tr{transition:background-color .25s}
+.jewl .j-size-table tbody tr.j-hit{background:color-mix(in srgb,var(--j-accent) 16%,transparent)}
+.jewl .j-size-table tbody tr.j-hit th{color:var(--j-gold)}
+.jewl .j-tips{margin-top:clamp(40px,5vw,64px);display:grid;gap:14px;max-width:calc(68ch + 2 * var(--j-gutter))}
+.jewl .j-tips h3{font-size:24px}
+.jewl .j-tips ul{padding-inline-start:1.1em;display:grid;gap:8px;color:var(--j-muted)}
+.jewl .j-tips li::marker{color:var(--j-gold)}
+.jewl .j-tips .j-btn{justify-self:start;margin-top:8px}
+.jewl .j-tips-cta{color:var(--j-ink)}
+.jewl .j-tips-cta a{color:var(--j-accent);text-underline-offset:3px}
+
+/* Resizing steps: a real sequence, so numbered */
+.jewl .j-steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2vw,28px);counter-reset:none}
+.jewl .j-steps li{position:relative;display:grid;gap:10px;align-content:start;padding-top:22px;border-top:1px solid var(--j-line)}
+.jewl .j-steps li::before{content:"";position:absolute;top:-1px;inset-inline-start:0;width:40px;height:1px;background:var(--j-g-yellow)}
+.jewl .j-step-n{font:400 48px/1 var(--j-display)}
+.jewl .j-steps h3{font-size:22px}
+.jewl .j-steps p{color:var(--j-muted);font-size:15px}
+
+/* Facts and stones */
+.jewl .j-facts-light{margin-bottom:clamp(36px,5vw,56px)}
+.jewl .j-facts-light div{background:var(--j-surface)}
+.jewl .j-facts-light span{color:var(--j-muted)}
+.jewl .j-stones{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(14px,2vw,24px);margin-bottom:clamp(40px,5vw,64px)}
+.jewl .j-stone-card{display:grid;gap:8px;align-content:start}
+.jewl .j-stone-ph{aspect-ratio:4/5;width:100%}
+.jewl .j-stone-card h3{font-size:20px;margin-top:6px}
+.jewl .j-mohs{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--j-accent)}
+.jewl .j-stone-card p:last-child{font-size:14px;color:var(--j-muted)}
+
+/* Questions */
+.jewl .j-faq{max-width:calc(820px + 2 * var(--j-gutter));border-top:1px solid var(--j-line)}
+.jewl .j-faq details{border-bottom:1px solid var(--j-line)}
+.jewl .j-faq summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none;font:400 clamp(19px,2vw,23px)/1.3 var(--j-display)}
+.jewl .j-faq summary::-webkit-details-marker{display:none}
+.jewl .j-faq summary i{position:relative;flex:none;width:14px;height:14px}
+.jewl .j-faq summary i::before,.jewl .j-faq summary i::after{content:"";position:absolute;inset:6px 0 auto;height:1.5px;background:var(--j-gold);transition:transform .35s var(--j-ease)}
+.jewl .j-faq summary i::after{transform:rotate(90deg)}
+.jewl .j-faq details[open] summary i::after{transform:rotate(0)}
+.jewl .j-faq details p{margin:0 0 24px;color:var(--j-muted);max-width:64ch}
+
+/* Contact */
+.jewl .j-contact{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(28px,5vw,72px);align-items:start}
+.jewl .j-contact-form{display:grid;gap:20px}
+.jewl .j-field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.jewl .j-input{width:100%;border:0;border-bottom:1px solid var(--j-ink);border-radius:0;background:none;padding:10px 0;font:300 16px/1.4 var(--j-sans);color:var(--j-ink)}
+.jewl textarea.j-input{border:1px solid var(--j-line);padding:12px;resize:vertical}
+.jewl select.j-input{appearance:none;-webkit-appearance:none;background:none;cursor:pointer}
+.jewl .j-input:focus{outline:none;border-color:var(--j-accent)}
+.jewl .j-contact-form .j-btn{justify-self:start}
+.jewl .j-form-ok{color:var(--j-accent)}
+.jewl .j-form-bad{color:#B3261E}
+.jewl .j-contact-card{display:grid;gap:14px;padding:clamp(22px,3vw,34px);background:var(--j-surface);border:1px solid var(--j-line)}
+.jewl .j-contact-card .j-ph{aspect-ratio:16/10;border-radius:50% 50% 0 0/60% 60% 0 0}
+.jewl .j-contact-card h2{font-size:30px}
+.jewl .j-contact-card > p{margin:0;color:var(--j-muted)}
+.jewl .j-contact-card dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:8px 0 0;font-size:14px}
+.jewl .j-contact-card dt{font:500 11px/1.8 var(--j-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--j-muted)}
+.jewl .j-contact-card dd{margin:0}
+
+@media (max-width:1080px){
+  .jewl .j-stones{grid-template-columns:repeat(3,1fr)}
+  .jewl .j-steps{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .jewl .j-guide,.jewl .j-contact{grid-template-columns:1fr}
+  .jewl .j-finder{position:static}
+  .jewl .j-page-mark{display:none}
+}
+@media (max-width:540px){
+  .jewl .j-steps,.jewl .j-field-row{grid-template-columns:1fr}
+  .jewl .j-stones{grid-template-columns:1fr 1fr}
+}
+
+/* =====================================================================
+   Jewl store pages: product, collection, cart, search, blog, 404
+   ===================================================================== */
+.jewl .j-center{text-align:center;display:grid;justify-items:center;gap:20px}
+.jewl .j-pd-section{padding-top:clamp(24px,3vw,40px)}
+.jewl .j-pd-section .j-crumbs{margin-bottom:clamp(20px,3vw,32px)}
+.jewl .j-pd{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,80px);align-items:start}
+.jewl .j-pd-gallery{position:sticky;top:110px;display:grid;gap:14px;perspective:1100px}
+.jewl .j-pd-tilt{transition:transform .7s var(--j-ease);transform-style:preserve-3d}
+.jewl .j-pd-main{aspect-ratio:4/5;width:100%;box-shadow:var(--j-shadow)}
+.jewl .j-pd-main .j-ph-initial{font-size:52cqi}
+.jewl .j-pd-thumbs{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.jewl .j-pd-thumbs button{flex:none;width:72px;aspect-ratio:4/5;padding:0;border:1px solid var(--j-line);background:var(--j-surface);border-radius:36px 36px 0 0;overflow:hidden;opacity:.7;transition:opacity .2s,border-color .2s}
+.jewl .j-pd-thumbs button img{width:100%;height:100%;object-fit:cover}
+.jewl .j-pd-thumbs button[aria-current="true"],.jewl .j-pd-thumbs button:hover{opacity:1;border-color:var(--j-gold)}
+.jewl .j-pd-side{display:grid;gap:24px}
+.jewl .j-qv-info.j-pd-info{padding:0}
+.jewl .j-pd-title{font-size:clamp(38px,4.6vw,58px);margin-top:10px}
+.jewl .j-pd-form{margin:0}
+.jewl .j-pd-form:not(:has(.shopify-payment-button)){display:none}
+.jewl .j-pd-acc{max-width:none}
+.jewl .j-pd-acc .j-rte{font-size:15px;color:var(--j-muted);margin-bottom:22px}
+.jewl .j-pd-acc a{color:var(--j-accent)}
+.jewl .j-pagination{margin-top:48px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.jewl .j-pagination span,.jewl .j-pagination a{display:inline-grid;place-items:center;min-width:40px;height:40px;padding:0 10px;border:1px solid var(--j-line);text-decoration:none}
+.jewl .j-pagination .current{background:var(--j-ink);color:var(--j-bg);border-color:var(--j-ink)}
+.jewl .j-pagination a:hover{border-color:var(--j-gold)}
+.jewl .j-coll-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,24px)}
+.jewl .j-coll-grid .j-coll{min-height:clamp(380px,40vw,500px)}
+.jewl .j-coll-grid .j-coll:hover{flex-grow:1}
+.jewl .j-cart{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(28px,5vw,72px);align-items:start}
+.jewl .j-cart-lines{border-top:1px solid var(--j-line)}
+.jewl .j-cart-lines .j-line{grid-template-columns:96px 1fr auto}
+.jewl .j-cart-summary{position:sticky;top:110px;display:grid;gap:14px;padding:clamp(22px,3vw,32px);background:var(--j-surface);border:1px solid var(--j-line)}
+.jewl .j-cart-summary .j-row{display:flex;justify-content:space-between;align-items:baseline;font-size:18px}
+.jewl .j-cart-summary .j-price{font-size:28px}
+.jewl .j-cart-summary textarea.j-input{min-height:80px}
+.jewl .j-search-form{display:flex;gap:0;width:min(640px,100%);margin-top:10px;border:1px solid var(--j-ink);background:var(--j-surface)}
+.jewl .j-search-form .j-input{border:0;padding:15px 16px;flex:1;min-width:0}
+.jewl .j-search-form .j-btn{border:0}
+.jewl .j-link-list{list-style:none;padding:0;border-top:1px solid var(--j-line);max-width:820px}
+.jewl .j-link-list a{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--j-line);text-decoration:none;font:400 22px/1.3 var(--j-display)}
+.jewl .j-link-list a:hover{color:var(--j-accent)}
+.jewl .j-nf-inner{position:relative;display:grid;justify-items:center;text-align:center;gap:14px;padding-block:clamp(60px,10vw,140px)}
+.jewl .j-nf h1{font-size:clamp(36px,4.6vw,58px)}
+.jewl .j-nf .j-hero-mark{margin-inline:auto}
+.jewl .j-stories{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,3vw,40px)}
+.jewl .j-story-card{display:grid;gap:12px;align-content:start}
+.jewl .j-story-card .j-ph{aspect-ratio:4/5;width:100%}
+.jewl .j-story-card h2{font-size:26px}
+.jewl .j-story-card h2 a{text-decoration:none}
+.jewl .j-story-card p{margin:0;color:var(--j-muted);font-size:15px}
+.jewl .j-article{display:grid;gap:clamp(28px,4vw,48px);justify-items:start}
+.jewl .j-article-img{width:100%;aspect-ratio:16/9;border-radius:50% 50% 0 0/30% 30% 0 0}
+.jewl .j-article .j-rte{margin-inline:auto}
+@media (max-width:1080px){
+  .jewl .j-coll-grid,.jewl .j-stories{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .jewl .j-pd,.jewl .j-cart{grid-template-columns:1fr}
+  .jewl .j-pd-gallery,.jewl .j-cart-summary{position:static}
+}
+@media (max-width:540px){
+  .jewl .j-coll-grid,.jewl .j-stories{grid-template-columns:1fr}
+  .jewl .j-cart-lines .j-line{grid-template-columns:72px 1fr auto}
+}

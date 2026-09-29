@@ -1,0 +1,52 @@
+{%- liquid
+  assign key = section.settings.content
+  assign title = page.title
+  assign intro = ''
+  if key != 'page'
+    assign title_key = 'jewl.' | append: key | append: '_title'
+    assign intro_key = 'jewl.' | append: key | append: '_intro'
+    assign title = title_key | t
+    assign intro = intro_key | t
+  endif
+  if key == 'ct'
+    assign eyebrow = 'jewl.pg_contact' | t
+  else
+    assign eyebrow = 'jewl.pg_care' | t
+  endif
+  assign wordmark = settings.jewl_wordmark | default: 'Jewl'
+-%}
+<div class="jewl">
+  <section class="j-page-hero j-band-sec">
+    <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="j-wrap j-page-hero-inner">
+      <nav class="j-crumbs" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a><span aria-hidden="true">·</span><span aria-current="page">{{ title }}</span>
+      </nav>
+      <div class="j-eyebrow">{{ eyebrow }}</div>
+      <h1>{{ title }}</h1>
+      {%- if intro != blank -%}<p class="j-lede">{{ intro }}</p>{%- endif -%}
+      <span class="j-page-mark j-gild" aria-hidden="true">{{ wordmark }}</span>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl page heading",
+  "settings": [
+    {
+      "type": "select", "id": "content", "label": "Heading", "default": "page",
+      "options": [
+        { "value": "page", "label": "Page title" },
+        { "value": "rsg", "label": "Ring size guide" },
+        { "value": "res", "label": "Lifetime resizing" },
+        { "value": "shp", "label": "Shipping & returns" },
+        { "value": "care", "label": "Jewelry care" },
+        { "value": "ct", "label": "Contact" }
+      ],
+      "info": "Translated headings come from Edit default theme content > Jewl."
+    }
+  ],
+  "presets": [{ "name": "Jewl page heading" }]
+}
+{% endschema %}

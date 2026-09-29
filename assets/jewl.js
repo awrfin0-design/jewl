@@ -215,7 +215,59 @@
       renderBag();
     } catch (e) {}
   }
-  async function addItems(items, name) {
+  /* ---- Cart motion: fly-to-bag, badge bump, button states, subtotal count ---- */
+  function flyToBag(src) {
+    const target = $('#j-bag-btn');
+    if (reduced || !src || !target) return Promise.resolve();
+    const a = src.getBoundingClientRect(), b = target.getBoundingClientRect();
+    if (!a.width || !b.width) return Promise.resolve();
+    const size = Math.min(a.width, a.height, 120);
+    const ghost = document.createElement('div');
+    ghost.className = 'j-fly';
+    const img = src.querySelector('img');
+    ghost.innerHTML = img ? `<img src="${esc(img.currentSrc || img.src)}" alt="">` : `<span>${esc((src.textContent || 'J').trim()[0] || 'J')}</span>`;
+    Object.assign(ghost.style, { left: a.left + a.width / 2 - size / 2 + 'px', top: a.top + a.height / 2 - size / 2 + 'px', width: size + 'px', height: size + 'px' });
+    ($('#j-overlays') || document.body).appendChild(ghost);
+    const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+    const anim = ghost.animate([
+      { transform: 'translate(0,0) scale(1)', opacity: 1 },
+      { transform: `translate(${dx * 0.45}px, ${dy * 0.45 - 90}px) scale(.55)`, opacity: 1, offset: 0.55 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.12)`, opacity: 0.2 },
+    ], { duration: 820, easing: 'cubic-bezier(.45,.05,.3,1)' });
+    return anim.finished.catch(() => {}).then(() => ghost.remove());
+  }
+  function bumpBag() {
+    const btn = $('#j-bag-btn'), badge = $('#j-bag-count');
+    [btn, badge].forEach((el) => { if (!el) return; el.classList.remove('j-bump'); void el.offsetWidth; el.classList.add('j-bump'); });
+  }
+  function setBtn(btn, state) {
+    if (!btn) return;
+    if (!btn.dataset.label) btn.dataset.label = btn.textContent.trim();
+    btn.classList.remove('j-busy', 'j-added');
+    if (state === 'busy') { btn.classList.add('j-busy'); btn.setAttribute('aria-busy', 'true'); }
+    else if (state === 'added') {
+      btn.removeAttribute('aria-busy'); btn.classList.add('j-added'); btn.textContent = `${t('added')} ✓`;
+      setTimeout(() => { btn.classList.remove('j-added'); btn.textContent = btn.dataset.label; }, 1700);
+    } else { btn.removeAttribute('aria-busy'); btn.textContent = btn.dataset.label; }
+  }
+  let shownTotal = null;
+  function tweenSubtotal(to) {
+    const els = $$('#j-subtotal, [data-j-subtotal]');
+    const from = shownTotal == null ? to : shownTotal; shownTotal = to;
+    if (reduced || from === to) { els.forEach((el) => { el.textContent = money(to); }); return; }
+    const t0 = performance.now(), dur = 520;
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      const v = Math.round((from + (to - from) * e) / 100) * 100;
+      els.forEach((el) => { el.textContent = money(k < 1 ? v : to); });
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    els.forEach((el) => { el.classList.remove('j-pulse'); void el.offsetWidth; el.classList.add('j-pulse'); });
+  }
+
+  async function addItems(items, name, opts = {}) {
+    setBtn(opts.btn, 'busy');
     try {
       const r = await fetch((CFG.routes.cart_add || '/cart/add') + '.js', {
         method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -223,12 +275,19 @@
       });
       const data = await r.json();
       if (!r.ok) throw new Error(data.description || data.message || t('error'));
-      await refreshCart();
+      await Promise.all([flyToBag(opts.src), refreshCart()]);
+      bumpBag();
+      setBtn(opts.btn, 'added');
       toast(t('toast_add', { n: name }));
       return true;
-    } catch (e) { toast(e.message || t('error')); return false; }
+    } catch (e) { setBtn(opts.btn, 'idle'); toast(e.message || t('error')); return false; }
   }
   async function changeLine(key, quantity) {
+    if (quantity === 0 && !reduced) {
+      const els = $$(`.j-line[data-key="${CSS.escape(key)}"]`);
+      els.forEach((el) => el.classList.add('j-line-out'));
+      if (els.length) await new Promise((r) => setTimeout(r, 320));
+    }
     try {
       const r = await fetch((CFG.routes.cart_change || '/cart/change') + '.js', {
         method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -237,9 +296,11 @@
       cart = await r.json(); renderBag();
     } catch (e) { toast(t('error')); }
   }
+  let prevQty = {}, bagRendered = false;
   function renderBag() {
     if (!cart) return;
     const count = cart.item_count, badge = $('#j-bag-count');
+    const firstRender = !bagRendered; bagRendered = true;
     if (badge) { badge.textContent = count; badge.hidden = !count; }
     bagBtn?.setAttribute('aria-label', `${t('bag')} (${count})`);
     const foot = $('#j-bag-foot'), body = $('#j-bag-body');
@@ -251,7 +312,9 @@
           const props = Object.entries(i.properties || {}).filter(([k, v]) => v && !k.startsWith('_')).map(([, v]) => `“${esc(v)}”`);
           const det = [i.variant_title && !/default title/i.test(i.variant_title) ? esc(i.variant_title) : '', ...props].filter(Boolean).join(' · ');
           const img = i.featured_image?.url || i.image;
-          return `<div class="j-line">
+          const prev = prevQty[i.key];
+          const cls = prev == null ? (firstRender ? '' : ' j-line-in') : prev !== i.quantity ? ' j-line-pulse' : '';
+          return `<div class="j-line${cls}" data-key="${esc(i.key)}">
             <div class="j-ph${img ? ' j-has-img' : ''}" data-stone="aqua" data-metal="yellow">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ''}<span class="j-ph-initial">${esc(i.product_title[0])}</span></div>
             <div><h3><a href="${esc(i.url)}" style="text-decoration:none">${esc(i.product_title)}</a></h3><small>${det}</small>
               <div class="j-qty"><button type="button" data-j-dec="${esc(i.key)}" data-q="${i.quantity - 1}" aria-label="${esc(t('b_less'))}">−</button><span class="j-num">${i.quantity}</span><button type="button" data-j-dec="${esc(i.key)}" data-q="${i.quantity + 1}" aria-label="${esc(t('b_more'))}">+</button></div></div>
@@ -259,7 +322,8 @@
         }).join('');
     if (body) body.innerHTML = html;
     $$('[data-j-cart-lines]').forEach((el) => { el.innerHTML = html; });
-    $$('#j-subtotal, [data-j-subtotal]').forEach((el) => { el.textContent = money(cart.total_price); });
+    tweenSubtotal(cart.total_price);
+    prevQty = Object.fromEntries(cart.items.map((i) => [i.key, i.quantity]));
   }
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#j-bag-body, [data-j-cart-lines]')) return;
@@ -271,6 +335,7 @@
     if (on) {
       scrim.hidden = false;
       requestAnimationFrame(() => { scrim.classList.add('j-on'); drawer.classList.add('j-on'); });
+      $$('#j-bag-body .j-line').forEach((el, i) => { el.style.setProperty('--j-i', i); el.classList.remove('j-line-stagger'); void el.offsetWidth; el.classList.add('j-line-stagger'); });
       root.setAttribute('scroll-lock', '');
       setTimeout(() => $('#j-close-bag')?.focus(), 60);
       refreshCart();
@@ -292,7 +357,7 @@
   });
   // Adds made by Horizon's own product pages and quick-add modal
   document.addEventListener('shopify:cart:lines-update', (e) => {
-    const done = () => { refreshCart(); if (e.action === 'add') setTimeout(() => openBag(true), 120); };
+    const done = () => { refreshCart().then(() => { if (e.action === 'add') { bumpBag(); setTimeout(() => openBag(true), 120); } }); };
     e.promise ? e.promise.then(done, () => {}) : setTimeout(done, 600);
   });
   refreshCart();
@@ -362,7 +427,8 @@
     }
     info.addEventListener('change', (e) => { const oi = e.target.dataset.oi; if (oi == null) return; state.sel[+oi] = e.target.value; render(); });
     info.addEventListener('click', (e) => {
-      if (e.target.closest('[data-j-qvadd]')) { const v = variantFor(p, state.sel); if (v) addItems([{ id: v.id, quantity: 1 }], p.title); }
+      const addBtn = e.target.closest('[data-j-qvadd]');
+      if (addBtn) { const v = variantFor(p, state.sel); if (v) addItems([{ id: v.id, quantity: 1 }], p.title, { btn: addBtn, src: main }); }
     });
     $$('[data-j-thumb]', sec).forEach((b) => b.addEventListener('click', () => {
       const el = $('img', main); if (el) { el.src = b.dataset.jThumb; el.removeAttribute('srcset'); }
@@ -383,7 +449,7 @@
         const p = byKey(qvState.key);
         if (p.demo) { toast(t('demo')); return; }
         const v = variantFor(p, qvState.sel);
-        if (v && (await addItems([{ id: v.id, quantity: 1 }], p.title))) qv.close();
+        if (v && (await addItems([{ id: v.id, quantity: 1 }], p.title, { btn: e.target.closest('[data-j-qvadd]'), src: $('#j-qv-media .j-ph') }))) setTimeout(() => qv.close(), 450);
       }
     });
     qv.addEventListener('click', (e) => { if (e.target === qv) qv.close(); });
@@ -456,7 +522,7 @@
         if (p.demo) { toast(t('demo')); return; }
         const needsChoice = p.options.some((o, oi) => oi !== p.metalIdx && o.values.length > 1);
         if (needsChoice) { openQV(p.key, sel); return; }
-        const v = variantFor(p, sel); if (v) addItems([{ id: v.id, quantity: 1 }], p.title);
+        const v = variantFor(p, sel); if (v) addItems([{ id: v.id, quantity: 1 }], p.title, { btn: a, src: card && card.querySelector('.j-ph') });
         return;
       }
       const sw = e.target.closest('[data-j-sw]');
@@ -538,7 +604,7 @@
       if (!v || !v.available) { toast(t('sold_out')); return; }
       const items = [{ id: v.id, quantity: 1, properties: s.text ? { Engraving: s.text, Lettering: t('e_' + s.font) } : {} }];
       if (s.text && conf.fee) items.push({ id: conf.fee.id, quantity: 1 });
-      addItems(items, band.title);
+      addItems(items, band.title, { btn: form.querySelector('button[type=submit]'), src: $('.j-band', sec) });
     });
     render();
     document.fonts?.ready?.then(render);

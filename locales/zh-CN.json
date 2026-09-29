@@ -233,7 +233,8 @@
     "sold_out": "已售罄",
     "error": "无法加入购物袋，请重试。",
     "view_product": "查看完整详情",
-    "subscribed": "谢谢。您将收到我们的下一封信。"
+    "subscribed": "谢谢。您将收到我们的下一封信。",
+    "added": "已加入"
   },
   "blocks": {
     "load_video": "加载视频：{{ description }}",

@@ -233,7 +233,8 @@
     "sold_out": "Esaurito",
     "error": "Impossibile aggiungere il gioiello al carrello. Riprova.",
     "view_product": "Vedi tutti i dettagli",
-    "subscribed": "Grazie. Riceverai la nostra prossima lettera."
+    "subscribed": "Grazie. Riceverai la nostra prossima lettera.",
+    "added": "Aggiunto"
   },
   "blocks": {
     "load_video": "Carica il video: {{ description }}",

@@ -67,7 +67,7 @@
     {{ content_for_header }}
 
     {% # theme-check-disable AssetPreload %}
-    {%- unless settings.type_body_font.system? -%}
+    {%- if settings.type_body_font != blank and settings.type_body_font.system? != true -%}
       <link
         rel="preload"
         as="font"
@@ -76,8 +76,8 @@
         crossorigin
         fetchpriority="low"
       >
-    {%- endunless -%}
-    {%- unless settings.type_subheading_font.system? -%}
+    {%- endif -%}
+    {%- if settings.type_subheading_font != blank and settings.type_subheading_font.system? != true -%}
       <link
         rel="preload"
         as="font"
@@ -86,8 +86,8 @@
         crossorigin
         fetchpriority="low"
       >
-    {%- endunless -%}
-    {%- unless settings.type_heading_font.system? -%}
+    {%- endif -%}
+    {%- if settings.type_heading_font != blank and settings.type_heading_font.system? != true -%}
       <link
         rel="preload"
         as="font"
@@ -96,8 +96,8 @@
         crossorigin
         fetchpriority="low"
       >
-    {%- endunless -%}
-    {%- unless settings.type_accent_font.system? -%}
+    {%- endif -%}
+    {%- if settings.type_accent_font != blank and settings.type_accent_font.system? != true -%}
       <link
         rel="preload"
         as="font"
@@ -106,7 +106,7 @@
         crossorigin
         fetchpriority="low"
       >
-    {%- endunless -%}
+    {%- endif -%}
     {% # theme-check-enable AssetPreload %}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}

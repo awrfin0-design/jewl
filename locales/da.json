@@ -233,7 +233,8 @@
     "sold_out": "Sold out",
     "error": "Couldn't add this to your bag. Please try again.",
     "view_product": "View full details",
-    "subscribed": "Thank you. You're on the list for our next letter."
+    "subscribed": "Thank you. You're on the list for our next letter.",
+    "added": "Added"
   },
   "blocks": {
     "load_video": "Indlæs video: {{ description }}",

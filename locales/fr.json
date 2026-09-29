@@ -233,7 +233,8 @@
     "sold_out": "Épuisé",
     "error": "Impossible d'ajouter cette pièce au panier. Veuillez réessayer.",
     "view_product": "Voir tous les détails",
-    "subscribed": "Merci. Vous recevrez notre prochaine lettre."
+    "subscribed": "Merci. Vous recevrez notre prochaine lettre.",
+    "added": "Ajouté"
   },
   "blocks": {
     "load_video": "Charger la vidéo : {{ description }}",

@@ -663,3 +663,43 @@ html.j-no-loader .jewl .j-loader{display:none}
   .jewl .j-coll-grid,.jewl .j-stories{grid-template-columns:1fr}
   .jewl .j-cart-lines .j-line{grid-template-columns:72px 1fr auto}
 }
+
+/* =====================================================================
+   Cart motion
+   ===================================================================== */
+/* A jewel that flies from the piece to the Bag */
+.jewl .j-fly{position:fixed;z-index:120;pointer-events:none;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff 0,var(--j-ph-a) 30%,var(--j-ph-b) 100%);box-shadow:0 0 0 2px #E7C978,0 12px 30px -8px rgba(8,50,60,.55),0 0 28px 6px rgba(231,201,120,.45);will-change:transform,opacity}
+.jewl .j-fly img{width:100%;height:100%;object-fit:cover}
+.jewl .j-fly span{font-family:var(--j-brand);font-size:60%;font-size:clamp(28px,60%,64px);background:var(--j-g-yellow);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* Bag button and count bump when a piece lands */
+.jewl #j-bag-btn.j-bump{animation:j-bagBump .6s var(--j-ease)}
+.jewl .j-count.j-bump{animation:j-countBump .6s var(--j-ease)}
+@keyframes j-bagBump{0%{transform:none}30%{transform:scale(1.12)}60%{transform:scale(.96)}100%{transform:none}}
+@keyframes j-countBump{0%{transform:none;box-shadow:0 0 0 0 rgba(231,201,120,.7)}35%{transform:scale(1.45)}100%{transform:none;box-shadow:0 0 0 12px rgba(231,201,120,0)}}
+/* Add buttons: busy shimmer, then a gilded "Added ✓" */
+.jewl .j-busy{position:relative;pointer-events:none;color:transparent!important}
+.jewl .j-busy::after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border-radius:50%;border:2px solid currentColor;border-color:#2A1E05 transparent #2A1E05 transparent;animation:j-spin .7s linear infinite}
+.jewl .j-btn-ink.j-busy::after,.jewl .j-actions .j-busy::after{border-color:var(--j-ink) transparent var(--j-ink) transparent}
+@keyframes j-spin{to{transform:rotate(360deg)}}
+.jewl .j-added{background:var(--j-g-yellow)!important;background-size:220% 100%!important;color:#2A1E05!important;border-color:transparent!important;animation:j-gleam 1.6s ease-in-out}
+/* Drawer lines: slide in, pulse on quantity change, slide out on removal */
+.jewl .j-line-in{animation:j-lineIn .6s var(--j-ease) both}
+.jewl .j-line-stagger{animation:j-lineIn .55s var(--j-ease) both;animation-delay:calc(var(--j-i,0) * 70ms + 120ms)}
+@keyframes j-lineIn{from{opacity:.001;transform:translateX(28px)}to{opacity:1;transform:none}}
+html[dir="rtl"] .jewl .j-line-in,html[dir="rtl"] .jewl .j-line-stagger{animation-name:j-lineInRtl}
+@keyframes j-lineInRtl{from{opacity:.001;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.jewl .j-line-pulse .j-price,.jewl .j-line-pulse .j-qty span{animation:j-pulseText .6s var(--j-ease)}
+.jewl .j-line-out{animation:j-lineOut .32s var(--j-ease) forwards;overflow:hidden}
+@keyframes j-lineOut{to{opacity:0;transform:translateX(40px);max-height:0;padding-block:0;border-color:transparent}}
+.jewl .j-line{max-height:260px}
+.jewl .j-pulse{animation:j-pulseText .6s var(--j-ease)}
+@keyframes j-pulseText{40%{color:var(--j-gold);transform:scale(1.08)}}
+.jewl .j-price.j-pulse,.jewl .j-line-pulse .j-price{display:inline-block}
+/* Drawer: a softer slide with a slight fade of its contents */
+.jewl .j-drawer{transition:transform .55s cubic-bezier(.16,1,.3,1),visibility 0s linear .55s}
+.jewl .j-drawer.j-on{transition:transform .55s cubic-bezier(.16,1,.3,1),visibility 0s}
+.jewl .j-drawer .j-drawer-head,.jewl .j-drawer .j-drawer-foot{transition:opacity .4s .15s,transform .5s .15s var(--j-ease);opacity:0;transform:translateY(8px)}
+.jewl .j-drawer.j-on .j-drawer-head,.jewl .j-drawer.j-on .j-drawer-foot{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .jewl .j-drawer .j-drawer-head,.jewl .j-drawer .j-drawer-foot{opacity:1;transform:none}
+}

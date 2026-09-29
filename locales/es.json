@@ -233,7 +233,8 @@
     "sold_out": "Agotado",
     "error": "No se pudo añadir a la cesta. Inténtalo de nuevo.",
     "view_product": "Ver todos los detalles",
-    "subscribed": "Gracias. Recibirás nuestra próxima carta."
+    "subscribed": "Gracias. Recibirás nuestra próxima carta.",
+    "added": "Añadido"
   },
   "blocks": {
     "load_video": "Cargar video: {{ description }}",

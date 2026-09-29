@@ -233,7 +233,8 @@
     "sold_out": "売り切れ",
     "error": "バッグに追加できませんでした。もう一度お試しください。",
     "view_product": "詳細を見る",
-    "subscribed": "ありがとうございます。次の手紙をお届けします。"
+    "subscribed": "ありがとうございます。次の手紙をお届けします。",
+    "added": "追加しました"
   },
   "blocks": {
     "load_video": "ビデオを読み込む: {{ description }}",

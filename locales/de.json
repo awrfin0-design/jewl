@@ -233,7 +233,8 @@
     "sold_out": "Ausverkauft",
     "error": "Das Stück konnte nicht in den Warenkorb gelegt werden. Bitte versuchen Sie es erneut.",
     "view_product": "Alle Details ansehen",
-    "subscribed": "Danke. Sie erhalten unseren nächsten Brief."
+    "subscribed": "Danke. Sie erhalten unseren nächsten Brief.",
+    "added": "Hinzugefügt"
   },
   "blocks": {
     "load_video": "Video laden: {{ description }}",

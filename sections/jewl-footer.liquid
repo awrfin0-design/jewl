@@ -34,10 +34,20 @@
             {%- if section.settings.care_menu != blank and section.settings.care_menu.links.size > 0 -%}
               {%- for link in section.settings.care_menu.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
             {%- else -%}
-              <li><a href="{{ root }}/#engrave">{{ 'jewl.ft_size' | t }}</a></li>
-              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_resize' | t }}</a></li>
-              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_ship' | t }}</a></li>
-              <li><a href="{{ routes.root_url }}">{{ 'jewl.ft_carejw' | t }}</a></li>
+              {%- assign care_pages = 'ring-size-guide,lifetime-resizing,shipping-returns,jewelry-care' | split: ',' -%}
+              {%- assign care_keys = 'jewl.ft_size,jewl.ft_resize,jewl.ft_ship,jewl.ft_carejw' | split: ',' -%}
+              {%- for handle in care_pages -%}
+                {%- assign care_page = pages[handle] -%}
+                {%- assign care_key = care_keys[forloop.index0] -%}
+                {%- if care_page.handle != blank -%}
+                  <li><a href="{{ care_page.url }}">{{ care_key | t }}</a></li>
+                {%- elsif handle == 'ring-size-guide' -%}
+                  <li><a href="{{ root }}/#engrave">{{ care_key | t }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if pages.contact.handle != blank -%}
+                <li><a href="{{ pages.contact.url }}">{{ pages.contact.title }}</a></li>
+              {%- endif -%}
             {%- endif -%}
           </ul>
         </div>
@@ -70,7 +80,7 @@
   "settings": [
     { "type": "textarea", "id": "about", "label": "About text", "info": "Leave empty to use the translated default." },
     { "type": "link_list", "id": "shop_menu", "label": "Shop column menu", "info": "Leave empty to show Rings, Necklaces, Earrings and Bracelets." },
-    { "type": "link_list", "id": "care_menu", "label": "Care column menu" },
+    { "type": "link_list", "id": "care_menu", "label": "Care column menu", "info": "Leave empty to link the pages with the handles ring-size-guide, lifetime-resizing, shipping-returns, jewelry-care and contact, when they exist." },
     { "type": "textarea", "id": "address", "label": "Address", "default": "Rua da Rosa 112\n1200-389 Lisboa" },
     { "type": "text", "id": "hours", "label": "Opening hours", "info": "Leave empty to use the translated default." },
     { "type": "text", "id": "email", "label": "Email", "default": "hello@jewl.example" },

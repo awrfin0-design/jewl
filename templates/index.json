@@ -1,69 +1,106 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "jewl_hero": {
+      "type": "jewl-hero",
       "settings": {
-        "eyebrow": "New Collection",
-        "heading": "Timeless pieces, for every story",
-        "subheading": "Ethically sourced diamonds and 18k gold, handcrafted by master jewelers.",
-        "button_label": "Shop the collection",
-        "button_link": "shopify://collections/all"
+        "stone": "aqua",
+        "eyebrow": "",
+        "title": "",
+        "lede": ""
       }
     },
-    "usps": {
-      "type": "usps",
-      "settings": { "heading": "The Lumière promise" },
-      "blocks": {
-        "usp-1": { "type": "usp", "settings": { "title": "Lifetime warranty", "text": "Every piece is covered, forever." } },
-        "usp-2": { "type": "usp", "settings": { "title": "Ethically sourced", "text": "Conflict-free diamonds and recycled gold." } },
-        "usp-3": { "type": "usp", "settings": { "title": "Free shipping & returns", "text": "On all orders over $150." } },
-        "usp-4": { "type": "usp", "settings": { "title": "Handcrafted in-house", "text": "Made by master jewelers." } }
-      },
-      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
+    "jewl_marquee": {
+      "type": "jewl-marquee",
+      "settings": {}
     },
-    "featured-collection": {
-      "type": "featured-collection",
+    "jewl_standards": {
+      "type": "jewl-standards",
+      "settings": {}
+    },
+    "jewl_catalog": {
+      "type": "jewl-catalog",
       "settings": {
-        "eyebrow": "Curated",
-        "heading": "Bestsellers",
-        "text": "Our most-loved pieces, chosen for their timeless design.",
-        "products_to_show": 8
+        "limit": 16
       }
     },
-    "collection-list": {
-      "type": "collection-list",
-      "settings": {
-        "eyebrow": "Shop by category",
-        "heading": "Find your piece"
-      },
+    "jewl_collections": {
+      "type": "jewl-collections",
       "blocks": {
-        "col-1": { "type": "collection", "settings": { "title": "Rings" } },
-        "col-2": { "type": "collection", "settings": { "title": "Necklaces" } },
-        "col-3": { "type": "collection", "settings": { "title": "Earrings" } }
+        "lagoon": {
+          "type": "collection",
+          "settings": {
+            "name": "Lagoon",
+            "category": "necklaces",
+            "count": 18,
+            "stone": "aqua",
+            "metal": "yellow",
+            "description": ""
+          }
+        },
+        "tide": {
+          "type": "collection",
+          "settings": {
+            "name": "Tide",
+            "category": "earrings",
+            "count": 14,
+            "stone": "paraiba",
+            "metal": "rose",
+            "description": ""
+          }
+        },
+        "heirloom": {
+          "type": "collection",
+          "settings": {
+            "name": "Heirloom",
+            "category": "rings",
+            "count": 16,
+            "stone": "topaz",
+            "metal": "white",
+            "description": ""
+          }
+        }
       },
-      "block_order": ["col-1", "col-2", "col-3"]
-    },
-    "story": {
-      "type": "story-split",
+      "block_order": [
+        "lagoon",
+        "tide",
+        "heirloom"
+      ],
       "settings": {
-        "image_position": "left",
-        "eyebrow": "Our Craft",
-        "heading": "Crafted with intention",
-        "text": "Every Lumière piece begins as a sketch and ends as an heirloom. Our master jewelers combine time-honored techniques with modern precision to create pieces that are made to be worn for generations.",
-        "button_label": "Our story",
-        "button_link": "/pages/about"
+        "all_link": ""
       }
     },
-    "testimonials": {
-      "type": "testimonials",
-      "settings": { "heading": "Loved by our clients" },
-      "blocks": {
-        "t-1": { "type": "testimonial", "settings": { "quote": "The engagement ring exceeded every expectation. Stunning craftsmanship.", "name": "Amelia R." } },
-        "t-2": { "type": "testimonial", "settings": { "quote": "Fast shipping, beautiful packaging, and the necklace is even better in person.", "name": "Sophie L." } },
-        "t-3": { "type": "testimonial", "settings": { "quote": "Customer service helped me resize my ring with zero hassle. Highly recommend.", "name": "Daniel K." } }
-      },
-      "block_order": ["t-1", "t-2", "t-3"]
+    "jewl_engraving": {
+      "type": "jewl-engraving",
+      "settings": {
+        "sample_text": "always, A & M"
+      }
+    },
+    "jewl_atelier": {
+      "type": "jewl-atelier",
+      "settings": {}
+    },
+    "jewl_newsletter": {
+      "type": "jewl-newsletter",
+      "settings": {}
     }
   },
-  "order": ["hero", "usps", "featured-collection", "collection-list", "story", "testimonials"]
+  "order": [
+    "jewl_hero",
+    "jewl_marquee",
+    "jewl_standards",
+    "jewl_catalog",
+    "jewl_collections",
+    "jewl_engraving",
+    "jewl_atelier",
+    "jewl_newsletter"
+  ]
 }

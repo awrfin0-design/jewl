@@ -2,6 +2,13 @@
   assign p = section.settings.product
   assign wordmark = settings.jewl_wordmark | default: 'Jewl'
 -%}
+{%- capture arch_img -%}
+  {%- if section.settings.image != blank -%}
+    {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'eager', fetchpriority: 'high', alt: section.settings.image.alt, sizes: '(min-width: 860px) 430px, 80vw' }}
+  {%- elsif section.settings.use_brand_image -%}
+    <img src="{{ 'jewl-hero.jpg' | asset_img_url: '1400x' }}" alt="" loading="eager" fetchpriority="high" width="1400" height="788">
+  {%- endif -%}
+{%- endcapture -%}
 <div class="jewl">
   <section class="j-hero" id="hero">
     <div class="j-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -20,8 +27,10 @@
         {%- if p != blank -%}
           <script type="application/json" data-j-products>[{% render 'jewl-product-json', product: p %}]</script>
           <button class="j-arch-btn" type="button" data-j-hero-qv="{{ p.handle }}" aria-label="{{ 'jewl.quick' | t | escape }}: {{ p.title | escape }}">
-            <div class="j-ph{% if p.featured_image %} j-has-img{% endif %}" data-stone="{{ section.settings.stone }}" data-metal="yellow">
-              {%- if p.featured_image -%}
+            <div class="j-ph{% if arch_img != blank or p.featured_image %} j-has-img{% endif %}" data-stone="{{ section.settings.stone }}" data-metal="yellow">
+              {%- if arch_img != blank -%}
+                {{ arch_img }}
+              {%- elsif p.featured_image -%}
                 {{ p.featured_image | image_url: width: 1000 | image_tag: loading: 'eager', alt: p.title, sizes: '(min-width: 860px) 430px, 80vw' }}
               {%- endif -%}
               <span class="j-ph-initial">{{ p.title | slice: 0 }}</span>
@@ -34,7 +43,7 @@
           </div>
         {%- else -%}
           <button class="j-arch-btn" type="button" data-j-hero-qv="ondine" aria-label="{{ 'jewl.quick' | t | escape }}: Ondine Solitaire">
-            <div class="j-ph" data-stone="{{ section.settings.stone }}" data-metal="yellow"><span class="j-ph-initial">O</span></div>
+            <div class="j-ph{% if arch_img != blank %} j-has-img{% endif %}" data-stone="{{ section.settings.stone }}" data-metal="yellow">{{ arch_img }}<span class="j-ph-initial">O</span></div>
           </button>
           <div class="j-arch-cap">
             <span class="j-brand j-gild">Ondine</span>
@@ -50,7 +59,9 @@
 {
   "name": "Jewl hero",
   "settings": [
-    { "type": "product", "id": "product", "label": "Featured piece", "info": "Shown in the arch. Leave empty to show the Ondine sample." },
+    { "type": "product", "id": "product", "label": "Featured piece", "info": "Opens in quick view when the arch is clicked. Leave empty to show the Ondine sample." },
+    { "type": "image_picker", "id": "image", "label": "Arch image", "info": "Leave empty to use the Jewl hero photo, or the featured piece's photo if that is turned off." },
+    { "type": "checkbox", "id": "use_brand_image", "label": "Use the Jewl hero photo", "default": true },
     {
       "type": "select", "id": "stone", "label": "Stone glow", "default": "aqua",
       "options": [

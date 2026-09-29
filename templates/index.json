@@ -12,6 +12,8 @@
     "jewl_hero": {
       "type": "jewl-hero",
       "settings": {
+        "product": "ondine-solitaire",
+        "use_brand_image": true,
         "stone": "aqua",
         "eyebrow": "",
         "title": "",

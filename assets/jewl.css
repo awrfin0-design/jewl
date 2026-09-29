@@ -703,3 +703,9 @@ html[dir="rtl"] .jewl .j-line-in,html[dir="rtl"] .jewl .j-line-stagger{animation
 @media (prefers-reduced-motion:reduce){
   .jewl .j-drawer .j-drawer-head,.jewl .j-drawer .j-drawer-foot{opacity:1;transform:none}
 }
+
+/* Atelier photo above the facts */
+.jewl .j-atelier-side{display:grid;gap:18px}
+.jewl .j-atelier-img{aspect-ratio:16/10;width:100%;border-radius:50% 50% 0 0/38% 38% 0 0;box-shadow:var(--j-shadow)}
+.jewl .j-atelier-img::before,.jewl .j-atelier-img::after{display:none}
+.jewl .j-hero-piece .j-ph.j-has-img::before{display:none}

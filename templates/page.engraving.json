@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "heading": {
+      "type": "jewl-page-hero",
+      "settings": {
+        "content": "engr"
+      }
+    },
+    "studio": {
+      "type": "jewl-engraving",
+      "settings": {
+        "show_heading": false,
+        "band_product": "nocturne-band",
+        "sample_text": "always, A & M"
+      }
+    },
+    "content": {
+      "type": "jewl-page-content",
+      "settings": {}
+    }
+  },
+  "order": [
+    "heading",
+    "studio",
+    "content"
+  ]
+}

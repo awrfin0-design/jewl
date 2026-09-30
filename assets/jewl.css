@@ -709,3 +709,140 @@ html[dir="rtl"] .jewl .j-line-in,html[dir="rtl"] .jewl .j-line-stagger{animation
 .jewl .j-atelier-img{aspect-ratio:16/10;width:100%;border-radius:50% 50% 0 0/38% 38% 0 0;box-shadow:var(--j-shadow)}
 .jewl .j-atelier-img::before,.jewl .j-atelier-img::after{display:none}
 .jewl .j-hero-piece .j-ph.j-has-img::before{display:none}
+
+/* =====================================================================
+   Interaction pass: hover details, reveal, cursor, metal preview
+   ===================================================================== */
+/* Reveal on scroll (only below-the-fold elements get j-rv, added by script) */
+.jewl .j-rv{opacity:.001;transform:translateY(26px);transition:opacity .9s var(--j-ease),transform .9s var(--j-ease);transition-delay:calc(var(--j-rv-i,0) * 90ms)}
+.jewl .j-rv.j-in{opacity:1;transform:none}
+
+/* "View" cursor over pieces */
+.jewl .j-cursor{position:fixed;left:0;top:0;z-index:95;pointer-events:none;width:0;height:0}
+.jewl .j-cursor span{position:absolute;left:-44px;top:-44px;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;font:500 10px/1.2 var(--j-sans);letter-spacing:.2em;text-transform:uppercase;text-align:center;color:var(--j-ink);background:color-mix(in srgb,var(--j-surface) 70%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px #D9B25E,0 10px 30px -12px rgba(8,50,60,.4);transform:scale(.2);opacity:0;transition:transform .35s var(--j-ease),opacity .25s}
+.jewl .j-cursor.j-on span{transform:scale(1);opacity:1}
+
+/* Metal preview on photos */
+.jewl .j-ph > img{transition:transform .9s var(--j-ease),opacity .35s,filter .35s}
+.jewl .j-ph > img.j-tinting{opacity:.55;filter:blur(2px)}
+.jewl .j-metal-flash::after{animation:j-metalFlash .7s var(--j-ease)}
+@keyframes j-metalFlash{0%{opacity:0;inset:0;height:auto;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.7) 50%,transparent 70%);transform:translateX(-100%)}100%{opacity:.55;transform:translateX(100%)}}
+.jewl .j-ph .j-img2{opacity:0;transition:opacity .6s var(--j-ease),transform .9s var(--j-ease)}
+.jewl .j-card:hover .j-ph .j-img2{opacity:1}
+
+/* Cards: gold outline draws in, lift, swatch tooltips */
+.jewl .j-card-media .j-ph{transition:box-shadow .5s var(--j-ease)}
+.jewl .j-card:hover .j-card-media .j-ph{box-shadow:inset 0 0 0 1px rgba(217,178,94,.9),0 26px 44px -30px rgba(8,50,60,.55)}
+.jewl .j-card{transition:transform .5s var(--j-ease)}
+.jewl .j-card:hover{transform:translateY(-4px)}
+.jewl .j-sw{position:relative}
+.jewl .j-sw::after{content:attr(aria-label);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);white-space:nowrap;font:400 11px/1 var(--j-sans);letter-spacing:.04em;background:var(--j-ink);color:var(--j-bg);padding:6px 8px;opacity:0;pointer-events:none;transition:opacity .2s,transform .25s var(--j-ease)}
+.jewl .j-sw:hover::after,.jewl .j-sw:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+
+/* Buttons: gold sheen sweep, line buttons fill from the start edge */
+.jewl .j-btn{position:relative;overflow:hidden;isolation:isolate;transition:background-color .35s,color .35s,background-position .8s var(--j-ease),transform .35s var(--j-ease),border-color .35s}
+.jewl .j-btn-gold::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s var(--j-ease)}
+.jewl .j-btn-gold:hover::after{transform:translateX(120%)}
+.jewl .j-btn-line{background:linear-gradient(var(--j-ink),var(--j-ink)) no-repeat 0 0/0 100%;transition:background-size .5s var(--j-ease),color .35s}
+html[dir="rtl"] .jewl .j-btn-line{background-position:100% 0}
+.jewl .j-btn-line:hover{background-color:transparent;background-size:100% 100%;color:var(--j-bg)}
+
+/* Nav: current page keeps its gold underline */
+.jewl .j-nav-links a[aria-current="page"]{background-size:100% 1px}
+
+/* Standards: gold rule slides in on hover */
+.jewl .j-standards li{position:relative;transition:background-color .4s}
+.jewl .j-standards li::before{content:"";position:absolute;top:0;inset-inline:22px;height:1px;background:var(--j-g-yellow);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--j-ease)}
+.jewl .j-standards li:first-child::before{inset-inline-start:0}
+.jewl .j-standards li:hover::before{transform:scaleX(1)}
+.jewl .j-standards li:hover strong{color:var(--j-gold)}
+.jewl .j-standards strong{transition:color .3s}
+
+/* Footer links: a small arrow slides in */
+.jewl .j-foot a{display:inline-flex;align-items:center;gap:0;transition:gap .3s var(--j-ease),color .2s}
+.jewl .j-foot a::after{content:"→";opacity:0;width:0;overflow:hidden;transition:opacity .3s,width .3s var(--j-ease)}
+.jewl .j-foot a:hover{gap:8px}
+.jewl .j-foot a:hover::after{opacity:1;width:1em}
+
+/* Collections: image drifts on hover, label rises */
+.jewl .j-coll > *:not(.j-ph){transition:transform .6s var(--j-ease)}
+.jewl .j-coll:hover > *:not(.j-ph){transform:translateY(-6px)}
+
+/* View-all under the featured grid */
+.jewl .j-view-all{display:flex;justify-content:center;margin-top:clamp(36px,4vw,56px)}
+
+/* =====================================================================
+   Engraving studio: three steps on a single grid
+   ===================================================================== */
+.jewl .j-studio-head{display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:clamp(24px,5vw,72px)}
+.jewl .j-studio-head .j-intro{margin:0;color:var(--j-muted);max-width:52ch}
+.jewl .j-studio{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:stretch}
+.jewl .j-studio-preview{display:grid;grid-template-rows:1fr auto;gap:0;border:1px solid var(--j-line);background:var(--j-surface)}
+.jewl .j-studio-preview .j-stage{min-height:clamp(320px,36vw,560px);border-radius:0;padding:clamp(20px,3vw,40px)}
+.jewl .j-studio-preview .j-stage::after{display:none}
+.jewl .j-summary{margin:0;display:grid;border-top:1px solid var(--j-line)}
+.jewl .j-summary > div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px;padding:14px clamp(18px,2vw,24px);border-bottom:1px solid var(--j-line);align-items:baseline}
+.jewl .j-summary > div:last-child{border-bottom:0}
+.jewl .j-summary dt{font:500 11px/1.4 var(--j-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--j-muted)}
+.jewl .j-summary dd{margin:0;text-align:end;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jewl .j-summary-head{background:color-mix(in srgb,var(--j-band-a) 55%,transparent)}
+.jewl .j-summary-head dd{font:400 22px/1 var(--j-brand)}
+.jewl .j-studio-form{display:grid;gap:0;border:1px solid var(--j-line);background:var(--j-surface)}
+.jewl .j-flow{list-style:none;margin:0;padding:0;position:relative}
+.jewl .j-step{position:relative;padding:clamp(20px,2.4vw,28px) clamp(18px,2.4vw,28px);border-bottom:1px solid var(--j-line);transition:background-color .35s}
+.jewl .j-step::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:2px;background:var(--j-g-yellow);transform:scaleY(0);transform-origin:top;transition:transform .5s var(--j-ease)}
+.jewl .j-step.j-step-on::before{transform:scaleY(1)}
+.jewl .j-step.j-step-on{background:color-mix(in srgb,var(--j-band-a) 30%,transparent)}
+.jewl .j-step-head{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:14px;margin-bottom:18px}
+.jewl .j-step-head h3{font-size:24px}
+.jewl .j-step-n{font:400 13px/1 var(--j-sans);letter-spacing:.14em;color:var(--j-muted);width:28px;height:28px;display:grid;place-items:center;border:1px solid var(--j-line);border-radius:50%;transition:background .3s,color .3s,border-color .3s}
+.jewl .j-step-done .j-step-n{background:var(--j-g-yellow);color:#2A1E05;border-color:transparent}
+.jewl .j-step-val{font-size:13px;color:var(--j-accent);max-width:22ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jewl .j-step-body{display:grid;gap:18px;padding-inline-start:42px}
+.jewl .j-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--j-line)}
+.jewl .j-seg .j-opt span{width:100%;min-height:52px;border:0;border-inline-start:1px solid var(--j-line)}
+.jewl .j-seg .j-opt:first-child span{border-inline-start:0}
+.jewl .j-metals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.jewl .j-metal{position:relative;cursor:pointer}
+.jewl .j-metal input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.jewl .j-metal span{display:grid;justify-items:center;gap:10px;padding:16px 8px;border:1px solid var(--j-line);text-align:center;font-size:13px;transition:border-color .25s,box-shadow .25s,transform .35s var(--j-ease)}
+.jewl .j-metal b{font-weight:400}
+.jewl .j-metal-chip{width:44px;height:44px;border-radius:50%;box-shadow:inset 0 -3px 6px rgba(0,0,0,.18),0 4px 10px -4px rgba(0,0,0,.3);transition:transform .4s var(--j-ease)}
+.jewl .j-metal:hover span{border-color:var(--j-accent)}
+.jewl .j-metal:hover .j-metal-chip{transform:rotate(-18deg) scale(1.06)}
+.jewl .j-metal input:checked + span{border-color:var(--j-ink);box-shadow:inset 0 0 0 1px var(--j-ink)}
+.jewl .j-metal input:focus-visible + span{outline:2px solid var(--j-accent);outline-offset:2px}
+.jewl .j-studio-form .j-sizes{grid-template-columns:repeat(6,1fr)}
+.jewl .j-size-foot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.jewl .j-studio-form .j-total{border-top:0;padding:clamp(20px,2.4vw,28px);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.jewl .j-total-label{display:block;font:500 11px/1 var(--j-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--j-muted);margin-bottom:8px}
+.jewl .j-studio-form .j-text-input{font-size:30px}
+
+/* Engraving teaser on the home page */
+.jewl .j-feature{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);align-items:center}
+.jewl .j-feature-stage{aspect-ratio:1/1;border-radius:50% 50% 0 0/34% 34% 0 0;display:grid;place-items:center;align-content:center;gap:28px;padding:clamp(24px,4vw,56px);text-decoration:none;box-shadow:var(--j-shadow)}
+.jewl .j-feature-stage .j-band{max-width:440px;transition:transform .8s var(--j-ease)}
+.jewl .j-feature-stage:hover .j-band{transform:perspective(900px) rotateX(4deg) scale(1.03)}
+.jewl .j-feature-metals{position:relative;display:flex;gap:10px}
+.jewl .j-feature-metals i{width:18px;height:18px;border-radius:50%;box-shadow:0 0 0 2px var(--j-surface)}
+.jewl .j-feature-copy{display:grid;gap:18px;justify-items:start}
+.jewl .j-feature-copy .j-intro{margin:0;color:var(--j-muted);max-width:48ch}
+.jewl .j-mini-steps{list-style:none;margin:6px 0 10px;padding:0;display:grid;grid-template-columns:repeat(3,auto);gap:10px 28px}
+.jewl .j-mini-steps li{display:flex;align-items:center;gap:10px;font-size:14px}
+.jewl .j-mini-steps span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid #D9B25E;font-size:11px;color:var(--j-gold)}
+
+@media (max-width:860px){
+  .jewl .j-studio,.jewl .j-studio-head,.jewl .j-feature{grid-template-columns:1fr}
+  .jewl .j-studio-preview{position:static}
+  .jewl .j-step-body{padding-inline-start:0}
+  .jewl .j-mini-steps{grid-template-columns:1fr}
+}
+@media (max-width:540px){
+  .jewl .j-studio-form .j-sizes{grid-template-columns:repeat(4,1fr)}
+  .jewl .j-metals{gap:6px}
+  .jewl .j-total .j-btn{width:100%}
+  .jewl .j-studio-preview .j-stage{min-height:300px}
+}
+@media (hover:none){
+  .jewl .j-card:hover{transform:none}
+}

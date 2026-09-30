@@ -31,11 +31,16 @@
     "jewl_catalog": {
       "type": "jewl-catalog",
       "settings": {
-        "limit": 16
+        "limit": 16,
+        "show_count": 8,
+        "show_view_all": true
       }
     },
     "jewl_collections": {
       "type": "jewl-collections",
+      "settings": {
+        "all_link": ""
+      },
       "blocks": {
         "lagoon": {
           "type": "collection",
@@ -75,14 +80,12 @@
         "lagoon",
         "tide",
         "heirloom"
-      ],
-      "settings": {
-        "all_link": ""
-      }
+      ]
     },
-    "jewl_engraving": {
-      "type": "jewl-engraving",
+    "jewl_feature": {
+      "type": "jewl-feature",
       "settings": {
+        "page_handle": "engraving",
         "sample_text": "always, A & M"
       }
     },
@@ -101,7 +104,7 @@
     "jewl_standards",
     "jewl_catalog",
     "jewl_collections",
-    "jewl_engraving",
+    "jewl_feature",
     "jewl_atelier",
     "jewl_newsletter"
   ]

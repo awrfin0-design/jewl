@@ -1,5 +1,9 @@
 {
   "jewl": {
+    "e_summary": "Votre alliance",
+    "e_total": "Total",
+    "view_all": "Voir toutes les pièces",
+    "engr_cta": "Créer votre alliance",
     "pd_details": "Détails",
     "pd_related": "Vous aimerez aussi",
     "cart_note": "Mot cadeau (facultatif)",

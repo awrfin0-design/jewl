@@ -22,6 +22,7 @@
   "price": {{ product.price | json }},
   "available": {{ product.available | json }},
   "img": {% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | json }}{% else %}null{% endif %},
+  "img2": {% if product.images.size > 1 %}{{ product.images[1] | image_url: width: 900 | json }}{% else %}null{% endif %},
   "stone": {{ stone | json }},
   "badge": {{ badge | json }},
   "spec": {{ spec | json }},

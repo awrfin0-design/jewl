@@ -1,5 +1,9 @@
 {
   "jewl": {
+    "e_summary": "Ihr Ring",
+    "e_total": "Gesamt",
+    "view_all": "Alle Stücke ansehen",
+    "engr_cta": "Ihren Ring gestalten",
     "pd_details": "Details",
     "pd_related": "Das könnte Ihnen gefallen",
     "cart_note": "Grußkarte (optional)",

@@ -2,14 +2,27 @@
   assign key = section.settings.content
   assign title = page.title
   assign intro = ''
-  if key != 'page'
-    assign title_key = 'jewl.' | append: key | append: '_title'
-    assign intro_key = 'jewl.' | append: key | append: '_intro'
-    assign title = title_key | t
-    assign intro = intro_key | t
-  endif
+  case key
+    when 'engr'
+      assign title = 'jewl.nav_engr' | t
+      assign intro = 'jewl.e_intro' | t
+    when 'atelier'
+      assign title = 'jewl.nav_atelier' | t
+      assign intro = 'jewl.ft_about' | t
+    when 'page'
+      assign title = page.title
+    else
+      assign title_key = 'jewl.' | append: key | append: '_title'
+      assign intro_key = 'jewl.' | append: key | append: '_intro'
+      assign title = title_key | t
+      assign intro = intro_key | t
+  endcase
   if key == 'ct'
     assign eyebrow = 'jewl.pg_contact' | t
+  elsif key == 'engr'
+    assign eyebrow = 'jewl.e_eyebrow' | t
+  elsif key == 'atelier'
+    assign eyebrow = 'jewl.a_eyebrow' | t
   else
     assign eyebrow = 'jewl.pg_care' | t
   endif
@@ -42,7 +55,9 @@
         { "value": "res", "label": "Lifetime resizing" },
         { "value": "shp", "label": "Shipping & returns" },
         { "value": "care", "label": "Jewelry care" },
-        { "value": "ct", "label": "Contact" }
+        { "value": "ct", "label": "Contact" },
+        { "value": "engr", "label": "Engraving" },
+        { "value": "atelier", "label": "Atelier" }
       ],
       "info": "Translated headings come from Edit default theme content > Jewl."
     }

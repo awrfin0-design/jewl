@@ -5,7 +5,7 @@
   endif
 -%}
 <div class="jewl">
-  <section class="j-block" id="shop" data-j-catalog>
+  <section class="j-block" id="shop" data-j-catalog{% if section.settings.show_count > 0 %} data-j-limit="{{ section.settings.show_count }}"{% endif %}>
     <script type="application/json" data-j-products>
       [
         {%- for product in source.products limit: section.settings.limit -%}
@@ -29,6 +29,11 @@
         </div>
       </div>
       <div class="j-grid"></div>
+      {%- if section.settings.show_view_all -%}
+        <div class="j-view-all">
+          <a class="j-btn j-btn-line" href="{% if section.settings.collection != blank %}{{ section.settings.collection.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">{{ 'jewl.view_all' | t }} →</a>
+        </div>
+      {%- endif -%}
     </div>
   </section>
 </div>
@@ -38,7 +43,9 @@
   "name": "Jewl catalog",
   "settings": [
     { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to show all products. With no products in the store, the eight sample pieces are shown." },
-    { "type": "range", "id": "limit", "label": "Products to show", "min": 4, "max": 48, "step": 4, "default": 16 },
+    { "type": "range", "id": "limit", "label": "Products to load", "min": 4, "max": 48, "step": 4, "default": 16 },
+    { "type": "range", "id": "show_count", "label": "Pieces shown at once (0 shows all)", "min": 0, "max": 24, "step": 4, "default": 0 },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show a View all pieces button", "default": false },
     {
       "type": "paragraph",
       "content": "Filters use the product type (Ring, Necklace, Earrings, Bracelet). Add the tag stone:aquamarine, stone:paraiba, stone:topaz or stone:turquoise to tint a piece, badge:New (or Bestseller, Engravable) to label it, and ct:1.2 ct for the carat weight. Metal swatches come from an option named Metal."

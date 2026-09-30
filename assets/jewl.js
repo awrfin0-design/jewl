@@ -119,11 +119,71 @@
   };
   const BADGES = { new: 't_new', bestseller: 't_best', engravable: 't_engr' };
   const badgeFor = (p) => (p.badgeKey ? t(p.badgeKey) : BADGES[String(p.badge).toLowerCase()] ? t(BADGES[String(p.badge).toLowerCase()]) : p.badge || '');
+  /* ---- Metal preview: when a variant has no photo of its own, the yellow-gold photo is
+     recoloured in the browser. Only gold pixels move; stones and the aqua ground stay. ---- */
+  const photoMetal = (p) => (p.metalIdx >= 0 && p.defaultSel ? metalKind(p.defaultSel[p.metalIdx]) : 'yellow');
+  function tintFor(p, sel) {
+    if (p.demo || p.metalIdx < 0) return '';
+    const kind = metalKind(sel[p.metalIdx]), v = variantFor(p, sel);
+    if (kind === photoMetal(p) || photoMetal(p) !== 'yellow') return '';
+    if (v && v.img && v.img !== p.img) return '';
+    return kind;
+  }
+  function recolor(a, kind) {
+    for (let i = 0; i < a.length; i += 4) {
+      const r = a[i] / 255, g = a[i + 1] / 255, b = a[i + 2] / 255;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+      if (d < 0.045) continue;
+      const l = (mx + mn) / 2, s = d / (1 - Math.abs(2 * l - 1));
+      let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      h *= 60; if (h < 0) h += 360;
+      if (h < 16 || h > 66 || s < 0.14) continue;
+      const w = Math.min(1, (s - 0.14) / 0.16) * Math.min(1, Math.min(h - 16, 66 - h) / 9);
+      let nh, ns, nl;
+      if (kind === 'white') { nh = 205; ns = 0.07; nl = Math.min(0.97, l * 1.04 + 0.05); }
+      else { nh = 8 + (h - 16) * 0.22; ns = Math.min(1, s * 0.78); nl = Math.min(0.96, l * 1.02 + 0.01); }
+      const c = (1 - Math.abs(2 * nl - 1)) * ns, x = c * (1 - Math.abs(((nh / 60) % 2) - 1)), m = nl - c / 2;
+      const [r1, g1, b1] = nh < 60 ? [c, x, 0] : nh < 120 ? [x, c, 0] : nh < 180 ? [0, c, x] : nh < 240 ? [0, x, c] : nh < 300 ? [x, 0, c] : [c, 0, x];
+      a[i] = (r + (r1 + m - r) * w) * 255; a[i + 1] = (g + (g1 + m - g) * w) * 255; a[i + 2] = (b + (b1 + m - b) * w) * 255;
+    }
+  }
+  const tintCache = new Map(), tintDone = new Map();
+  function tintSrc(src, kind) {
+    const key = src + '|' + kind;
+    if (!tintCache.has(key)) {
+      tintCache.set(key, new Promise((res) => {
+        const im = new Image(); im.crossOrigin = 'anonymous';
+        im.onload = () => {
+          try {
+            const w = Math.min(im.naturalWidth, 1000), h = Math.round(im.naturalHeight * w / im.naturalWidth);
+            const c = document.createElement('canvas'); c.width = w; c.height = h;
+            const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0, w, h);
+            const data = x.getImageData(0, 0, w, h); recolor(data.data, kind); x.putImageData(data, 0, 0);
+            c.toBlob((bl) => { const u = bl ? URL.createObjectURL(bl) : null; tintDone.set(key, u); res(u); }, 'image/jpeg', 0.9);
+          } catch (e) { res(null); }
+        };
+        im.onerror = () => res(null);
+        im.src = src;
+      }));
+    }
+    return tintCache.get(key);
+  }
+  function applyTints(scope) {
+    $$('img[data-j-tint]', scope || document).forEach((img) => {
+      const kind = img.dataset.jTint, base = img.dataset.jBase || img.getAttribute('src');
+      img.dataset.jBase = base;
+      if (!kind) { if (img.getAttribute('src') !== base) img.src = base; return; }
+      const ready = tintDone.get(base + '|' + kind);
+      if (ready) { img.src = ready; return; }
+      img.classList.add('j-tinting');
+      tintSrc(base, kind).then((u) => { if (u && img.dataset.jTint === kind) img.src = u; img.classList.remove('j-tinting'); });
+    });
+  }
   const phHTML = (p, sel, extra = '') => {
-    const img = imgFor(p, sel);
-    return `<div class="j-ph${img ? ' j-has-img' : ''}" data-stone="${p.stone}" data-metal="${metalOfSel(p, sel)}" ${extra}>${
-      img ? `<img src="${esc(img)}" alt="${esc(p.title)}" loading="lazy">` : ''
-    }<span class="j-ph-initial">${esc(p.title[0])}</span></div>`;
+    const img = imgFor(p, sel), tint = tintFor(p, sel);
+    return `<div class="j-ph${img ? ' j-has-img' : ''}${p.img2 ? ' j-has-img2' : ''}" data-stone="${p.stone}" data-metal="${metalOfSel(p, sel)}" ${extra}>${
+      img ? `<img src="${esc(img)}" alt="${esc(p.title)}" loading="lazy" data-j-tint="${tint}">` : ''
+    }${p.img2 && !tint ? `<img class="j-img2" src="${esc(p.img2)}" alt="" loading="lazy">` : ''}<span class="j-ph-initial">${esc(p.title[0])}</span></div>`;
   };
 
   /* ============ Theme (light / dark) ============ */
@@ -406,6 +466,7 @@
   function renderQV() {
     const p = byKey(qvState.key), sel = qvState.sel;
     $('#j-qv-media').innerHTML = phHTML(p, sel);
+    applyTints($('#j-qv-media'));
     $('#j-qv-info').innerHTML = panelHTML(p, sel, false);
   }
   const productPages = [];
@@ -420,9 +481,14 @@
       info.innerHTML = panelHTML(p, state.sel, true);
       const v = variantFor(p, state.sel);
       if (idInput && v) idInput.value = v.id;
-      const img = imgFor(p, state.sel);
+      const img = imgFor(p, state.sel), el = $('img', main), tint = tintFor(p, state.sel);
       main.dataset.metal = metalOfSel(p, state.sel);
-      if (img && v && v.img) { const el = $('img', main); if (el) { el.src = img; el.removeAttribute('srcset'); } }
+      if (el) {
+        if (!el.dataset.jOrig) { el.dataset.jOrig = el.getAttribute('src'); el.dataset.jOrigSet = el.getAttribute('srcset') || ''; }
+        if (tint && p.img) { el.removeAttribute('srcset'); el.dataset.jBase = p.img; el.dataset.jTint = tint; applyTints(main); }
+        else if (img && v && v.img && v.img !== p.img) { el.dataset.jTint = ''; el.src = img; el.removeAttribute('srcset'); }
+        else { el.dataset.jTint = ''; el.src = el.dataset.jOrig; if (el.dataset.jOrigSet) el.setAttribute('srcset', el.dataset.jOrigSet); }
+      }
       if (v && history.replaceState) { const u = new URL(location.href); u.searchParams.set('variant', v.id); history.replaceState(null, '', u); }
     }
     info.addEventListener('change', (e) => { const oi = e.target.dataset.oi; if (oi == null) return; state.sel[+oi] = e.target.value; render(); });
@@ -466,6 +532,7 @@
       this.cat = location.hash === '#saved' ? 'saved' : 'all';
       this.sort = 'feat';
       this.sel = {};
+      this.limit = +el.dataset.jLimit || 0;
       this.grid = $('.j-grid', el); this.filters = $('.j-filters', el); this.sortEl = $('select', el); this.showing = $('.j-showing', el);
       if (this.sortEl) {
         this.sortEl.innerHTML = ['feat', 'low', 'high'].map((s) => `<option value="${s}">${esc(t('sort_' + s))}</option>`).join('');
@@ -473,6 +540,23 @@
       }
       this.filters?.addEventListener('click', (e) => { const b = e.target.closest('[data-cat]'); if (b) this.setCat(b.dataset.cat); });
       el.addEventListener('click', (e) => this.onClick(e));
+      // Hovering a metal swatch previews that metal on the photo
+      el.addEventListener('pointerover', (e) => {
+        const sw = e.target.closest('[data-j-sw]'); if (!sw) return;
+        const card = sw.closest('.j-card'), p = byKey(card.dataset.key), img = card.querySelector('.j-ph > img[data-j-tint]');
+        if (!p || !img) return;
+        const sel = [...this.selOf(p)]; sel[p.metalIdx] = sw.dataset.jSw;
+        img.dataset.jTint = tintFor(p, sel); applyTints(card);
+        card.querySelector('.j-ph').dataset.metal = metalOfSel(p, sel);
+      });
+      el.addEventListener('pointerout', (e) => {
+        const sw = e.target.closest('[data-j-sw]'); if (!sw || sw.contains(e.relatedTarget)) return;
+        const card = sw.closest('.j-card'); if (!card) return;
+        const p = byKey(card.dataset.key), img = card.querySelector('.j-ph > img[data-j-tint]');
+        if (!p || !img) return;
+        img.dataset.jTint = tintFor(p, this.selOf(p)); applyTints(card);
+        card.querySelector('.j-ph').dataset.metal = metalOfSel(p, this.selOf(p));
+      });
       if (fine) tilt(this.grid, '.j-tilt', 9);
       this.render();
     }
@@ -491,7 +575,9 @@
       if (this.sort === 'high') list = [...list].sort((a, b) => priceFor(b, this.selOf(b)) - priceFor(a, this.selOf(a)));
       if (this.showing) this.showing.textContent = t('showing', { n: list.length });
       if (!list.length) { this.grid.innerHTML = `<div class="j-empty-grid"><span class="j-s">♡&#xFE0E;</span>${esc(t('no_saved'))}</div>`; return; }
+      if (this.limit) list = list.slice(0, this.limit);
       this.grid.innerHTML = list.map((p, i) => this.card(p, i)).join('');
+      applyTints(this.grid);
     }
     card(p, i) {
       const sel = this.selOf(p), w = wish.has(p.key), ok = availableFor(p, sel);
@@ -534,7 +620,10 @@
           if (v) sel.splice(0, sel.length, ...v.options);
         }
         this.sel[p.key] = sel;
-        card.outerHTML = this.card(p, 0).replace('--j-d:0', '--j-d:0;animation:none');
+        const fresh = document.createElement('div');
+        fresh.innerHTML = this.card(p, 0).replace('--j-d:0', '--j-d:0;animation:none');
+        const next = fresh.firstElementChild; card.replaceWith(next); applyTints(next);
+        next.querySelector('.j-ph')?.classList.add('j-metal-flash');
       }
     }
   }
@@ -592,10 +681,17 @@
       $('.j-counter', sec).textContent = `${ins.value.length} / ${ins.maxLength}`;
       $('.j-readout', sec).textContent = t('e_mm', { s: s.size, mm: mm.toFixed(1) });
       const fee = s.text ? feePrice : 0;
-      $('.j-studio-price', sec).textContent = money(bandPrice(s) + fee);
-      $('.j-breakdown', sec).textContent = t('e_break', { band: money(bandPrice(s)), eng: money(fee) });
+      $$('.j-studio-price', sec).forEach((el) => { el.textContent = money(bandPrice(s) + fee); });
+      $$('.j-breakdown', sec).forEach((el) => { el.textContent = t('e_break', { band: money(bandPrice(s)), eng: money(fee) }); });
+      const vals = { insc: s.text ? `“${s.text}”` : '—', font: t('e_' + s.font), metal: t(s.metal), size: `US ${s.size} · ${mm.toFixed(1)} mm` };
+      Object.entries(vals).forEach(([k, v]) => $$(`[data-j-val="${k}"]`, sec).forEach((el) => { el.textContent = v; }));
+      $$('.j-step', sec).forEach((st) => st.classList.toggle('j-step-done', !!st.querySelector('input:checked') || (st.dataset.step === '1' && !!s.text)));
     }
     form.addEventListener('input', render);
+    form.addEventListener('focusin', (e) => {
+      const st = e.target.closest('.j-step');
+      $$('.j-step', sec).forEach((x) => x.classList.toggle('j-step-on', x === st));
+    });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const s = state();
@@ -632,6 +728,38 @@
     range.addEventListener('input', () => { num.value = range.value; update(range.value); });
     update(num.value);
   });
+
+  /* ============ Motion: reveal on scroll, "View" cursor, magnetic buttons ============ */
+  if (!reduced && 'IntersectionObserver' in window) {
+    const targets = $$('.jewl .j-head, .jewl .j-standards li, .jewl .j-coll, .jewl .j-story > *, .jewl .j-feature > *, .jewl .j-facts > div, .jewl .j-letter > *, .jewl .j-studio > *, .jewl .j-steps li, .jewl .j-stone-card');
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add('j-in'); io.unobserve(en.target); }
+    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    targets.forEach((el, i) => {
+      if (el.getBoundingClientRect().top < innerHeight * 0.92) return; // already on screen: leave as is
+      el.classList.add('j-rv'); el.style.setProperty('--j-rv-i', i % 4); io.observe(el);
+    });
+    setTimeout(() => targets.forEach((el) => el.classList.add('j-in')), 6000);
+  }
+  if (fine) {
+    const cur = document.createElement('div');
+    cur.className = 'j-cursor'; cur.innerHTML = `<span>${esc(t('quick'))}</span>`;
+    ($('#j-overlays') || document.body).appendChild(cur);
+    let on = false;
+    document.addEventListener('pointermove', (e) => {
+      const hit = e.target.closest('.jewl .j-card .j-ph, .jewl .j-arch-btn, .jewl .j-coll');
+      if (hit !== null !== on) { on = hit !== null; cur.classList.toggle('j-on', on); }
+      if (on) cur.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => cur.classList.remove('j-on'));
+    $$('.jewl .j-hero-ctas .j-btn, .jewl .j-feature .j-btn, .jewl .j-total .j-btn').forEach((b) => {
+      b.addEventListener('pointermove', (e) => {
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.18}px, ${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
+      });
+      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+    });
+  }
 
   /* ============ Horizon hooks ============ */
   window.Jewl = { openBag: () => openBag(true), refreshCart, toast };

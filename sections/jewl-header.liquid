@@ -5,6 +5,16 @@
   if root == '/'
     assign root = ''
   endif
+  assign shop_url = routes.all_products_collection_url
+  assign coll_url = routes.collections_url
+  assign engr_url = root | append: '/#engrave'
+  if pages.engraving.handle != blank
+    assign engr_url = pages.engraving.url
+  endif
+  assign atelier_url = root | append: '/#atelier'
+  if pages.atelier.handle != blank
+    assign atelier_url = pages.atelier.url
+  endif
 -%}
 
 {%- liquid
@@ -25,10 +35,10 @@
           {%- if use_menu -%}
             {%- for link in menu.links -%}<li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>{%- endfor -%}
           {%- else -%}
-            <li><a href="{{ root }}/#shop">{{ 'jewl.nav_shop' | t }}</a></li>
-            <li><a href="{{ root }}/#collections">{{ 'jewl.nav_coll' | t }}</a></li>
-            <li><a href="{{ root }}/#engrave">{{ 'jewl.nav_engr' | t }}</a></li>
-            <li><a href="{{ root }}/#atelier">{{ 'jewl.nav_atelier' | t }}</a></li>
+            <li><a href="{{ shop_url }}"{% if request.path == shop_url %} aria-current="page"{% endif %}>{{ 'jewl.nav_shop' | t }}</a></li>
+            <li><a href="{{ coll_url }}"{% if request.path == coll_url %} aria-current="page"{% endif %}>{{ 'jewl.nav_coll' | t }}</a></li>
+            <li><a href="{{ engr_url }}"{% if request.path == engr_url %} aria-current="page"{% endif %}>{{ 'jewl.nav_engr' | t }}</a></li>
+            <li><a href="{{ atelier_url }}"{% if request.path == atelier_url %} aria-current="page"{% endif %}>{{ 'jewl.nav_atelier' | t }}</a></li>
           {%- endif -%}
         </ul>
         <a class="j-logo j-gild" href="{{ routes.root_url }}" aria-label="{{ wordmark | escape }}">{{ wordmark }}</a>
@@ -65,7 +75,7 @@
         {%- if use_menu -%}
           {%- for link in menu.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
         {%- else -%}
-          <a href="{{ root }}/#shop">{{ 'jewl.nav_shop' | t }}</a><a href="{{ root }}/#collections">{{ 'jewl.nav_coll' | t }}</a><a href="{{ root }}/#engrave">{{ 'jewl.nav_engr' | t }}</a><a href="{{ root }}/#atelier">{{ 'jewl.nav_atelier' | t }}</a>
+          <a href="{{ shop_url }}">{{ 'jewl.nav_shop' | t }}</a><a href="{{ coll_url }}">{{ 'jewl.nav_coll' | t }}</a><a href="{{ engr_url }}">{{ 'jewl.nav_engr' | t }}</a><a href="{{ atelier_url }}">{{ 'jewl.nav_atelier' | t }}</a>
         {%- endif -%}
       </div>
     </div>
@@ -82,7 +92,7 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Leave empty to link to the Shop, Collections, Engraving and Atelier sections of the home page."
+      "info": "Leave empty to link to Shop (all products), Collections, and the pages with the handles engraving and atelier."
     },
     {
       "type": "paragraph",

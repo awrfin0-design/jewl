@@ -1,65 +1,102 @@
 {%- liquid
   assign band = section.settings.band_product
   assign fee = section.settings.fee_product
+  assign guide = pages['ring-size-guide']
 -%}
 <div class="jewl">
-  <section class="j-block" id="engrave" data-j-studio>
+  <section class="j-block j-studio-sec" id="engrave" data-j-studio>
     <script type="application/json" data-j-studio-config>
       {
         "band": {% if band != blank %}{% render 'jewl-product-json', product: band %}{% else %}null{% endif %},
         "fee": {% if fee != blank %}{"id": {{ fee.selected_or_first_available_variant.id | json }}, "price": {{ fee.selected_or_first_available_variant.price | json }}}{% else %}null{% endif %}
       }
     </script>
-    <div class="j-wrap j-studio">
-      <div class="j-stage j-ph" data-stone="aqua" data-metal="yellow">
-        <div class="j-band" data-metal="yellow">
-          <span class="j-engr" data-font="script"></span>
-          <span class="j-hall j-l">750 · JWL</span>
-          <span class="j-hall j-r j-hall-size j-num">US 6</span>
-        </div>
-        <span class="j-stage-note">{{ 'jewl.e_view' | t }}</span>
-      </div>
-
-      <form class="j-studio-form" id="j-studio-{{ section.id }}" novalidate>
-        <div>
-          <div class="j-eyebrow">{{ 'jewl.e_eyebrow' | t }}</div>
-          <h2 style="margin-top:10px">{{ 'jewl.e_title_html' | t }}</h2>
+    <div class="j-wrap">
+      {%- if section.settings.show_heading -%}
+        <div class="j-head j-studio-head">
+          <div>
+            <div class="j-eyebrow">{{ 'jewl.e_eyebrow' | t }}</div>
+            <h2>{{ 'jewl.e_title_html' | t }}</h2>
+          </div>
           <p class="j-intro">{{ 'jewl.e_intro' | t }}</p>
         </div>
-        <div class="j-field">
-          <label for="j-inscription-{{ section.id }}">{{ 'jewl.e_insc' | t }}</label>
-          <input class="j-text-input" id="j-inscription-{{ section.id }}" maxlength="18" value="{{ section.settings.sample_text | escape }}" autocomplete="off">
-          <span class="j-counter j-num"></span>
+      {%- endif -%}
+
+      <div class="j-studio">
+        <div class="j-studio-preview">
+          <div class="j-stage j-ph" data-stone="aqua" data-metal="yellow">
+            <div class="j-band" data-metal="yellow">
+              <span class="j-engr" data-font="script"></span>
+              <span class="j-hall j-l">750 · JWL</span>
+              <span class="j-hall j-r j-hall-size j-num">US 6</span>
+            </div>
+            <span class="j-stage-note">{{ 'jewl.e_view' | t }}</span>
+          </div>
+          <dl class="j-summary">
+            <div class="j-summary-head"><dt>{{ 'jewl.e_summary' | t }}</dt><dd>Nocturne</dd></div>
+            <div><dt>{{ 'jewl.e_insc' | t }}</dt><dd data-j-val="insc"></dd></div>
+            <div><dt>{{ 'jewl.e_letter' | t }}</dt><dd data-j-val="font"></dd></div>
+            <div><dt>{{ 'jewl.metal' | t }}</dt><dd data-j-val="metal"></dd></div>
+            <div><dt>{{ 'jewl.size' | t }}</dt><dd class="j-num" data-j-val="size"></dd></div>
+          </dl>
         </div>
-        <fieldset class="j-field">
-          <legend>{{ 'jewl.e_letter' | t }}</legend>
-          <div class="j-opts">
-            <label class="j-opt"><input type="radio" name="font" id="j-font-script-{{ section.id }}" value="script" checked><span style="font-family:var(--j-script);font-size:20px">{{ 'jewl.e_script' | t }}</span></label>
-            <label class="j-opt"><input type="radio" name="font" id="j-font-roman-{{ section.id }}" value="roman"><span style="font-family:var(--j-display);font-style:italic">{{ 'jewl.e_roman' | t }}</span></label>
-            <label class="j-opt"><input type="radio" name="font" id="j-font-caps-{{ section.id }}" value="caps"><span style="letter-spacing:.14em;text-transform:uppercase;font-size:12.5px">{{ 'jewl.e_caps' | t }}</span></label>
+
+        <form class="j-studio-form" id="j-studio-{{ section.id }}" novalidate>
+          <ol class="j-flow">
+            <li class="j-step j-step-on" data-step="1">
+              <div class="j-step-head"><span class="j-step-n j-num">01</span><h3>{{ 'jewl.e_insc' | t }}</h3><span class="j-step-val" data-j-val="insc"></span></div>
+              <div class="j-step-body">
+                <div class="j-field">
+                  <label class="j-sr" for="j-inscription-{{ section.id }}">{{ 'jewl.e_insc' | t }}</label>
+                  <input class="j-text-input" id="j-inscription-{{ section.id }}" maxlength="18" value="{{ section.settings.sample_text | escape }}" placeholder="{{ 'jewl.e_ph' | t | escape }}" autocomplete="off">
+                  <span class="j-counter j-num"></span>
+                </div>
+                <fieldset class="j-field">
+                  <legend>{{ 'jewl.e_letter' | t }}</legend>
+                  <div class="j-seg">
+                    <label class="j-opt"><input type="radio" name="font" id="j-font-script-{{ section.id }}" value="script" checked><span style="font-family:var(--j-script);font-size:22px">{{ 'jewl.e_script' | t }}</span></label>
+                    <label class="j-opt"><input type="radio" name="font" id="j-font-roman-{{ section.id }}" value="roman"><span style="font-family:var(--j-display);font-style:italic">{{ 'jewl.e_roman' | t }}</span></label>
+                    <label class="j-opt"><input type="radio" name="font" id="j-font-caps-{{ section.id }}" value="caps"><span style="letter-spacing:.14em;text-transform:uppercase;font-size:12px">{{ 'jewl.e_caps' | t }}</span></label>
+                  </div>
+                </fieldset>
+              </div>
+            </li>
+            <li class="j-step" data-step="2">
+              <div class="j-step-head"><span class="j-step-n j-num">02</span><h3>{{ 'jewl.metal' | t }}</h3><span class="j-step-val" data-j-val="metal"></span></div>
+              <div class="j-step-body">
+                <div class="j-metals">
+                  {%- assign metals = 'yellow,white,rose' | split: ',' -%}
+                  {%- for m in metals -%}
+                    {%- assign mk = 'jewl.' | append: m -%}
+                    <label class="j-metal">
+                      <input type="radio" name="metal" id="j-metal-{{ m }}-{{ section.id }}" value="{{ m }}"{% if forloop.first %} checked{% endif %}>
+                      <span><i class="j-metal-chip" style="background:var(--j-g-{{ m }})"></i><b>{{ mk | t }}</b></span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </li>
+            <li class="j-step" data-step="3">
+              <div class="j-step-head"><span class="j-step-n j-num">03</span><h3>{{ 'jewl.size' | t }}</h3><span class="j-step-val j-num" data-j-val="size"></span></div>
+              <div class="j-step-body">
+                <div class="j-sizes"></div>
+                <div class="j-size-foot">
+                  <span class="j-readout j-num"></span>
+                  {%- if guide.handle != blank -%}<a class="j-qv-link" href="{{ guide.url }}">{{ guide.title }} →</a>{%- endif -%}
+                </div>
+              </div>
+            </li>
+          </ol>
+          <div class="j-total">
+            <div>
+              <span class="j-total-label">{{ 'jewl.e_total' | t }}</span>
+              <div class="j-price j-num j-studio-price"></div>
+              <small class="j-breakdown j-num"></small>
+            </div>
+            <button class="j-btn j-btn-gold" type="submit">{{ 'jewl.e_add' | t }}</button>
           </div>
-        </fieldset>
-        <fieldset class="j-field">
-          <legend>{{ 'jewl.metal' | t }}</legend>
-          <div class="j-opts">
-            <label class="j-opt"><input type="radio" name="metal" id="j-metal-yellow-{{ section.id }}" value="yellow" checked><span><i class="j-dot" style="background:var(--j-g-yellow)"></i>{{ 'jewl.yellow' | t }}</span></label>
-            <label class="j-opt"><input type="radio" name="metal" id="j-metal-white-{{ section.id }}" value="white"><span><i class="j-dot" style="background:var(--j-g-white)"></i>{{ 'jewl.white' | t }}</span></label>
-            <label class="j-opt"><input type="radio" name="metal" id="j-metal-rose-{{ section.id }}" value="rose"><span><i class="j-dot" style="background:var(--j-g-rose)"></i>{{ 'jewl.rose' | t }}</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="j-field">
-          <legend>{{ 'jewl.size' | t }}</legend>
-          <div class="j-sizes"></div>
-          <span class="j-readout j-num"></span>
-        </fieldset>
-        <div class="j-total">
-          <div>
-            <div class="j-price j-num j-studio-price"></div>
-            <small class="j-breakdown j-num"></small>
-          </div>
-          <button class="j-btn j-btn-ink" type="submit">{{ 'jewl.e_add' | t }}</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </section>
 </div>
@@ -68,6 +105,7 @@
 {
   "name": "Jewl engraving studio",
   "settings": [
+    { "type": "checkbox", "id": "show_heading", "label": "Show heading", "default": true },
     {
       "type": "product", "id": "band_product", "label": "Band product",
       "info": "Needs a Metal option (yellow, white, rose gold) and a Size option (4 to 9). The inscription is added to the order as a line item property."

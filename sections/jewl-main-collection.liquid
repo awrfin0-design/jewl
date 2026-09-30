@@ -7,7 +7,11 @@
           <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a><span aria-hidden="true">·</span><a href="{{ routes.collections_url }}">{{ 'jewl.coll_eyebrow' | t }}</a>
         </nav>
         <div class="j-eyebrow j-num">{{ 'jewl.pieces' | t: n: collection.products_count }}</div>
-        <h1>{{ collection.title }}</h1>
+        {%- if collection.handle == 'all' -%}
+          <h1>{{ 'jewl.shop_title_html' | t }}</h1>
+        {%- else -%}
+          <h1>{{ collection.title }}</h1>
+        {%- endif -%}
         {%- if collection.description != blank -%}<div class="j-lede j-rte">{{ collection.description }}</div>{%- endif -%}
         <span class="j-page-mark j-gild" aria-hidden="true">{{ settings.jewl_wordmark | default: 'Jewl' }}</span>
       </div>

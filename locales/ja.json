@@ -1,5 +1,9 @@
 {
   "jewl": {
+    "e_summary": "あなたのバンド",
+    "e_total": "合計",
+    "view_all": "すべての作品を見る",
+    "engr_cta": "バンドをデザインする",
     "pd_details": "詳細",
     "pd_related": "こちらもおすすめ",
     "cart_note": "ギフトメッセージ（任意）",

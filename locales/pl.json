@@ -1,5 +1,9 @@
 {
   "jewl": {
+    "e_summary": "Your band",
+    "e_total": "Total",
+    "view_all": "View all pieces",
+    "engr_cta": "Design your band",
     "pd_details": "Details",
     "pd_related": "You may also like",
     "cart_note": "Gift note (optional)",

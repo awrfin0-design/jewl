@@ -1,0 +1,45 @@
+{%- liquid
+  assign target = pages[section.settings.page_handle]
+  assign href = '#engrave'
+  if target.handle != blank
+    assign href = target.url
+  endif
+-%}
+<div class="jewl">
+  <section class="j-block j-feature-sec">
+    <div class="j-wrap j-feature">
+      <a class="j-feature-stage j-ph" href="{{ href }}" data-stone="aqua" data-metal="yellow" aria-hidden="true" tabindex="-1">
+        <div class="j-band j-band-static" data-metal="yellow">
+          <span class="j-engr" data-font="script">{{ section.settings.sample_text }}</span>
+          <span class="j-hall j-l">750 · JWL</span>
+          <span class="j-hall j-r j-num">US 6</span>
+        </div>
+        <div class="j-feature-metals">
+          <i style="background:var(--j-g-yellow)"></i><i style="background:var(--j-g-white)"></i><i style="background:var(--j-g-rose)"></i>
+        </div>
+      </a>
+      <div class="j-feature-copy">
+        <div class="j-eyebrow">{{ 'jewl.e_eyebrow' | t }}</div>
+        <h2>{{ 'jewl.e_title_html' | t }}</h2>
+        <p class="j-intro">{{ 'jewl.e_intro' | t }}</p>
+        <ol class="j-mini-steps">
+          <li><span class="j-num">01</span>{{ 'jewl.e_insc' | t }}</li>
+          <li><span class="j-num">02</span>{{ 'jewl.metal' | t }}</li>
+          <li><span class="j-num">03</span>{{ 'jewl.size' | t }}</li>
+        </ol>
+        <a class="j-btn j-btn-gold" href="{{ href }}">{{ 'jewl.engr_cta' | t }} →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Jewl engraving teaser",
+  "settings": [
+    { "type": "text", "id": "page_handle", "label": "Engraving page handle", "default": "engraving" },
+    { "type": "text", "id": "sample_text", "label": "Sample inscription", "default": "always, A & M" }
+  ],
+  "presets": [{ "name": "Jewl engraving teaser" }]
+}
+{% endschema %}

@@ -1,5 +1,9 @@
 {
   "jewl": {
+    "e_summary": "您的戒指",
+    "e_total": "合计",
+    "view_all": "查看全部作品",
+    "engr_cta": "设计您的戒指",
     "pd_details": "详情",
     "pd_related": "您可能也喜欢",
     "cart_note": "礼品留言（选填）",

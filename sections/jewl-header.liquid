@@ -75,7 +75,7 @@
         {%- if use_menu -%}
           {%- for link in menu.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}
         {%- else -%}
-          <a href="{{ shop_url }}">{{ 'jewl.nav_shop' | t }}</a><a href="{{ coll_url }}">{{ 'jewl.nav_coll' | t }}</a><a href="{{ engr_url }}">{{ 'jewl.nav_engr' | t }}</a><a href="{{ atelier_url }}">{{ 'jewl.nav_atelier' | t }}</a>
+          <a href="{{ routes.root_url }}">{{ 'jewl.pg_home' | t }}</a><a href="{{ shop_url }}">{{ 'jewl.nav_shop' | t }}</a><a href="{{ coll_url }}">{{ 'jewl.nav_coll' | t }}</a><a href="{{ engr_url }}">{{ 'jewl.nav_engr' | t }}</a><a href="{{ atelier_url }}">{{ 'jewl.nav_atelier' | t }}</a>
         {%- endif -%}
       </div>
     </div>

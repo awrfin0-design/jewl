@@ -214,7 +214,7 @@ html[dir="rtl"] .jewl .j-sorter select{background-position:16px 52%;padding:.65e
 .jewl .j-card-media .j-tilt{position:relative;transition:transform .6s var(--j-ease);transform-style:preserve-3d}
 .jewl .j-card-media .j-ph{aspect-ratio:4/5;width:100%;cursor:pointer}
 .jewl .j-card:hover .j-ph-initial{transform:scale(1.06);background-position:100% 0}
-.jewl .j-actions{position:absolute;inset-inline:10px;bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:1px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--j-ease)}
+.jewl .j-actions{position:absolute;inset-inline:10px;bottom:10px;display:grid;grid-template-columns:1fr;gap:1px;opacity:0;transform:translateY(10px);transition:opacity .35s,transform .45s var(--j-ease)}
 .jewl .j-card:hover .j-actions,.jewl .j-card:focus-within .j-actions{opacity:1;transform:none}
 .jewl .j-actions button{border:0;padding:12px 6px;font:500 10.5px/1.2 var(--j-sans);letter-spacing:.14em;text-transform:uppercase;background:color-mix(in srgb,var(--j-surface) 90%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background-color .2s,color .2s}
 .jewl .j-actions button:hover{background:var(--j-ink);color:var(--j-bg)}
@@ -354,7 +354,7 @@ html[dir="rtl"] .jewl .j-drawer{transform:translateX(-100%)}
 .jewl .j-note{font-size:12px;color:var(--j-muted);margin:0}
 
 /* ================= Quick view ================= */
-.jewl dialog.j-qv{width:min(980px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:1px solid var(--j-line);background:var(--j-bg);color:var(--j-ink);box-shadow:var(--j-shadow);overflow:auto}
+.jewl dialog.j-qv{width:min(980px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:1px solid var(--j-line);background:var(--j-bg);color:var(--j-ink);box-shadow:var(--j-shadow);overflow:auto;position:fixed;inset:0;margin:auto;max-width:calc(100vw - 32px);box-sizing:border-box}
 .jewl dialog.j-qv::backdrop{background:var(--j-scrim);backdrop-filter:blur(4px)}
 .jewl dialog.j-qv[open]{animation:j-qvIn .5s var(--j-ease)}
 @keyframes j-qvIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
@@ -394,7 +394,7 @@ html[dir="rtl"] .jewl .j-drawer{transform:translateX(-100%)}
   .jewl .j-coll:hover,.jewl .j-coll:focus-visible{flex-grow:1}
   .jewl .j-foot{grid-template-columns:1fr 1fr}
   .jewl .j-foot > div:first-child{grid-column:1/-1}
-  .jewl .j-qv-media .j-ph{max-width:320px;margin-inline:auto}
+  .jewl .j-qv-media .j-ph{max-width:min(320px,30vh);margin-inline:auto}
 }
 @media (max-width:540px){
   .jewl .j-standards ul,.jewl .j-facts{grid-template-columns:1fr}
@@ -402,8 +402,7 @@ html[dir="rtl"] .jewl .j-drawer{transform:translateX(-100%)}
   .jewl .j-standards li:first-child{border-top:0}
   .jewl .j-grid{gap:22px 12px}
   .jewl .j-card h3{font-size:17px}
-  .jewl .j-actions{grid-template-columns:1fr}
-  .jewl .j-actions button:first-child{display:none}
+  .jewl .j-actions{display:none}
   .jewl .j-tool{padding:0 8px}
   .jewl .j-toolbar{align-items:stretch}
 }
@@ -679,7 +678,7 @@ html.j-no-loader .jewl .j-loader{display:none}
 /* Add buttons: busy shimmer, then a gilded "Added ✓" */
 .jewl .j-busy{position:relative;pointer-events:none;color:transparent!important}
 .jewl .j-busy::after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border-radius:50%;border:2px solid currentColor;border-color:#2A1E05 transparent #2A1E05 transparent;animation:j-spin .7s linear infinite}
-.jewl .j-btn-ink.j-busy::after,.jewl .j-actions .j-busy::after{border-color:var(--j-ink) transparent var(--j-ink) transparent}
+.jewl .j-btn-ink.j-busy::after,.jewl .j-actions .j-busy::after,.jewl .j-card-add.j-busy::after{border-color:var(--j-ink) transparent var(--j-ink) transparent}
 @keyframes j-spin{to{transform:rotate(360deg)}}
 .jewl .j-added{background:var(--j-g-yellow)!important;background-size:220% 100%!important;color:#2A1E05!important;border-color:transparent!important;animation:j-gleam 1.6s ease-in-out}
 /* Drawer lines: slide in, pulse on quantity change, slide out on removal */
@@ -736,8 +735,10 @@ html[dir="rtl"] .jewl .j-line-in,html[dir="rtl"] .jewl .j-line-stagger{animation
 .jewl .j-card{transition:transform .5s var(--j-ease)}
 .jewl .j-card:hover{transform:translateY(-4px)}
 .jewl .j-sw{position:relative}
-.jewl .j-sw::after{content:attr(aria-label);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);white-space:nowrap;font:400 11px/1 var(--j-sans);letter-spacing:.04em;background:var(--j-ink);color:var(--j-bg);padding:6px 8px;opacity:0;pointer-events:none;transition:opacity .2s,transform .25s var(--j-ease)}
-.jewl .j-sw:hover::after,.jewl .j-sw:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.jewl .j-sw::after{content:attr(aria-label);position:absolute;bottom:calc(100% + 8px);right:-6px;transform:translateY(4px);display:none;white-space:nowrap;font:400 11px/1 var(--j-sans);letter-spacing:.04em;background:var(--j-ink);color:var(--j-bg);padding:6px 8px;opacity:0;pointer-events:none;transition:opacity .2s,transform .25s var(--j-ease)}
+@media (hover:hover){.jewl .j-sw::after{display:block}.jewl .j-sw:hover::after,.jewl .j-sw:focus-visible::after{opacity:1;transform:none}}
+/* Nothing may widen the page on phones */
+.jewl .j-block,.jewl .j-site,.jewl .j-announce,.jewl .j-foot{overflow-x:clip}
 
 /* Buttons: gold sheen sweep, line buttons fill from the start edge */
 .jewl .j-btn{position:relative;overflow:hidden;isolation:isolate;transition:background-color .35s,color .35s,background-position .8s var(--j-ease),transform .35s var(--j-ease),border-color .35s}
@@ -846,3 +847,31 @@ html[dir="rtl"] .jewl .j-btn-line{background-position:100% 0}
 @media (hover:none){
   .jewl .j-card:hover{transform:none}
 }
+@media (max-width:860px){
+  .jewl .j-qv-media{padding:16px}
+  .jewl dialog.j-qv .j-qv-actions{position:sticky;bottom:0;z-index:2;background:var(--j-bg);padding-block:10px;margin-inline:-4px;padding-inline:4px;box-shadow:0 -12px 16px -12px rgba(11,52,64,.18)}
+}
+
+/* ---- Card: always-visible add to bag ---- */
+.jewl .j-card-add{position:relative;margin-top:14px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--j-line);background:transparent;color:var(--j-ink);font:500 11px/1.2 var(--j-sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;overflow:hidden;isolation:isolate;transition:color .3s,border-color .3s}
+.jewl .j-card-add::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--j-ink);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--j-ease)}
+.jewl .j-card-add i{font-style:normal;font-size:16px;line-height:1;transition:transform .35s var(--j-ease)}
+.jewl .j-card-add:hover,.jewl .j-card-add:focus-visible{color:var(--j-bg);border-color:var(--j-ink)}
+.jewl .j-card-add:hover::before,.jewl .j-card-add:focus-visible::before{transform:scaleX(1)}
+.jewl .j-card-add:hover i{transform:rotate(90deg)}
+.jewl .j-card-add.j-added{color:var(--j-bg);border-color:var(--j-teal,#0A7C88)}
+.jewl .j-card-add.j-added::before{transform:scaleX(1);background:var(--j-teal,#0A7C88)}
+.jewl .j-card-add:disabled{opacity:.5;cursor:not-allowed}
+.jewl .j-card-add.j-busy span,.jewl .j-card-add.j-busy i{opacity:.35}
+@media (max-width:540px){.jewl .j-card-add{padding:10px 10px;font-size:10px;letter-spacing:.1em}}
+
+/* ---- Back to top ---- */
+.jewl .j-top{position:fixed;z-index:60;inset-inline-end:18px;bottom:18px;width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--j-line);background:color-mix(in srgb,var(--j-bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--j-ink);font-size:18px;cursor:pointer;opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .3s,transform .4s var(--j-ease),background-color .2s,color .2s;box-shadow:var(--j-shadow)}
+.jewl .j-top.j-on{opacity:1;transform:none;pointer-events:auto}
+.jewl .j-top:hover{background:var(--j-ink);color:var(--j-bg)}
+.jewl .j-card-add.j-added,.jewl .j-card-add.j-added span,.jewl .j-card-add.j-added i{color:#fff}
+/* Cards in a row share one baseline: the add button sits at the foot of each */
+.jewl .j-grid > .j-card{display:flex;flex-direction:column}
+.jewl .j-grid > .j-card > .j-card-info{flex:1;display:flex;flex-direction:column}
+.jewl .j-grid > .j-card .j-card-add{margin-top:auto}
+.jewl .j-grid > .j-card .j-card-info > .j-card-row:last-of-type{margin-bottom:14px}

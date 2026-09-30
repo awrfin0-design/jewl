@@ -302,13 +302,14 @@
   }
   function setBtn(btn, state) {
     if (!btn) return;
-    if (!btn.dataset.label) btn.dataset.label = btn.textContent.trim();
+    const lab = btn.querySelector('span') || btn;
+    if (!btn.dataset.label) btn.dataset.label = lab.textContent.trim();
     btn.classList.remove('j-busy', 'j-added');
     if (state === 'busy') { btn.classList.add('j-busy'); btn.setAttribute('aria-busy', 'true'); }
     else if (state === 'added') {
-      btn.removeAttribute('aria-busy'); btn.classList.add('j-added'); btn.textContent = `${t('added')} ✓`;
-      setTimeout(() => { btn.classList.remove('j-added'); btn.textContent = btn.dataset.label; }, 1700);
-    } else { btn.removeAttribute('aria-busy'); btn.textContent = btn.dataset.label; }
+      btn.removeAttribute('aria-busy'); btn.classList.add('j-added'); lab.textContent = `${t('added')} ✓`;
+      setTimeout(() => { btn.classList.remove('j-added'); lab.textContent = btn.dataset.label; }, 1700);
+    } else { btn.removeAttribute('aria-busy'); lab.textContent = btn.dataset.label; }
   }
   let shownTotal = null;
   function tweenSubtotal(to) {
@@ -586,7 +587,7 @@
         <div class="j-card-media"><div class="j-tilt">
           ${phHTML(p, sel, `data-j-qv="${esc(p.key)}" aria-hidden="true"`)}
           ${ok ? '' : `<span class="j-sold">${esc(t('sold_out'))}</span>`}
-          <div class="j-actions"><button type="button" data-j-qv="${esc(p.key)}">${esc(t('quick'))}</button><button type="button" data-j-add="${esc(p.key)}" ${ok ? '' : 'disabled'}>${esc(t('add'))}</button></div>
+          <div class="j-actions"><button type="button" data-j-qv="${esc(p.key)}">${esc(t('quick'))}</button></div>
         </div></div>
         <div class="j-card-info">
           <div class="j-card-tag">${esc(badgeFor(p))}</div>
@@ -596,6 +597,7 @@
           <div class="j-card-row"><span class="j-price j-num">${money(priceFor(p, sel))}</span>
             ${metals.length > 1 ? `<div class="j-swatches" role="group" aria-label="${esc(t('metal'))}">${metals.map((m) =>
               `<button class="j-sw" type="button" data-j-sw="${esc(m)}" aria-pressed="${m === sel[p.metalIdx]}" aria-label="${esc(optLabel(p, p.metalIdx, m))}" style="--j-sw:var(--j-g-${p.demo ? m : metalKind(m)})"></button>`).join('')}</div>` : ''}</div>
+          <button class="j-card-add" type="button" data-j-add="${esc(p.key)}" ${ok ? '' : 'disabled'}><span>${esc(ok ? t('add') : t('sold_out'))}</span><i aria-hidden="true">+</i></button>
         </div></article>`;
     }
     onClick(e) {
@@ -760,6 +762,15 @@
       b.addEventListener('pointerleave', () => { b.style.transform = ''; });
     });
   }
+
+  /* ============ Back to top ============ */
+  const top = document.createElement('button');
+  top.type = 'button'; top.className = 'j-top'; top.setAttribute('aria-label', t('top')); top.innerHTML = '<span aria-hidden="true">↑</span>';
+  ($('#j-overlays') || document.body).appendChild(top);
+  const scroller = () => { const w = $('.page-wrapper'); return w && w.scrollHeight > w.clientHeight + 4 && getComputedStyle(w).overflowY !== 'visible' ? w : null; };
+  const onScroll = () => { const y = scroller() ? scroller().scrollTop : scrollY; top.classList.toggle('j-on', y > innerHeight * 1.2); };
+  addEventListener('scroll', onScroll, { passive: true }); $('.page-wrapper')?.addEventListener('scroll', onScroll, { passive: true });
+  top.addEventListener('click', () => { const w = scroller(); (w || window).scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); });
 
   /* ============ Horizon hooks ============ */
   window.Jewl = { openBag: () => openBag(true), refreshCart, toast };

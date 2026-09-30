@@ -43,112 +43,112 @@
     assign accent_font_bold_italic_face_id = '[accent_font_bold_italic_family]-[accent_font_bold_italic_weight]-[accent_font_bold_italic_style]|' | replace: '[accent_font_bold_italic_family]', accent_font_bold_italic.family | replace: '[accent_font_bold_italic_weight]', accent_font_bold_italic.weight | replace: '[accent_font_bold_italic_style]', accent_font_bold_italic.style
 
     unless rendered_fonts contains primary_font_face_id
-      if primary_font != blank
+      if primary_font.family != blank
         echo primary_font | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: primary_font_face_id
     endunless
 
     unless rendered_fonts contains primary_font_bold_face_id
-      if primary_font_bold != blank
+      if primary_font_bold.family != blank
         echo primary_font_bold | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: primary_font_bold_face_id
     endunless
 
     unless rendered_fonts contains primary_font_italic_face_id
-      if primary_font_italic != blank
+      if primary_font_italic.family != blank
         echo primary_font_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: primary_font_italic_face_id
     endunless
 
     unless rendered_fonts contains primary_font_bold_italic_face_id
-      if primary_font_bold_italic != blank
+      if primary_font_bold_italic.family != blank
         echo primary_font_bold_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: primary_font_bold_italic_face_id
     endunless
 
     unless rendered_fonts contains secondary_font_face_id
-      if secondary_font != blank
+      if secondary_font.family != blank
         echo secondary_font | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: secondary_font_face_id
     endunless
 
     unless rendered_fonts contains secondary_font_bold_face_id
-      if secondary_font_bold != blank
+      if secondary_font_bold.family != blank
         echo secondary_font_bold | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: secondary_font_bold_face_id
     endunless
 
     unless rendered_fonts contains secondary_font_italic_face_id
-      if secondary_font_italic != blank
+      if secondary_font_italic.family != blank
         echo secondary_font_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: secondary_font_italic_face_id
     endunless
 
     unless rendered_fonts contains secondary_font_bold_italic_face_id
-      if secondary_font_bold_italic != blank
+      if secondary_font_bold_italic.family != blank
         echo secondary_font_bold_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: secondary_font_bold_italic_face_id
     endunless
 
     unless rendered_fonts contains tertiary_font_face_id
-      if tertiary_font != blank
+      if tertiary_font.family != blank
         echo tertiary_font | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: tertiary_font_face_id
     endunless
 
     unless rendered_fonts contains tertiary_font_bold_face_id
-      if tertiary_font_bold != blank
+      if tertiary_font_bold.family != blank
         echo tertiary_font_bold | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: tertiary_font_bold_face_id
     endunless
 
     unless rendered_fonts contains tertiary_font_italic_face_id
-      if tertiary_font_italic != blank
+      if tertiary_font_italic.family != blank
         echo tertiary_font_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: tertiary_font_italic_face_id
     endunless
 
     unless rendered_fonts contains tertiary_font_bold_italic_face_id
-      if tertiary_font_bold_italic != blank
+      if tertiary_font_bold_italic.family != blank
         echo tertiary_font_bold_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: tertiary_font_bold_italic_face_id
     endunless
 
     unless rendered_fonts contains accent_font_face_id
-      if accent_font != blank
+      if accent_font.family != blank
         echo accent_font | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: accent_font_face_id
     endunless
 
     unless rendered_fonts contains accent_font_bold_face_id
-      if accent_font_bold != blank
+      if accent_font_bold.family != blank
         echo accent_font_bold | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: accent_font_bold_face_id
     endunless
 
     unless rendered_fonts contains accent_font_italic_face_id
-      if accent_font_italic != blank
+      if accent_font_italic.family != blank
         echo accent_font_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: accent_font_italic_face_id
     endunless
 
     unless rendered_fonts contains accent_font_bold_italic_face_id
-      if accent_font_bold_italic != blank
+      if accent_font_bold_italic.family != blank
         echo accent_font_bold_italic | font_face: font_display: 'swap'
       endif
       assign rendered_fonts = rendered_fonts | append: accent_font_bold_italic_face_id
